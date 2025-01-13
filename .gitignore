@@ -1,0 +1,53 @@
+w# Exclure les fichiers de build et les dossiers bin/obj
+[Bb]in/
+[Oo]bj/
+
+# Exclure les fichiers de configuration spécifiques à l'utilisateur
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Exclure les dossiers de logs
+logs/
+*.log
+
+# Exclure les fichiers de package NuGet générés
+*.nupkg
+*.snupkg
+
+# Exclure les dossiers des dépendances locales
+packages/
+*.dll
+*.pdb
+*.cache
+*.ilk
+*.idb
+*.obj
+
+
+
+# Exclure les fichiers secrets locaux (ASP.NET Core User Secrets)
+secrets.json
+*.local.settings.json
+
+# Exclure les fichiers générés par Visual Studio
+.vs/
+.vscode/
+.idea/
+
+# Exclure les fichiers de build docker
+docker-compose.override.yml
+*.docker-compose*
+
+# Exclure les fichiers de configuration de publication
+*.Publish.xml
+
+# Exclure les fichiers spécifiques à la plateforme
+.DS_Store
+Thumbs.db
+
+# Exclure les fichiers générés par Rider ou ReSharper (si utilisé)
+.idea/
+*.sln.iml
+_ReSharper*/
