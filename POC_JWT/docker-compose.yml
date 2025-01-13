@@ -7,10 +7,10 @@ services:
     ports:
       - "5046:5000"
 
-  weatherapi:
-    image: ${DOCKER_REGISTRY-}weatherapi
+  BasicApi:
+    image: ${DOCKER_REGISTRY-}basicapi
     build:
       context: .
-      dockerfile: WeatherApi\Dockerfile
+      dockerfile: BasicApi\Dockerfile
     ports:
       - "5048:5000"

@@ -13,19 +13,19 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WeatherApi/WeatherApi.csproj", "WeatherApi/"]
-RUN dotnet restore "./WeatherApi/WeatherApi.csproj"
+COPY ["BasicApi/BasicApi.csproj", "BasicApi/"]
+RUN dotnet restore "./BasicApi/BasicApi.csproj"
 COPY . .
-WORKDIR "/src/WeatherApi"
-RUN dotnet build "./WeatherApi.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+WORKDIR "/src/BasicApi"
+RUN dotnet build "./BasicApi.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 # Cette étape permet de publier le projet de service à copier dans la phase finale
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WeatherApi.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./BasicApi.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
 
 # Cette phase est utilisée en production ou lors de l’exécution à partir de VS en mode normal (par défaut quand la configuration de débogage n’est pas utilisée)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WeatherApi.dll"]
+ENTRYPOINT ["dotnet", "BasicApi.dll"]
