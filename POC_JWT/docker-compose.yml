@@ -1,0 +1,16 @@
+services:
+  jwtapi:
+    image: ${DOCKER_REGISTRY-}jwtapi
+    build:
+      context: .
+      dockerfile: JWTApi\Dockerfile
+    ports:
+      - "5046:5000"
+
+  weatherapi:
+    image: ${DOCKER_REGISTRY-}weatherapi
+    build:
+      context: .
+      dockerfile: WeatherApi\Dockerfile
+    ports:
+      - "5048:5000"

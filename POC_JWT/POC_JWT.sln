@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTApi", "JWTApi\JWTApi.csproj", "{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi", "WeatherApi\WeatherApi.csproj", "{FE323321-C478-4CC5-8739-9348E7F7ABA7}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE323321-C478-4CC5-8739-9348E7F7ABA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE323321-C478-4CC5-8739-9348E7F7ABA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE323321-C478-4CC5-8739-9348E7F7ABA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE323321-C478-4CC5-8739-9348E7F7ABA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
