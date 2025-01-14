@@ -1,7 +1,9 @@
-﻿using JWTApi.Services.Interfaces;
+﻿using JWTApi.Exceptions;
+using JWTApi.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace JWTApi.Services
 {
@@ -21,7 +23,14 @@ namespace JWTApi.Services
         {
             // Utiliser pour retourné le token
             JwtSecurityTokenHandler tokenHandler = new();
-            byte[] key = "MySecretKeyThatShouldNotBeHere"u8.ToArray();                      // A sauvegarder de manière sécurisé, pas en dure dans le code
+            string? ApiKey = Environment.GetEnvironmentVariable("API_KEY");
+
+            if (String.IsNullOrEmpty(ApiKey))
+            {
+                throw new InvalidConfigurationException("La clé d'API est vide ou mal configurée.");
+            }
+
+            byte[] ByteApiKey = Encoding.UTF8.GetBytes(ApiKey);
 
             List<Claim> claims = new List<Claim>
             {
@@ -36,9 +45,9 @@ namespace JWTApi.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(15),                                   
-                Issuer = "https://id.poc.com",                                              // Celui qui créer le token
-                Audience = "https://mainApp.com",                                           // La "destination" du token
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                Issuer = "http://id.identity.com",                                              // Celui qui créer le token         
+                Audience = "http://baseApi.com",                                           // La "destination" du token, peut varier en fonction du destinataire
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(ByteApiKey), SecurityAlgorithms.HmacSha256)
             };
 
             SecurityToken token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);

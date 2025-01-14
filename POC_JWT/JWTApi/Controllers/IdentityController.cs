@@ -21,7 +21,7 @@ namespace JWTApi.Controllers
             _tokenGenerator = tokenGenerator;
         }
 
-        [HttpGet(Name = "login")]
+        [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
             if (_authService.ValidateCredentials(request.Email, request.Password))

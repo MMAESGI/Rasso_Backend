@@ -1,6 +1,7 @@
 using BasicApi;
 using BasicApi.Configuration;
-using Microsoft.Extensions.Options;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 // Extension pour l'injection de dépendance
 builder.Services.AddAppSettingsConfiguration(builder.Configuration);
 builder.Services.AddApplicationServices();
+
+// add authorisation pour la policy
 builder.Services.AddCustomAuthentification(builder.Configuration);
 
 
@@ -26,6 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

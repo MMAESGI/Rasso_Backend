@@ -11,13 +11,13 @@ namespace JWTApi.Controllers
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="authService">Service d'authentification</param>
         public BasicController()
         {
 
         }
 
-        [HttpGet(Name = "home")]
+        [Authorize]
+        [HttpGet("home")]
         public IActionResult Home()
         {
             return Ok("Tu est sur la page d'accueil si tu as le bon JWT");
@@ -26,7 +26,7 @@ namespace JWTApi.Controllers
 
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet(Name = "admin")]
+        [HttpGet("admin")]
         public IActionResult Admin()
         {
             return Ok("Tu est un admin authorisé.");

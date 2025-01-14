@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: JWTApi\Dockerfile
+
     ports:
       - "5046:5000"
 
@@ -12,5 +13,6 @@ services:
     build:
       context: .
       dockerfile: BasicApi\Dockerfile
+
     ports:
       - "5048:5000"
