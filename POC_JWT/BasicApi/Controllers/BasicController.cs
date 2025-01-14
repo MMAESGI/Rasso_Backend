@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JWTApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api")]
     public class BasicController : ControllerBase
@@ -16,7 +17,7 @@ namespace JWTApi.Controllers
 
         }
 
-        [Authorize]
+        
         [HttpGet("home")]
         public IActionResult Home()
         {

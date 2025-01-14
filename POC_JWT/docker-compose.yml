@@ -4,15 +4,18 @@ services:
     build:
       context: .
       dockerfile: JWTApi\Dockerfile
-
+    environment:
+      - ESGI_API_KEY=${ESGI_API_KEY}
     ports:
       - "5046:5000"
 
-  BasicApi:
+  basicapi:
     image: ${DOCKER_REGISTRY-}basicapi
     build:
       context: .
       dockerfile: BasicApi\Dockerfile
+    environment:
+      - ESGI_API_KEY=${ESGI_API_KEY}
 
     ports:
       - "5048:5000"

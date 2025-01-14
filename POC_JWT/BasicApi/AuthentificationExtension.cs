@@ -23,7 +23,7 @@ namespace BasicApi
                 throw new InvalidConfigurationException("Le appsettings est invalide ou mal configuré.");
             }
 
-            string? ApiKey = Environment.GetEnvironmentVariable("API_KEY");
+            string? ApiKey = Environment.GetEnvironmentVariable("ESGI_API_KEY");
 
             if (String.IsNullOrEmpty(ApiKey))
             {

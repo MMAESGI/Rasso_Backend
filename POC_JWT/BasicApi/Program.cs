@@ -1,7 +1,6 @@
 using BasicApi;
 using BasicApi.Configuration;
 
-DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 

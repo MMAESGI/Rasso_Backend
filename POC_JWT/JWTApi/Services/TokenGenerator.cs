@@ -23,7 +23,7 @@ namespace JWTApi.Services
         {
             // Utiliser pour retourné le token
             JwtSecurityTokenHandler tokenHandler = new();
-            string? ApiKey = Environment.GetEnvironmentVariable("API_KEY");
+            string? ApiKey = Environment.GetEnvironmentVariable("ESGI_API_KEY");
 
             if (String.IsNullOrEmpty(ApiKey))
             {
