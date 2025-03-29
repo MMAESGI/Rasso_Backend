@@ -1,38 +1,40 @@
 ﻿using BasicApi.Entity;
+using BasicApi.Services.Interfaces;
 using MySql.Data.MySqlClient;
 
 namespace BasicApi.Services
 {
-    public class MySqlService
+    /// <inheritdoc cref="IMySqlService"/>
+    public class MySqlService : IMySqlService
     {
-        private string _connectionString;
-
-        public MySqlService(string connectionString)
+        private readonly IDataBaseConnectionService _dbconnectionService;
+        public MySqlService(IDataBaseConnectionService dbconnectionService)
         {
-            _connectionString = connectionString;
+            _dbconnectionService = dbconnectionService;
         }
 
+        /// <inheritdoc />
         public List<User> GetUsers()
         {
             List<User> users = new List<User>();
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = _dbconnectionService.GetConnection())
             {
                 try
                 {
                     connection.Open();
-                    string query = "SELECT id, name FROM users";
+                    string query = "SELECT Id, Name FROM USER";
 
-                    using (var command = new MySqlCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        using (var reader = command.ExecuteReader())
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 var user = new User
                                 {
-                                    Id = reader.GetInt32("id"),
-                                    Name = reader.GetString("name")
+                                    Id = reader.GetInt32("Id"),
+                                    Name = reader.GetString("Name")
                                 };
                                 users.Add(user);
                             }

@@ -1,4 +1,6 @@
 ﻿
+using BasicApi.Entity;
+using BasicApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,19 +11,22 @@ namespace JWTApi.Controllers
     [Route("api")]
     public class BasicController : ControllerBase
     {
+        private readonly IMySqlService _mySqlService;
+
         /// <summary>
         /// Ctor
         /// </summary>
-        public BasicController()
+        public BasicController(IMySqlService sqlService)
         {
-
+            _mySqlService = sqlService;
         }
 
         
         [HttpGet("home")]
         public IActionResult Home()
         {
-            return Ok("Tu est sur la page d'accueil si tu as le bon JWT");
+            List<User> users = _mySqlService.GetUsers();
+            return Ok(users);
         }
 
 

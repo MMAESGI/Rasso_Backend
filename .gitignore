@@ -24,7 +24,7 @@ packages/
 *.ilk
 *.idb
 *.obj
-
+*.env
 
 
 # Exclure les fichiers secrets locaux (ASP.NET Core User Secrets)

@@ -1,6 +1,7 @@
 using BasicApi;
 using BasicApi.Configuration;
 using BasicApi.Services;
+using BasicApi.Services.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +22,9 @@ builder.Services.AddCustomAuthentification(builder.Configuration);
 
 // MySql
 
-builder.Services.AddSingleton<MySqlService>(provider =>
-    new MySqlService(builder.Configuration.GetConnectionString("MyDatabase") ?? ""));
+builder.Services.AddSingleton<IMySqlService, MySqlService>();
+builder.Services.AddSingleton<IDataBaseConnectionService, DataBaseConnectionService>();
+
 
 
 var app = builder.Build();
