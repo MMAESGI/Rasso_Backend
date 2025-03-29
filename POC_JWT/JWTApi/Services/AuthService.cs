@@ -5,6 +5,10 @@ namespace JWTApi.Services
     /// <inheritdoc cref="IAuthService"/>
     public class AuthService : IAuthService
     {
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="userRepository">User repository</param>
         public AuthService(IUserRepository userRepository)
         {
         }

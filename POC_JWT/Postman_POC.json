@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "9f770e58-10ff-49db-be5d-df81c2f5106b",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40952918"
+	},
+	"item": [
+		{
+			"name": "Get Bearer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"email@gmail.com\",\r\n  \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5046/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5046",
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Get From BaseApi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1NDM2NzE2Ni1lYzlkLTQ3NzktYjMyYy1jYzBkMzI0NmM0ZDMiLCJzdWIiOiJjZDZiOGIzOS04NWY0LTRhOTktOTAzOC1iMzllNGI5NjkyNzIiLCJlbWFpbCI6ImVtYWlsQGdtYWlsLmNvbSIsInJvbGUiOiJVc2VyIiwibmJmIjoxNzQzMjYwOTYwLCJleHAiOjE3NDMyNjE4NjAsImlhdCI6MTc0MzI2MDk2MCwiaXNzIjoiaHR0cDovL2lkLmlkZW50aXR5LmNvbSIsImF1ZCI6Imh0dHA6Ly9iYXNlQXBpLmNvbSJ9.lwgMnJzU3pGZsaJC-P4NjULLXGgJiwh1axidyNi7_mE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5048/api/home",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5048",
+					"path": [
+						"api",
+						"home"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		}
+	]
+}

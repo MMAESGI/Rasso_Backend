@@ -1,5 +1,6 @@
 using JWTApi;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +13,6 @@ builder.Services.AddSwaggerGen();
 
 // Extension pour l'injection de dépendance
 builder.Services.AddApplicationServices();
-
 
 
 var app = builder.Build();

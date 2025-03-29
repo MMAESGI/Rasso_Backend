@@ -1,6 +1,8 @@
 using BasicApi;
 using BasicApi.Configuration;
-using Microsoft.Extensions.Options;
+using BasicApi.Services;
+using BasicApi.Services.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,15 @@ builder.Services.AddSwaggerGen();
 // Extension pour l'injection de dépendance
 builder.Services.AddAppSettingsConfiguration(builder.Configuration);
 builder.Services.AddApplicationServices();
+
+// add authorisation pour la policy
 builder.Services.AddCustomAuthentification(builder.Configuration);
+
+// MySql
+
+builder.Services.AddSingleton<IMySqlService, MySqlService>();
+builder.Services.AddSingleton<IDataBaseConnectionService, DataBaseConnectionService>();
+
 
 
 var app = builder.Build();
@@ -26,6 +36,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -4,13 +4,28 @@ services:
     build:
       context: .
       dockerfile: JWTApi\Dockerfile
+    environment:
+      - ESGI_API_KEY=${ESGI_API_KEY}
+      - DB_SERVER=${DB_SERVER}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     ports:
-      - "5046:5000"
+      - "5046:8080"
 
-  BasicApi:
+  basicapi:
     image: ${DOCKER_REGISTRY-}basicapi
     build:
       context: .
       dockerfile: BasicApi\Dockerfile
+    environment:
+      - ESGI_API_KEY=${ESGI_API_KEY}
+      - DB_SERVER=${DB_SERVER}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+
     ports:
-      - "5048:5000"
+      - "5048:8080"
