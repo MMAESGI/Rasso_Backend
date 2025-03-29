@@ -1,5 +1,6 @@
 using BasicApi;
 using BasicApi.Configuration;
+using BasicApi.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,11 @@ builder.Services.AddApplicationServices();
 
 // add authorisation pour la policy
 builder.Services.AddCustomAuthentification(builder.Configuration);
+
+// MySql
+
+builder.Services.AddSingleton<MySqlService>(provider =>
+    new MySqlService(builder.Configuration.GetConnectionString("MyDatabase") ?? ""));
 
 
 var app = builder.Build();

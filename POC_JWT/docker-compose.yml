@@ -7,7 +7,7 @@ services:
     environment:
       - ESGI_API_KEY=${ESGI_API_KEY}
     ports:
-      - "5046:5000"
+      - "5046:8080"
 
   basicapi:
     image: ${DOCKER_REGISTRY-}basicapi
@@ -18,4 +18,4 @@ services:
       - ESGI_API_KEY=${ESGI_API_KEY}
 
     ports:
-      - "5048:5000"
+      - "5048:8080"
