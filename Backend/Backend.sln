@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "Identity\Identity.csproj", "{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RassoApi", "RassoApi\RassoApi.csproj", "{B2758458-E6FC-4023-A5A7-1BC00974FC55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15610AF3-2EE8-4292-B04C-4C4A4D4A2DAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69F1C7DF-049C-4B99-9B4D-53A7CC9E28B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2758458-E6FC-4023-A5A7-1BC00974FC55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2758458-E6FC-4023-A5A7-1BC00974FC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2758458-E6FC-4023-A5A7-1BC00974FC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2758458-E6FC-4023-A5A7-1BC00974FC55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
