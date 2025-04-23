@@ -17,11 +17,11 @@ namespace RassoApi.Services
         public List<User> GetUsers()
         {
             List<User> users = new List<User>();
-
-            using (var connection = _dbconnectionService.GetConnection())
+            try
             {
-                try
+                using (var connection = _dbconnectionService.GetConnection())
                 {
+
                     connection.Open();
                     string query = "SELECT Id, Name FROM USER";
 
@@ -41,12 +41,11 @@ namespace RassoApi.Services
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error: " + ex.Message);
-                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
             return users;
         }
     }
