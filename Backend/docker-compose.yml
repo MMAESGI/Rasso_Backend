@@ -1,0 +1,31 @@
+services:
+  identity:
+    image: ${DOCKER_REGISTRY-}identity
+    build:
+      context: .
+      dockerfile: Identity/Dockerfile
+    environment:
+      - ESGI_API_KEY=${ESGI_API_KEY}
+      - DB_SERVER=${DB_SERVER}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    ports:
+      - "5046:8080"
+
+  rassoapi:
+    image: ${DOCKER_REGISTRY-}rassoapi
+    build:
+      context: .
+      dockerfile: RassoApi/Dockerfile
+    environment:
+      - ESGI_API_KEY=${ESGI_API_KEY}
+      - DB_SERVER=${DB_SERVER}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+
+    ports:
+      - "5048:8080"
