@@ -54,5 +54,6 @@ _ReSharper*/
 
 
 #liquibase
+Database/lib/
 liquibase.properties
 *.jar

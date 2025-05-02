@@ -1,15 +1,30 @@
-# POC_JWT
+# Backend
 
-Ceci est une démonstration de l'utilisation d'un JWT.
 
-Le projet est décomposé en deux parties :
-  - JWTApi  : Microservice d'identité (à l'heure où je rédige ce README, la vérification de l'existence de l'utilisateur n'est pas complète).
-  - BasicApi : Microservice de test qui permet de récupérer quelques informations en base de données.
+## Structure du projet :
+  - Backend  : Contients les microservices et le projet docker.
+  - Database : Contients les fichiers relatifs à la mise en place / mise à jour de la base de données.
 
-L'accès à BasicApi est donc ""protégé"" par un JWT.
 
-Il n'est pas utilisable dans un vrai contexte, il manque des parties comme :
-- la vérification de l'existence de l'utilisateur lors de la demande de JWT.
-- les rôles (Administrateur etc) à renseigner dans le JWT.
-- le refresh token permettant d'accéder à un nouveau token par exemple.
-- d'autres aspects de sécurité qui vont de paire avec la "la vérification de l'existence de l'utilisateur" comme le hashage, le nombre de tentatives de connexion pour bloquer un utilisateur etc.
+## Backend
+### Identity
+
+Microservice d'identité : celcui-ci gènère un JWT permettant d'autoriser l'accès aux autres microservices
+
+
+### RassoApi
+
+Api principale pour la gestion de nos événements 
+
+
+### Database 
+
+Dossier contenants les fichiers nécessaires à la mise en place de la base de données.
+
+Database
+	/changes        : Dossier contenant les scripts de modifications de la base de données par ordre chronologique. 
+	   001-init.sql : Fichier de création de la base de données initial. Nomenclature à respecter est 'XXX-nomModification.sql' avec XXX le numéro d'ordre de passage du script.
+	/lib            : Contient le fichier .jar du driver MySQL : mysql-connector-java-X.Y.Z.jar   (8.3.0 à l'heure actuelle).
+	changelog.sql   : Fichier sql incluant les scripts à passer
+
+
