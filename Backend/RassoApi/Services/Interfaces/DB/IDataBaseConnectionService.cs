@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace RassoApi.Services.Interfaces
+namespace RassoApi.Services.Interfaces.DB
 {
     /// <summary>
     /// Service de contruction de la chaine de connexion

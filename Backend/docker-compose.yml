@@ -29,3 +29,27 @@ services:
 
     ports:
       - "5048:8080"
+      
+  liquibase:
+    image: liquibase/liquibase:latest
+    container_name: liquibase
+    environment:
+      - DB_SERVER=${DB_SERVER}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    volumes:
+      - ./Database/liquibase:/liquibase/changelog
+      - ./Database/lib:/liquibase/lib
+      - ./Database/lib/mysql-connector-java-8.3.0.jar:/liquibase/lib/mysql-connector-java-8.3.0.jar
+
+    working_dir: /liquibase/changelog
+    command: >
+      --url=jdbc:mysql://${DB_SERVER}:${DB_PORT}/${DB_NAME}
+      --username=${DB_USER}
+      --password=${DB_PASS}
+      --changeLogFile=changelog.sql
+      --driver=com.mysql.cj.jdbc.Driver
+      --classpath=/liquibase/lib/mysql-connector-java-8.3.0.jar
+      update

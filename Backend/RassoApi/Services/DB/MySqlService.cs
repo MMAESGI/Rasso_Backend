@@ -1,8 +1,8 @@
 ﻿using RassoApi.Entity;
-using RassoApi.Services.Interfaces;
 using MySql.Data.MySqlClient;
+using RassoApi.Services.Interfaces.DB;
 
-namespace RassoApi.Services
+namespace RassoApi.Services.DB
 {
     /// <inheritdoc cref="IMySqlService"/>
     public class MySqlService : IMySqlService
