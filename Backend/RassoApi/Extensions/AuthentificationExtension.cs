@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace RassoApi
+namespace RassoApi.Extensions
 {
     public static class AuthentificationExtension
     {
@@ -17,7 +17,7 @@ namespace RassoApi
         public static IServiceCollection AddCustomAuthentification(this IServiceCollection services, IConfiguration configuration)
         {
             AppsettingsConfiguration? appsettings = configuration.GetSection("Configuration").Get<AppsettingsConfiguration>();
-            
+
             if (appsettings is null)
             {
                 throw new InvalidConfigurationException("Le appsettings est invalide ou mal configuré.");
@@ -25,7 +25,7 @@ namespace RassoApi
 
             string? ApiKey = Environment.GetEnvironmentVariable("ESGI_API_KEY");
 
-            if (String.IsNullOrEmpty(ApiKey))
+            if (string.IsNullOrEmpty(ApiKey))
             {
                 throw new InvalidConfigurationException("La clé d'API est vide ou mal configurée.");
             }

@@ -1,8 +1,8 @@
 ﻿using RassoApi.Exceptions;
-using RassoApi.Services.Interfaces;
 using MySql.Data.MySqlClient;
+using RassoApi.Services.Interfaces.DB;
 
-namespace RassoApi.Services
+namespace RassoApi.Services.DB
 {
     /// <inheritdoc cref="IDataBaseConnectionService"/>
     public class DataBaseConnectionService : IDataBaseConnectionService
@@ -20,11 +20,11 @@ namespace RassoApi.Services
             string? username = Environment.GetEnvironmentVariable("DB_USER");
             string? password = Environment.GetEnvironmentVariable("DB_PASS");
 
-            if (String.IsNullOrEmpty(server)
-                || String.IsNullOrEmpty(database)
-                || String.IsNullOrEmpty(port)
-                || String.IsNullOrEmpty(username)
-                || String.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(server)
+                || string.IsNullOrEmpty(database)
+                || string.IsNullOrEmpty(port)
+                || string.IsNullOrEmpty(username)
+                || string.IsNullOrEmpty(password))
             {
                 throw new InvalidDatabaseConnectionException("La chaine de connexion n'a pas pu être construite correctement");
             }

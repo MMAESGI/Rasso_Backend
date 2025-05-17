@@ -1,14 +1,14 @@
-using RassoApi;
 using RassoApi.Configuration;
-using RassoApi.Services;
-using RassoApi.Services.Interfaces;
+using RassoApi.Extensions;
+using RassoApi.Services.DB;
+using RassoApi.Services.Interfaces.DB;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,7 +21,6 @@ builder.Services.AddApplicationServices();
 builder.Services.AddCustomAuthentification(builder.Configuration);
 
 // MySql
-
 builder.Services.AddSingleton<IMySqlService, MySqlService>();
 builder.Services.AddSingleton<IDataBaseConnectionService, DataBaseConnectionService>();
 
