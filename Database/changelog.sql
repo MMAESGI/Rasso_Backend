@@ -126,8 +126,8 @@ CREATE TABLE event_images (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     event_id CHAR(36) NOT NULL,
     s3_url VARCHAR(500) NOT NULL,
-    filename VARCHAR(255),          -- Nom original (optionnel)
-    description VARCHAR(255),       -- Description ou légende de l'image
+    filename VARCHAR(255),
+    description VARCHAR(255),
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
