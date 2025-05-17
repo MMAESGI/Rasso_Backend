@@ -51,3 +51,9 @@ Thumbs.db
 .idea/
 *.sln.iml
 _ReSharper*/
+
+
+#liquibase
+Database/lib/
+liquibase.properties
+*.jar
