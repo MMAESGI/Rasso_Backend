@@ -1,6 +1,6 @@
 ﻿using RassoApi.DTOs.Requests.Event;
 using RassoApi.Mappers;
-using RassoApi.Models.Event;
+using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Interfaces.Events;
 
@@ -15,24 +15,17 @@ namespace RassoApi.Services.Events
             _eventRepository = eventRepository;
         }
 
-        public async Task<Event> CreateEventAsync(CreateEventRequest request)
+        public Task<Event> CreateEvent(CreateEventRequest eventRequest)
         {
-            // Ici tu pourrais ajouter des règles métier (ex: validation, vérification droits, etc.)
-            Event newEvent = EventMapper.ToEntity(request);
-
-
-
-            // Ajouter en base
-            var createdEvent = await _eventRepository.AddAsync(newEvent);
-
-            return createdEvent;
+            throw new NotImplementedException();
         }
 
-        public async Task<Event> GetEventById(int id)
+
+        async Task<Event> IEventService.GetEventById(int id)
         {
             Event result = new();
 
-            return result;
+            return await Task.FromResult(result);
         }
     }
 }

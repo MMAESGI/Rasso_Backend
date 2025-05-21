@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
 using RassoApi.Helpers.Api;
 using RassoApi.Mappers;
-using RassoApi.Models.Event;
+using RassoApi.Models.EventModels;
 using RassoApi.Services.Interfaces.Events;
 
 namespace RassoApi.Controllers
@@ -26,7 +25,7 @@ namespace RassoApi.Controllers
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventRequest request)
         {
 
-            Event createdEvent = await _eventService.CreateEventAsync(request);
+            Event createdEvent = await _eventService.CreateEvent(request);
 
             EventResponse eventResponse = EventMapper.ToResponse(createdEvent);
 

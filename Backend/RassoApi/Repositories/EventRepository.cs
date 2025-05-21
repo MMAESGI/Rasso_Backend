@@ -1,4 +1,4 @@
-﻿using RassoApi.Models.Event;
+﻿using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
 
 namespace RassoApi.Repositories

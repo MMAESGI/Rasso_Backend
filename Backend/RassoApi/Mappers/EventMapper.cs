@@ -1,6 +1,6 @@
 ﻿using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
-using RassoApi.Models.Event;
+using RassoApi.Models.EventModels;
 
 namespace RassoApi.Mappers
 {
@@ -14,9 +14,9 @@ namespace RassoApi.Mappers
                 Description = dto.Description,
                 Date = dto.Date,
                 Location = dto.Location,
-                OrganizerId = dto.OrganizerId,
+                //OrganizerId = dto.OrganizerId,
                 Category = dto.Category,
-                Status = "En attente"
+                //Status = StatusEnum.WAITINGVALIDATION
             };
         }
 
@@ -28,9 +28,9 @@ namespace RassoApi.Mappers
                 Date = entity.Date,
                 Location = entity.Location,
                 Description = entity.Description,
-                OrganizerId = entity.OrganizerId,
+                //OrganizerId = entity.OrganizerId,
                 Category = entity.Category,
-                Status = entity.Status
+                Status = entity.Status?.Code,
             };
         }
     }
