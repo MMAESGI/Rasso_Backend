@@ -19,6 +19,14 @@ namespace RassoApi.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+            // Application de la configuration des classes
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
+            modelBuilder.ApplyConfiguration(new EventMediaConfiguration());
+            modelBuilder.ApplyConfiguration(new EventStatusConfiguration());
+            modelBuilder.ApplyConfiguration(new RefusalReasonConfiguration());
+            modelBuilder.ApplyConfiguration(new EventParticipantConfiguration());
+            modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
         }
     }
 }

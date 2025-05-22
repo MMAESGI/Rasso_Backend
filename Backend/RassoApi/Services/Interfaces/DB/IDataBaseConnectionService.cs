@@ -8,9 +8,15 @@ namespace RassoApi.Services.Interfaces.DB
     public interface IDataBaseConnectionService
     {
         /// <summary>
-        ///  Récupère la chaine de connexion
+        ///  Récupère la connexion à la base de données
         /// </summary>
         /// <returns></returns>
         public MySqlConnection GetConnection();
+
+        /// <summary>
+        /// Retourne la chaine de connexion à la base de données
+        /// </summary>
+        /// <returns></returns>
+        public string GetConnectionString();
     }
 }

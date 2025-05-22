@@ -2,17 +2,24 @@
 using MySql.Data.MySqlClient;
 using RassoApi.Services.Interfaces.DB;
 
-namespace RassoApi.Services.DB
+namespace RassoApi.Database
 {
     /// <inheritdoc cref="IDataBaseConnectionService"/>
     public class DataBaseConnectionService : IDataBaseConnectionService
     {
-
+        /// <summary>
+        /// Ctor
+        /// </summary>
         public DataBaseConnectionService()
         {
         }
 
         public MySqlConnection GetConnection()
+        {
+            return new MySqlConnection(GetConnectionString()); ;
+        }
+
+        public string GetConnectionString()
         {
             string? server = Environment.GetEnvironmentVariable("DB_SERVER");
             string? database = Environment.GetEnvironmentVariable("DB_NAME");
@@ -29,9 +36,7 @@ namespace RassoApi.Services.DB
                 throw new InvalidDatabaseConnectionException("La chaine de connexion n'a pas pu être construite correctement");
             }
 
-            string connectionString = $"Server={server};Port={port};Database={database};Uid={username};Pwd={password};";
-
-            return new MySqlConnection(connectionString); ;
+            return $"Server={server};Port={port};Database={database};Uid={username};Pwd={password};";
         }
     }
 }

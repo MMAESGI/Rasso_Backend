@@ -1,4 +1,5 @@
 using RassoApi.Configuration;
+using RassoApi.Database;
 using RassoApi.Extensions;
 using RassoApi.Services.DB;
 using RassoApi.Services.Interfaces.DB;
@@ -20,10 +21,9 @@ builder.Services.AddApplicationServices();
 // add authorisation pour la policy
 builder.Services.AddCustomAuthentification(builder.Configuration);
 
-// MySql
-builder.Services.AddSingleton<IMySqlService, MySqlService>();
-builder.Services.AddSingleton<IDataBaseConnectionService, DataBaseConnectionService>();
 
+// Database 
+builder.Services.AddDataBaseServices();
 
 
 var app = builder.Build();

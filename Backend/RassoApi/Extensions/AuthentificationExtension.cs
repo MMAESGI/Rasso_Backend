@@ -2,7 +2,6 @@
 using RassoApi.Configuration;
 using RassoApi.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace RassoApi.Extensions
