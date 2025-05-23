@@ -7,11 +7,11 @@ namespace RassoApi.Database
     public class AppDbContext : DbContext
     {
         public DbSet<Event> Events => Set<Event>();
-        //public DbSet<EventMedia> EventImages => Set<EventMedia>();
+        public DbSet<EventMedia> EventImages => Set<EventMedia>();
         public DbSet<EventStatus> EventStatuses => Set<EventStatus>();
         public DbSet<RefusalReason> RefusalReasons => Set<RefusalReason>();
-        //public DbSet<EventParticipant> EventParticipants => Set<EventParticipant>();
-        //public DbSet<Favorite> Favorites => Set<Favorite>();
+        public DbSet<EventParticipant> EventParticipants => Set<EventParticipant>();
+        public DbSet<Favorite> Favorites => Set<Favorite>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
@@ -22,11 +22,11 @@ namespace RassoApi.Database
 
             // Application de la configuration des classes
             modelBuilder.ApplyConfiguration(new EventConfiguration());
-            //modelBuilder.ApplyConfiguration(new EventMediaConfiguration());
+            modelBuilder.ApplyConfiguration(new EventMediaConfiguration());
             modelBuilder.ApplyConfiguration(new EventStatusConfiguration());
             modelBuilder.ApplyConfiguration(new RefusalReasonConfiguration());
-            //modelBuilder.ApplyConfiguration(new EventParticipantConfiguration());
-            //modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
+            modelBuilder.ApplyConfiguration(new EventParticipantConfiguration());
+            modelBuilder.ApplyConfiguration(new FavoriteConfiguration());
         }
     }
 }

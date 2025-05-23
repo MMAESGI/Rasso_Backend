@@ -1,9 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using RassoApi.Configuration;
 using RassoApi.Database;
 using RassoApi.Extensions;
-using RassoApi.Services.DB;
-using RassoApi.Services.Interfaces.DB;
+using static Common.CommonExtension;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,17 +24,16 @@ builder.Services.AddCustomAuthentification(builder.Configuration);
 // Database 
 builder.Services.AddDataBaseServices();
 
+builder.Services.AddCommonServices<AppDbContext>();
+
+// Utilisation du package commun
+builder.Services.AddCommonServices<AppDbContext>();
 
 var app = builder.Build();
 
 
-// Application des migrations 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    db.Database.Migrate();
-//}
-
+// Utilisation du package commun
+app.UseCommonPackage();
 
 
 // Configure the HTTP request pipeline.

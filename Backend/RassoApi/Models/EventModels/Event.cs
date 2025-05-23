@@ -52,7 +52,7 @@ namespace RassoApi.Models.EventModels
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        //public ICollection<EventMedia> Images { get; set; } = new List<EventMedia>();
+        public ICollection<EventMedia> Images { get; set; } = new List<EventMedia>();
     }
 
 }

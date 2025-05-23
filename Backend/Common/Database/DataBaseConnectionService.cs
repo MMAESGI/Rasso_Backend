@@ -1,9 +1,8 @@
-﻿using RassoApi.Exceptions;
-using MySql.Data.MySqlClient;
-using RassoApi.Services.Interfaces.DB;
+﻿
 using DotNetEnv;
+using MySql.Data.MySqlClient;
 
-namespace RassoApi.Database
+namespace Common.Database
 {
     /// <inheritdoc cref="IDataBaseConnectionService"/>
     public class DataBaseConnectionService : IDataBaseConnectionService
@@ -42,8 +41,6 @@ namespace RassoApi.Database
             string? username = Environment.GetEnvironmentVariable("DB_USER");
             string? password = Environment.GetEnvironmentVariable("DB_PASS");
 
-
-            Console.WriteLine($"Environnement : \n  -{server} \n -{database} \n -{port} \n - {username} \n {password}");
 
             if (string.IsNullOrEmpty(server)
                 || string.IsNullOrEmpty(database)

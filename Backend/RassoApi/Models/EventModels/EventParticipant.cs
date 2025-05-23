@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using RassoApi.Entity;
 
 namespace RassoApi.Models.EventModels
 {
@@ -17,9 +18,8 @@ namespace RassoApi.Models.EventModels
         [Required]
         public Guid UserId { get; set; }
 
-        // User minimal reference - see note ci-dessous
         [NotMapped]
-        public object? User { get; set; }
+        public User? User { get; set; }
 
         public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
     }

@@ -1,6 +1,7 @@
 ﻿using RassoApi.Entity;
 using MySql.Data.MySqlClient;
 using RassoApi.Services.Interfaces.DB;
+using Common.Database;
 
 namespace RassoApi.Services.DB
 {

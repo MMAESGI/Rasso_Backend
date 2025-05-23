@@ -18,14 +18,7 @@ namespace RassoApi.Extensions
         /// <returns></returns>
         public static IServiceCollection AddDataBaseServices(this IServiceCollection services)
         {
-            _ = services.AddScoped<IDataBaseConnectionService, DataBaseConnectionService>();
-
-            _ = services.AddDbContext<AppDbContext>((sp, options) =>
-            {
-                string connectionString = DataBaseConnectionService.GetConnectionString();
-
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
+            
 
             _ = services.AddScoped<IMySqlService, MySqlService>();
             _ = services.AddSingleton<IEventRepository, EventRepository>();
