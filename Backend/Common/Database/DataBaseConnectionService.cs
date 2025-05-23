@@ -33,13 +33,14 @@ namespace Common.Database
                 Console.WriteLine("Le fichier .env n'a pas été trouvé à l'emplacement : {envPath}.");
                 Env.Load();
             }
-            
 
-            string? server = Environment.GetEnvironmentVariable("DB_SERVER");
-            string? database = Environment.GetEnvironmentVariable("DB_NAME");
-            string? port = Environment.GetEnvironmentVariable("DB_PORT");
-            string? username = Environment.GetEnvironmentVariable("DB_USER");
-            string? password = Environment.GetEnvironmentVariable("DB_PASS");
+            string? suffix = Environment.GetEnvironmentVariable($"ENV_SUFFIX");
+            suffix ?= $"_{suffix}" : suffix = string.Empty;
+            string? server = Environment.GetEnvironmentVariable($"DB_SERVER{suffix}");
+            string? database = Environment.GetEnvironmentVariable($"DB_NAME{suffix}");
+            string? port = Environment.GetEnvironmentVariable($"DB_PORT{suffix}");
+            string? username = Environment.GetEnvironmentVariable($"DB_USER{suffix}");
+            string? password = Environment.GetEnvironmentVariable($"DB_PASS{suffix}");
 
 
             if (string.IsNullOrEmpty(server)
