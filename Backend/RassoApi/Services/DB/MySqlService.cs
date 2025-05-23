@@ -1,8 +1,9 @@
 ﻿using RassoApi.Entity;
-using RassoApi.Services.Interfaces;
 using MySql.Data.MySqlClient;
+using RassoApi.Services.Interfaces.DB;
+using Common.Database;
 
-namespace RassoApi.Services
+namespace RassoApi.Services.DB
 {
     /// <inheritdoc cref="IMySqlService"/>
     public class MySqlService : IMySqlService
@@ -33,7 +34,7 @@ namespace RassoApi.Services
                             {
                                 var user = new User
                                 {
-                                    Id = reader.GetInt32("Id"),
+                                    Id = reader.GetGuid("Id"),
                                     Name = reader.GetString("Name")
                                 };
                                 users.Add(user);

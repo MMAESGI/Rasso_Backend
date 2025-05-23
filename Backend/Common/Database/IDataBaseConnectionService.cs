@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace RassoApi.Services.Interfaces
+namespace Common.Database
 {
     /// <summary>
     /// Service de contruction de la chaine de connexion
@@ -8,7 +8,7 @@ namespace RassoApi.Services.Interfaces
     public interface IDataBaseConnectionService
     {
         /// <summary>
-        ///  Récupère la chaine de connexion
+        ///  Récupère la connexion à la base de données
         /// </summary>
         /// <returns></returns>
         public MySqlConnection GetConnection();

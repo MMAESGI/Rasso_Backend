@@ -1,4 +1,4 @@
-﻿namespace RassoApi.Exceptions
+﻿namespace Common.Database
 {
     internal class InvalidDatabaseConnectionException : Exception
     {
