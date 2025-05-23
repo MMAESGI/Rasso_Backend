@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Identity.Models
 {
@@ -16,7 +17,9 @@ namespace Identity.Models
         [Required]
         public string PasswordHash { get; set; } = null!;
 
-        public int RoleId { get; set; }
+        public Guid RoleId { get; set; }
+
+        [ForeignKey(nameof(RoleId))]
         public UserRole Role { get; set; } = null!;
 
         public bool IsActive { get; set; } = true;

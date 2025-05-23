@@ -4,7 +4,7 @@ namespace Identity.Models
 {
     public class UserRole
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required, MaxLength(50)]
         public string Code { get; set; } = null!;

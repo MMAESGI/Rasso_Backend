@@ -12,11 +12,5 @@ namespace RassoApi.Services.Interfaces.DB
         /// </summary>
         /// <returns></returns>
         public MySqlConnection GetConnection();
-
-        /// <summary>
-        /// Retourne la chaine de connexion à la base de données
-        /// </summary>
-        /// <returns></returns>
-        public string GetConnectionString();
     }
 }

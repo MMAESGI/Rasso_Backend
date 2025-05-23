@@ -8,9 +8,13 @@ namespace RassoApi.Models.EventModels
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
+        [Required]
         public Guid EventId { get; set; }
+
+        [ForeignKey(nameof(EventId))]
         public Event Event { get; set; } = null!;
 
+        [Required]
         public Guid UserId { get; set; }
 
         // User minimal reference - see note ci-dessous

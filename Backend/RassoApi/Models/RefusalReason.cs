@@ -4,6 +4,7 @@ namespace RassoApi.Models
 {
     public class RefusalReason
     {
+        [Key]
         public int Id { get; set; }
 
         [Required, MaxLength(50)]

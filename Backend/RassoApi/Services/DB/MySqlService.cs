@@ -33,7 +33,7 @@ namespace RassoApi.Services.DB
                             {
                                 var user = new User
                                 {
-                                    Id = reader.GetInt32("Id"),
+                                    Id = reader.GetGuid("Id"),
                                     Name = reader.GetString("Name")
                                 };
                                 users.Add(user);

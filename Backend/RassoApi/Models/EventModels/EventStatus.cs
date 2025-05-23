@@ -5,6 +5,7 @@ namespace RassoApi.Models.EventModels
 {
     public class EventStatus
     {
+        [Key]
         public int Id { get; set; }
 
 

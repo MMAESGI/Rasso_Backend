@@ -26,9 +26,10 @@ namespace RassoApi.Models.EventModels
         [MaxLength(50)]
         public string? Category { get; set; }
 
+        [Required]
         public Guid OrganizerId { get; set; }
 
-        [ForeignKey(nameof(OrganizerId))]
+        [NotMapped]
         public User? Organizer { get; set; } = null;
 
         public int StatusId { get; set; }
@@ -36,10 +37,10 @@ namespace RassoApi.Models.EventModels
         [ForeignKey(nameof(StatusId))]
         public EventStatus? Status { get; set; }
 
-        public Guid? ModeratedById { get; set; }
+        public Guid? ModeratedByUserId { get; set; }
 
-        [ForeignKey(nameof(ModeratedById))]
-        public User? ModeratedBy { get; set; }
+        [NotMapped]
+        public User? ModeratedByUser { get; set; }
 
         public DateTime? ModeratedAt { get; set; }
         public int? RefusalReasonId { get; set; }
@@ -51,7 +52,7 @@ namespace RassoApi.Models.EventModels
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<EventMedia> Images { get; set; } = new List<EventMedia>();
+        //public ICollection<EventMedia> Images { get; set; } = new List<EventMedia>();
     }
 
 }

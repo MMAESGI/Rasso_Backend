@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RassoApi.Models.EventModels
 {
@@ -7,9 +8,13 @@ namespace RassoApi.Models.EventModels
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
+        [Required]
         public Guid EventId { get; set; }
+
+        [ForeignKey(nameof(EventId))]
         public Event Event { get; set; } = null!;
 
+        // Lien vers le fichier dans S3
         [Required, MaxLength(500)]
         public string S3Url { get; set; } = null!;
 
@@ -21,4 +26,5 @@ namespace RassoApi.Models.EventModels
 
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
     }
+
 }

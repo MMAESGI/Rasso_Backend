@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using RassoApi.Configuration;
 using RassoApi.Database;
 using RassoApi.Extensions;
@@ -27,6 +28,16 @@ builder.Services.AddDataBaseServices();
 
 
 var app = builder.Build();
+
+
+// Application des migrations 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//    db.Database.Migrate();
+//}
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

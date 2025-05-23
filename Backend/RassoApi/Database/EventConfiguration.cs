@@ -22,7 +22,7 @@ namespace RassoApi.Database
             builder.Property(e => e.Category).HasColumnName("category").HasMaxLength(50);
             builder.Property(e => e.StatusId).HasColumnName("status_id");
             builder.Property(e => e.OrganizerId).HasColumnName("organizer_id");
-            builder.Property(e => e.ModeratedById).HasColumnName("moderated_by_id");
+            builder.Property(e => e.ModeratedByUserId).HasColumnName("moderated_by_id");
             builder.Property(e => e.ModeratedAt).HasColumnName("moderated_at");
             builder.Property(e => e.RefusalReasonId).HasColumnName("refusal_reason_id");
             builder.Property(e => e.RefusalComment).HasColumnName("refusal_comment");
@@ -31,7 +31,7 @@ namespace RassoApi.Database
 
             builder.HasOne(e => e.Status).WithMany().HasForeignKey(e => e.StatusId);
             builder.HasOne(e => e.Organizer).WithMany().HasForeignKey(e => e.OrganizerId);
-            builder.HasOne(e => e.ModeratedBy).WithMany().HasForeignKey(e => e.ModeratedById);
+            builder.HasOne(e => e.ModeratedByUser).WithMany().HasForeignKey(e => e.ModeratedByUserId);
             builder.HasOne(e => e.RefusalReason).WithMany().HasForeignKey(e => e.RefusalReasonId);
         }
     } 

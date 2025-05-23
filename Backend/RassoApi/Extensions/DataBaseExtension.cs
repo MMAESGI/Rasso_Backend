@@ -22,13 +22,12 @@ namespace RassoApi.Extensions
 
             _ = services.AddDbContext<AppDbContext>((sp, options) =>
             {
-                var dbService = sp.GetRequiredService<IDataBaseConnectionService>();
-                string connectionString = dbService.GetConnectionString();
+                string connectionString = DataBaseConnectionService.GetConnectionString();
 
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
 
-            _ = services.AddSingleton<IMySqlService, MySqlService>();
+            _ = services.AddScoped<IMySqlService, MySqlService>();
             _ = services.AddSingleton<IEventRepository, EventRepository>();
             _ = services.AddSingleton<IEventValidator, EventValidator>();
 

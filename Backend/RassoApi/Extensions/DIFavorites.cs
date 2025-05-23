@@ -1,5 +1,4 @@
-﻿using RassoApi.Services.Events;
-using RassoApi.Services.Interfaces.Events;
+﻿
 
 namespace RassoApi.Extensions
 {

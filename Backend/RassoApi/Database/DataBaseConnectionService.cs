@@ -1,6 +1,7 @@
 ﻿using RassoApi.Exceptions;
 using MySql.Data.MySqlClient;
 using RassoApi.Services.Interfaces.DB;
+using DotNetEnv;
 
 namespace RassoApi.Database
 {
@@ -19,13 +20,30 @@ namespace RassoApi.Database
             return new MySqlConnection(GetConnectionString()); ;
         }
 
-        public string GetConnectionString()
+        public static string GetConnectionString()
         {
+            string envPath = Path.Combine(Directory.GetCurrentDirectory(), "../.env");
+
+            if (Path.Exists(envPath))
+            {
+                Console.WriteLine("Le fichier .env a été trouvé à l'emplacement : {envPath}.");
+                Env.Load(envPath);
+            }
+            else
+            {
+                Console.WriteLine("Le fichier .env n'a pas été trouvé à l'emplacement : {envPath}.");
+                Env.Load();
+            }
+            
+
             string? server = Environment.GetEnvironmentVariable("DB_SERVER");
             string? database = Environment.GetEnvironmentVariable("DB_NAME");
             string? port = Environment.GetEnvironmentVariable("DB_PORT");
             string? username = Environment.GetEnvironmentVariable("DB_USER");
             string? password = Environment.GetEnvironmentVariable("DB_PASS");
+
+
+            Console.WriteLine($"Environnement : \n  -{server} \n -{database} \n -{port} \n - {username} \n {password}");
 
             if (string.IsNullOrEmpty(server)
                 || string.IsNullOrEmpty(database)
