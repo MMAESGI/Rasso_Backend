@@ -2,7 +2,7 @@
 using RassoApi.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RassoApi.Services.Interfaces.DB;
+using RassoApi.Services.DB.Interfaces;
 
 namespace RassoApi.Controllers
 {

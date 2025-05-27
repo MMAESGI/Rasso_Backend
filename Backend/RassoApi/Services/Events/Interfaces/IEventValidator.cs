@@ -1,4 +1,4 @@
-﻿namespace RassoApi.Services.Interfaces.Events
+﻿namespace RassoApi.Services.Events.Interfaces
 {
     public interface IEventValidator
     {

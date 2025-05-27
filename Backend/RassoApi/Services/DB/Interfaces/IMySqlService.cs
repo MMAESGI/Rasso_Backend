@@ -1,6 +1,6 @@
 ﻿using RassoApi.Entity;
 
-namespace RassoApi.Services.Interfaces.DB
+namespace RassoApi.Services.DB.Interfaces
 {
     /// <summary>
     /// Interface pour le POC Jwt

@@ -3,9 +3,9 @@ using RassoApi.Database;
 using RassoApi.Repositories;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.DB;
+using RassoApi.Services.DB.Interfaces;
 using RassoApi.Services.Events;
-using RassoApi.Services.Interfaces.DB;
-using RassoApi.Services.Interfaces.Events;
+using RassoApi.Services.Events.Interfaces;
 
 namespace RassoApi.Extensions
 {

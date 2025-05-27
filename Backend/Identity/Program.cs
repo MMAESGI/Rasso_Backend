@@ -18,11 +18,10 @@ builder.Services.AddApplicationServices();
 
 // Utilisation du package commun
 builder.Services.AddCommonServices<AppDbContext>();
-
 var app = builder.Build();
 
 // Utilisation du package commun
-app.UseCommonPackage();
+app.UseCommonPackage<AppDbContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

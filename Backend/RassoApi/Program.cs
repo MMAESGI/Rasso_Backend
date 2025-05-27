@@ -1,6 +1,8 @@
 using RassoApi.Configuration;
 using RassoApi.Database;
 using RassoApi.Extensions;
+using RassoApi.Services.Events.Interfaces;
+using RassoApi.Services.Events;
 using static Common.CommonExtension;
 
 
@@ -24,16 +26,19 @@ builder.Services.AddCustomAuthentification(builder.Configuration);
 // Database 
 builder.Services.AddDataBaseServices();
 
-builder.Services.AddCommonServices<AppDbContext>();
-
 // Utilisation du package commun
 builder.Services.AddCommonServices<AppDbContext>();
+
+builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5046");
+});
 
 var app = builder.Build();
 
 
 // Utilisation du package commun
-app.UseCommonPackage();
+app.UseCommonPackage<AppDbContext>();
 
 
 // Configure the HTTP request pipeline.

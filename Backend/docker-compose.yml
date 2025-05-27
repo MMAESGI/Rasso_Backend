@@ -7,8 +7,8 @@ services:
     environment:
       - ESGI_API_KEY=${ESGI_API_KEY}
       - ENV_SUFFIX=IDENTITY
-      - DB_SERVER=${DB_SERVER}
-      - DB_PORT=${DB_PORT}
+      - DB_SERVER=${DB_SERVER_IDENTITY}
+      - DB_PORT=${DB_PORT_IDENTITY}
       - DB_NAME=${DB_NAME_IDENTITY}
       - DB_USER=${DB_USER_IDENTITY}
       - DB_PASS=${DB_PASS_IDENTITY}
@@ -23,9 +23,9 @@ services:
     environment:
       - ESGI_API_KEY=${ESGI_API_KEY}
       - ENV_SUFFIX=RASSOAPI
-      - DB_SERVER=${DB_SERVER}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME_RASSO}
+      - DB_SERVER=${DB_SERVER_RASSOAPI}
+      - DB_PORT=${DB_PORT_RASSOAPI}
+      - DB_NAME=${DB_NAME_RASSOAPI}
       - DB_USER=${DB_USER_RASSOAPI}
       - DB_PASS=${DB_PASS_RASSOAPI}
 
