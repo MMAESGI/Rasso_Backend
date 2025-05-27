@@ -17,10 +17,7 @@ namespace Identity.Models
         [Required]
         public string PasswordHash { get; set; } = null!;
 
-        public Guid RoleId { get; set; }
-
-        [ForeignKey(nameof(RoleId))]
-        public UserRole Role { get; set; } = null!;
+        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
         public bool IsActive { get; set; } = true;
 

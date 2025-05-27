@@ -1,7 +1,8 @@
-﻿using Identity.Services;
+﻿using Identity.Repositories;
+using Identity.Services;
 using Identity.Services.Interfaces;
 
-namespace Identity
+namespace Identity.Extensions
 {
     public static class DependencyInjectionExtensions
     {

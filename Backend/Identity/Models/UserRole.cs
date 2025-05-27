@@ -4,12 +4,11 @@ namespace Identity.Models
 {
     public class UserRole
     {
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public User User { get; set; } = default!;
 
-        [Required, MaxLength(50)]
-        public string Code { get; set; } = null!;
-
-        [Required, MaxLength(100)]
-        public string Label { get; set; } = null!;
+        public int RoleId { get; set; }
+        public Role Role { get; set; } = default!;
     }
+
 }

@@ -1,5 +1,5 @@
-using Identity;
 using Identity.Database;
+using Identity.Extensions;
 using Microsoft.EntityFrameworkCore;
 using static Common.CommonExtension;
 
@@ -22,6 +22,10 @@ var app = builder.Build();
 
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
+
+// Peuplement des données
+await app.SeedIdentityDataAsync();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

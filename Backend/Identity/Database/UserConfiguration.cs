@@ -9,21 +9,33 @@ namespace Identity.Database
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("users");
+            builder.ToTable("Users");
+
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.Id).HasColumnType("char(36)");
-            builder.Property(u => u.Name).HasMaxLength(100).IsRequired();
-            builder.Property(u => u.Email).HasMaxLength(150).IsRequired();
-            builder.Property(u => u.PasswordHash).HasColumnType("text").IsRequired();
-            builder.Property(u => u.IsActive).HasDefaultValue(true);
-            builder.Property(u => u.CreatedAt).HasColumnType("timestamp");
-            builder.Property(u => u.AnonymizedAt).HasColumnType("timestamp");
+            builder.Property(u => u.Name)
+                .IsRequired()
+                .HasMaxLength(100);
 
-            builder.HasOne(u => u.Role)
-                .WithMany()
-                .HasForeignKey(u => u.RoleId)
-                .HasConstraintName("fk_users_role");
+            builder.Property(u => u.Email)
+                .IsRequired()
+                .HasMaxLength(150);
+
+            builder.HasIndex(u => u.Email)
+                .IsUnique();
+
+            builder.Property(u => u.PasswordHash)
+                .IsRequired();
+
+            builder.Property(u => u.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Property(u => u.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            builder.HasMany(u => u.UserRoles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(ur => ur.UserId);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto;
+using RassoApi.DTOs;
 using RassoApi.DTOs.Responses.Event;
 using RassoApi.Models;
 using RassoApi.Repositories.Interfaces;
@@ -9,21 +10,26 @@ namespace RassoApi.Services.Events
 {
     public class FavoriteService : IFavoriteService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserProxyService _userService;
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
 
-        public FavoriteService(IUserRepository userRepo, IEventRepository eventRepo, IMapper mapper)
+        public FavoriteService(IUserProxyService userService, IEventRepository eventRepo, IMapper mapper)
         {
-            _userRepository = userRepo;
+            _userService = userService;
             _eventRepository = eventRepo;
             _mapper = mapper;
         }
 
-        public async Task<List<EventResponse>> GetFavouriteEventsAsync(string username)
+        public async Task<List<EventResponse>> GetFavouriteEventsAsync(Guid userId)
         {
-            var user = await _userRepository.GetByUsernameAsync(username);
-            var favs = await _eventRepository.GetFavoritesByUserIdAsync(user.Id);
+            UserDto? user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ArgumentException("Utilisateur non trouvé");
+            }
+
+            var favs = await _eventRepository.GetFavoritesByUserIdAsync(user?.Id);
             return _mapper.Map<List<EventResponse>>(favs);
         }
 

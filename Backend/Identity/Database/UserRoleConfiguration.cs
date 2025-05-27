@@ -8,26 +8,17 @@ namespace Identity.Database
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
-            builder.ToTable("user_roles");
+            builder.ToTable("UserRoles");
 
-            builder.HasKey(ur => ur.Id);
+            builder.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-            builder.Property(ur => ur.Id)
-                .HasColumnName("id")
-                .IsRequired();
+            builder.HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
 
-            builder.Property(ur => ur.Code)
-                .HasColumnName("code")
-                .HasMaxLength(50)
-                .IsRequired();
-
-            builder.HasIndex(ur => ur.Code)
-                .IsUnique();
-
-            builder.Property(ur => ur.Label)
-                .HasColumnName("label")
-                .HasMaxLength(100)
-                .IsRequired();
+            builder.HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
         }
     }
 }

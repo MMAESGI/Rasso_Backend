@@ -5,7 +5,6 @@ using RassoApi.Services.Events.Interfaces;
 using RassoApi.Services.Events;
 using static Common.CommonExtension;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,10 +35,8 @@ builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
 
 var app = builder.Build();
 
-
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

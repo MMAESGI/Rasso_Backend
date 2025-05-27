@@ -5,8 +5,8 @@ namespace RassoApi.Services.Events.Interfaces
 {
     public interface IFavoriteService
     {
-        Task<List<EventResponse>> GetFavouriteEventsAsync(string username);
-        Task<bool> ToggleFavoriteAsync(string username, Guid eventId);
+        Task<List<EventResponse>> GetFavouriteEventsAsync(Guid userId);
+        Task<bool> ToggleFavoriteAsync(Guid userId, Guid eventId);
 
     }
 
