@@ -16,7 +16,7 @@ namespace Identity.Extensions
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
 
             // Authentification
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IUserService, UserService>();
 
             // Base de données
             services.AddSingleton<IUserRepository, UserRepository>();

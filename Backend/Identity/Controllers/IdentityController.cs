@@ -1,4 +1,8 @@
-﻿using Identity.Controllers.Requests;
+﻿using Common.Results;
+using Identity.Controllers.Requests;
+using Identity.DTOs.Responses;
+using Identity.Mappers;
+using Identity.Models;
 using Identity.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,30 +13,46 @@ namespace Identity.Controllers
     [Route("api")]
     public class IdentityController : ControllerBase
     {
-        IAuthService _authService;
+        IUserService _authService;
         ITokenGenerator _tokenGenerator;
+        IIdentityMapper _mapper;
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="authService">Service d'authentification</param>
-        public IdentityController(IAuthService authService, ITokenGenerator tokenGenerator)
+        public IdentityController(IUserService authService, ITokenGenerator tokenGenerator, IIdentityMapper mapper)
         {
             _authService = authService;
             _tokenGenerator = tokenGenerator;
+            _mapper = mapper;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if (_authService.ValidateCredentials(request.Email, request.Password))
+            Result<User> result = await _authService.GetUser(request.Email, request.Password);
+            if (result.Success && result.Value != null)
             {
-                Guid userId = Guid.NewGuid(); // trouver l'id par email ?
-                string token = _tokenGenerator.GenerateToken(userId, request.Email);
-                return Ok(token);
+                UserResponse user  = _mapper.ToUserResponse(result.Value);
+                string token = _tokenGenerator.GenerateToken(result.Value.Id, result.Value.Email);
+                return Ok(new { Token = token, User  = user});
             }
+
             return Unauthorized("Invalid username or password");
         }
 
-        //[Authorize(Roles = "Administrator")]
+
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequest signUpRequest)
+        {
+            Result<User> result = await _userService.SignUpAsync(signUpRequest);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return 
+        }
+
     }
 }

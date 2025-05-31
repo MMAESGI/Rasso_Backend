@@ -1,13 +1,14 @@
-﻿using RassoApi.DTOs.Requests.Event;
+﻿using RassoApi.DTOs;
+using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
 using RassoApi.Models.EventModels;
 using RassoApi.Services.Events.Interfaces;
 
 namespace RassoApi.Mappers
 {
-    public static class EventMapper
+    public static class EventMapper : IEventMapper
     {
-        public static EventResponse ToResponse(Event ev)
+        public static EventResponse ToResponse(Event ev, bool isFavorite)
         {
             return new EventResponse
             {
@@ -30,7 +31,7 @@ namespace RassoApi.Mappers
                             bool isFavorite,
                             int participantCount)
         {
-            var organizerTask = userProxyService.GetUserByIdAsync(ev.OrganizerId);
+            Task<UserDto?> organizerTask = userProxyService.GetUserByIdAsync(ev.OrganizerId);
             Task<ModeratorResponse?> moderatedTask = Task.FromResult<ModeratorResponse?>(null);
 
             if (ev.ModeratedByUserId.HasValue)

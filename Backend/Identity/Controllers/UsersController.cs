@@ -14,19 +14,6 @@
 //            _userService = userService;
 //        }
 
-//        [HttpPost("signup")]
-//        public async Task<IActionResult> SignUp([FromBody] UserDto userDto)
-//        {
-//            var result = await _userService.SignUpAsync(userDto);
-//            return Ok(result);
-//        }
-
-//        [HttpPost("login")]
-//        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
-//        {
-//            var result = await _userService.LoginAsync(loginDto);
-//            return Ok(result);
-//        }
 
 //        [Authorize]
 //        [HttpPut("{id}")]

@@ -11,7 +11,7 @@ namespace Identity.Models
         [Required, MaxLength(100)]
         public string Name { get; set; } = null!;
 
-        [Required, MaxLength(150)]
+        [Required, MaxLength(150), EmailAddress]
         public string Email { get; set; } = null!;
 
         [Required]
@@ -19,7 +19,7 @@ namespace Identity.Models
 
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; } = false;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? AnonymizedAt { get; set; }
