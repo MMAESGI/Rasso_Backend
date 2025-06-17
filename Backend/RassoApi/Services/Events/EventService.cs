@@ -1,42 +1,45 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using System.ComponentModel;
+using Org.BouncyCastle.Crypto;
+using RassoApi.DTOs;
 using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
+using RassoApi.Exceptions;
 using RassoApi.Mappers;
 using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Events.Interfaces;
+using ZstdSharp;
 
 namespace RassoApi.Services.Events
 {
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
+        private readonly IUserProxyService _userProxyService;
+        private readonly IEventMapper _eventMapper;
 
-        public EventService(IEventRepository eventRepo, IUserRepository userRepo, IMapper mapper)
+        public EventService(IEventRepository eventRepo, IUserProxyService userProxyService, IEventMapper eventMapper)
         {
             _eventRepository = eventRepo;
-            _userRepository = userRepo;
-            _mapper = mapper;
+            _userProxyService = userProxyService;
+            _eventMapper = eventMapper;
         }
 
         public async Task<List<EventResponse>> GetAllEventsAsync()
         {
-            var events = await _eventRepository.GetAllAsync(includeOrganizer: true);
-            return _mapper.Map<List<EventResponse>>(events);
+            List<Event> events = await _eventRepository.GetAllAsync(includeImages: true);
+            return _eventMapper.ToEventListResponse(events);
         }
 
-        public async Task<DetailedEventResponse?> GetEventByIdAsync(Guid id)
+        public async Task<DetailedEventResponse> GetEventByIdAsync(Guid id)
         {
-            var ev = await _eventRepository.GetByIdAsync(id, includeOrganizer: true);
-            return ev == null ? null : _mapper.Map<DetailedEventResponse>(ev);
+            var ev = await _eventRepository.GetByIdAsync(id, includeImages: true);
+            return ev == null ? throw new EventException("Evenement non trouvé.") : await _eventMapper.ToDetailedEventResponseAsync(ev);
         }
 
-        public async Task<EventResponse> CreateEventAsync(CreateEventRequest request, string username)
+        public async Task<EventResponse> CreateEventAsync(CreateEventRequest request, string email)
         {
-            var user = await _userRepository.GetByUsernameAsync(username);
-            if (user == null) throw new Exception("User not found");
+            UserDto user = await GetUser(email);
 
             var entity = new Event
             {
@@ -49,21 +52,21 @@ namespace RassoApi.Services.Events
             };
 
             await _eventRepository.AddAsync(entity);
-            return _mapper.Map<EventResponse>(entity);
+            return _eventMapper.ToEventResponse(entity);
         }
 
-        public async Task<EventResponse?> UpdateEventAsync(Guid id, UpdateEventRequest request)
+        public async Task<EventResponse> UpdateEventAsync(Guid id, UpdateEventRequest request)
         {
-            var ev = await _eventRepository.GetByIdAsync(id);
-            if (ev == null) return null;
+            Event? ev = await _eventRepository.GetByIdAsync(id);
+            if (ev == null) throw new EventException("Evénement non trouvé.");
 
             ev.Title = request.Title;
             ev.Description = request.Description;
             ev.Date = request.Date;
             ev.Location = request.Location;
 
-            await _eventRepository.UpdateAsync(ev);
-            return _mapper.Map<EventResponse>(ev);
+            await _eventRepository.UpdateAsync(ev);         // TODO la logique de maj est mauvaise, on est pas sur que cela soit modifier
+            return _eventMapper.ToEventResponse(ev);
         }
 
         public async Task<bool> DeleteEventAsync(Guid id)
@@ -73,21 +76,32 @@ namespace RassoApi.Services.Events
 
         public async Task<List<EventResponse>> GetTopEventsAsync()
         {
-            var top = await _eventRepository.GetTopEventsAsync();
-            return _mapper.Map<List<EventResponse>>(top);
+            List<Event> top = await _eventRepository.GetTopEventsAsync();
+            return _eventMapper.ToEventListResponse(top);
         }
 
-        public async Task<List<EventResponse>> GetEventsByLocationAsync(string? name, double? lat, double? lon)
+        public async Task<List<EventResponse>> GetEventsByLocationAsync(string? name, double? latitude, double? longitude)
         {
-            var results = await _eventRepository.GetByLocationAsync(name, lat, lon);
-            return _mapper.Map<List<EventResponse>>(results);
+            List<Event> results = await _eventRepository.GetByLocationAsync(name, latitude, longitude);
+            return _eventMapper.ToEventListResponse(results);
         }
 
-        public async Task<EventResponse> GetMainEventAsync(string username)
+        public async Task<EventResponse> GetMainEventAsync(string email)
         {
-            var user = await _userRepository.GetByUsernameAsync(username);
-            var ev = await _eventRepository.GetMainEventForUserAsync(user.Id);
-            return _mapper.Map<EventResponse>(ev);
+            UserDto user = await GetUser(email);
+            Event? ev = await _eventRepository.GetMainEventForUserAsync(user.Id);
+            if (ev != null)
+            {
+                return _eventMapper.ToEventResponse(ev);
+            }
+            throw new EventException("Evenement non trouvé.") ;
+        }
+
+        private async Task<UserDto> GetUser(string email)
+        {
+            UserDto? user = await _userProxyService.GetUserByEmail(email);
+            if (user == null) throw new Exception("Utilisateur non trouvé.");
+            return user;
         }
     }
 

@@ -10,7 +10,7 @@ namespace RassoApi.Mappers
     {
         private readonly IUserProxyService _userProxyService;
         private readonly IUserMapper _userMapper;
-        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper)
+        public EventMapper(IUserProxyService userProxyService, , IUserMapper userMapper)
         {
             _userProxyService = userProxyService;
             _userMapper = userMapper;
@@ -33,13 +33,12 @@ namespace RassoApi.Mappers
 
 
 
-        public async Task<DetailedEventResponse> ToDetailedEventResponseAsync(
-                            Event ev,
-                            bool isFavorite = false,
-                            int participantCount = 0)
+        public async Task<DetailedEventResponse> ToDetailedEventResponseAsync(Event ev)
         {
             Task<OrganizerResponse?> organizerTask = GetUserResponseAsync<OrganizerResponse>(ev.OrganizerId);
             Task<ModeratorResponse?> moderatedTask = GetUserResponseAsync<ModeratorResponse>(ev.ModeratedByUserId);
+            bool isFavorite = false; // TODO
+            int participantCount = 0; // TODO
 
             await Task.WhenAll(organizerTask, moderatedTask);
 

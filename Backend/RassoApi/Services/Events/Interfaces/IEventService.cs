@@ -7,12 +7,13 @@ namespace RassoApi.Services.Events.Interfaces
     public interface IEventService
     {
         Task<List<EventResponse>> GetAllEventsAsync();
-        Task<DetailedEventResponse?> GetEventByIdAsync(Guid id);
+        Task<DetailedEventResponse> GetEventByIdAsync(Guid id);
         Task<EventResponse> CreateEventAsync(CreateEventRequest request, string username);
-        Task<EventResponse?> UpdateEventAsync(Guid id, UpdateEventRequest request);
+        Task<EventResponse> UpdateEventAsync(Guid id, UpdateEventRequest request);
         Task<bool> DeleteEventAsync(Guid id);
         Task<List<EventResponse>> GetTopEventsAsync();
         Task<List<EventResponse>> GetEventsByLocationAsync(string? locationName, double? latitude, double? longitude);
         Task<EventResponse> GetMainEventAsync(string username);
+
     }
 }

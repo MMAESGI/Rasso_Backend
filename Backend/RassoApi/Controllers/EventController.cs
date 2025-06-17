@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
+using RassoApi.Exceptions;
 using RassoApi.Helpers.Api;
-using RassoApi.Mappers;
-using RassoApi.Models.EventModels;
 using RassoApi.Services.Events.Interfaces;
 
 namespace RassoApi.Controllers
@@ -22,7 +23,7 @@ namespace RassoApi.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetAll()
         {
-            var events = await _eventService.GetAllEventsAsync();
+            List<EventResponse> events = await _eventService.GetAllEventsAsync();
             return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(events));
         }
 
@@ -37,16 +38,23 @@ namespace RassoApi.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost] // TODO Role organisateur
         public async Task<ActionResult<ApiResponse<EventResponse>>> Create([FromBody] CreateEventRequest request)
         {
-            var created = await _eventService.CreateEventAsync(request, User.Identity!.Name!);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<EventResponse>.SuccessResponse(created, "Event created successfully"));
+            string? email = GetEmailByClaim();
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+            }
+
+            EventResponse eventResponse = await _eventService.CreateEventAsync(request, email);
+            return CreatedAtAction(nameof(GetById), new { eventId = eventResponse.Id }, ApiResponse<EventResponse>.SuccessResponse(eventResponse, "Event created successfully."));
+
         }
 
         [Authorize]
         [HttpPut("{id}")]
-        [HttpPatch("{id}")]
+        [HttpPatch("{id}")] //TODO Role organisateur
         public async Task<ActionResult<ApiResponse<EventResponse>>> Update(Guid id, [FromBody] UpdateEventRequest request)
         {
             var updated = await _eventService.UpdateEventAsync(id, request);
@@ -57,7 +65,7 @@ namespace RassoApi.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] //TODO Role
         public async Task<ActionResult<ApiResponse<string>>> Delete(Guid id)
         {
             var result = await _eventService.DeleteEventAsync(id);
@@ -74,35 +82,45 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(top));
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult<ApiResponse<List<EventResponse>>>> Search([FromQuery] string q)
-        {
-            var results = await _eventService.SearchEventsAsync(q);
-            return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(results));
-        }
+        //[HttpGet("search")]
+        //public async Task<ActionResult<ApiResponse<List<EventResponse>>>> Search([FromQuery] string q)
+        //{
+        //    //var results = await _eventService.SearchEventsAsync(q);
+        //    return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(null));
+        //}
 
-        [Authorize]
-        [HttpGet("favourites")]
-        public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetFavourites()
-        {
-            var favs = await _eventService.GetFavouriteEventsAsync(User.Identity!.Name!);
-            return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(favs));
-        }
+        //[Authorize]
+        //[HttpGet("favourites")]
+        //public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetFavourites()
+        //{
+        //    string? email = GetEmailByClaim();
+        //    if (string.IsNullOrEmpty(email))
+        //    {
+        //        return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+        //    }
+        //    List<EventResponse> favoriteEvents = await _eventService.GetFavouriteEventsAsync(email);
+        //    return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(favoriteEvents));
+        //}
 
-        [Authorize]
-        [HttpPut("favorite")]
-        [HttpPatch("favorite")]
-        public async Task<ActionResult<ApiResponse<string>>> ToggleFavorite([FromBody] ToggleFavoriteRequest request)
-        {
-            var result = await _eventService.ToggleFavoriteAsync(User.Identity!.Name!, request.EventId);
-            return Ok(ApiResponse<string>.SuccessResponse("Favorite updated"));
-        }
+        //[Authorize]
+        //[HttpPut("favorite")]
+        //[HttpPatch("favorite")]
+        //public async Task<ActionResult<ApiResponse<string>>> ToggleFavorite([FromBody] ToggleFavoriteRequest request)
+        //{
+        //    string? email = GetEmailByClaim();
+        //    if (string.IsNullOrEmpty(email))
+        //    {
+        //        return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+        //    }
+        //    var result = await _eventService.ToggleFavoriteAsync(email, request.EventId);
+        //    return Ok(ApiResponse<string>.SuccessResponse("Favorite updated"));
+        //}
 
         [HttpGet("location")]
         public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetByLocation(
-            [FromQuery] string? locationName,
-            [FromQuery] double? latitude,
-            [FromQuery] double? longitude)
+                                        [FromQuery] string? locationName,
+                                        [FromQuery] double? latitude,
+                                        [FromQuery] double? longitude)
         {
             var events = await _eventService.GetEventsByLocationAsync(locationName, latitude, longitude);
             return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(events));
@@ -112,8 +130,31 @@ namespace RassoApi.Controllers
         [HttpGet("main")]
         public async Task<ActionResult<ApiResponse<EventResponse>>> GetMain()
         {
-            var main = await _eventService.GetMainEventAsync(User.Identity!.Name!);
-            return Ok(ApiResponse<EventResponse>.SuccessResponse(main));
+            try
+            {
+                string? email = GetEmailByClaim();
+                if (string.IsNullOrEmpty(email))
+                {
+                    return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+                }
+                EventResponse eventResponse = await _eventService.GetMainEventAsync(email);
+                return Ok(ApiResponse<EventResponse>.SuccessResponse(eventResponse));
+            }
+            catch (EventException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Une erreur est survenue lors de la récupération des événements");
+            }
+            
+        }
+
+        private string? GetEmailByClaim()
+        {
+            return User.FindFirst(ClaimTypes.Email)?.Value
+                ?? User.FindFirst("email")?.Value;
         }
     }
 

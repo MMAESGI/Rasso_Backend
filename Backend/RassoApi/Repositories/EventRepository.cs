@@ -54,8 +54,8 @@ namespace RassoApi.Repositories
                 return false;
 
             _context.Events.Remove(ev);
-            await _context.SaveChangesAsync();
-            return true;
+            
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<Event>> GetTopEventsAsync()
@@ -75,7 +75,7 @@ namespace RassoApi.Repositories
 
             if (latitude.HasValue && longitude.HasValue)
             {
-                // Ex : filtrage simple autour de la position
+                // Filtrage  autour de la position
                 double range = 0.1; // ~10km
                 query = query.Where(e =>
                     e.Latitude >= latitude - range && e.Latitude <= latitude + range &&
@@ -87,7 +87,7 @@ namespace RassoApi.Repositories
 
         public async Task<Event?> GetMainEventForUserAsync(Guid userId)
         {
-            // Exemple simple : le plus proche dans le futur pour cet utilisateur
+            // Le plus proche event dans le futur pour cet utilisateur
             return await _context.Events
                 .Where(e => e.OrganizerId == userId && e.Date > DateTime.UtcNow)
                 .OrderBy(e => e.Date)

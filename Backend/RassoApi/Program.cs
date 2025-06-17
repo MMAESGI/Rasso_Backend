@@ -30,6 +30,7 @@ builder.Services.AddCommonServices<AppDbContext>();
 
 builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
 {
+    // Url du microservice Identity
     client.BaseAddress = new Uri("http://localhost:5046");
 });
 

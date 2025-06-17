@@ -13,9 +13,17 @@ namespace Identity.Database
 
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.Name)
+            builder.Property(u => u.FirstName)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(20);
+
+            builder.Property(u => u.LastName)
+                .IsRequired()
+                .HasMaxLength(20);
+
+            builder.Property(u => u.Username)
+                .IsRequired()
+                .HasMaxLength(20);
 
             builder.Property(u => u.Email)
                 .IsRequired()

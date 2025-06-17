@@ -1,0 +1,5 @@
+DB_SERVER=sunlamander.tech
+DB_NAME=ESGI_RACEVENTS
+DB_PORT=3306
+DB_USER=esgiDBuser
+DB_PASS=esgiDBuser
