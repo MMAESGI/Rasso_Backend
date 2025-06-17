@@ -5,8 +5,11 @@ namespace RassoApi.DTOs
     public class UserDto
     {
         public Guid Id { get; set; }
-        public string Username { get; set; } = default!;
+        public string? Username { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public string? Email { get; set; }
+        public string? AvatarUrl { get; set; } = string.Empty;
         public UserRoleEnum role { get; set; } = UserRoleEnum.Default;
     }
 

@@ -1,9 +1,11 @@
 ﻿namespace RassoApi.DTOs.Responses.User
 {
-    public class OrganizerResponse
+    public class OrganizerResponse : UserResponse
     {
-        public Guid Id { get; set; }
-        public string Username { get; set; } = "Organisateur";
+        public OrganizerResponse()
+        {
+            UserName ??= "Organisateur";
+        }
 
     }
 

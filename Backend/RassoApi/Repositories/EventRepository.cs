@@ -1,4 +1,5 @@
-﻿using RassoApi.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using RassoApi.Database;
 using RassoApi.Models;
 using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
@@ -60,7 +61,7 @@ namespace RassoApi.Repositories
         public async Task<List<Event>> GetTopEventsAsync()
         {
             return await _context.Events
-                .OrderByDescending(e => e.Date) // ou selon une autre logique métier
+                .OrderByDescending(e => e.Date)
                 .Take(10)
                 .ToListAsync();
         }

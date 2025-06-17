@@ -3,9 +3,9 @@
 namespace Identity.Services.Interfaces
 {
     /// <summary>
-    /// Encapsulation de la validation de mot de passe par identity
+    /// Encapsulation de la gestion des mots de passe effectuée par ASP.NET Identity
     /// </summary>
-    public interface IPasswordValidator
+    public interface IPasswordManager
     {
         /// <summary>
         /// Valide le mot de passe d'un utilisateur
@@ -14,5 +14,13 @@ namespace Identity.Services.Interfaces
         /// <param name="password">Mot de passe</param>
         /// <returns>Une liste d'erreur</returns>
         Task<IReadOnlyList<string>> ValidateAsync(User user, string password);
+
+        /// <summary>
+        /// Hache le mot de passe d'un utilisateur
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        string HashPassword(User user, string password);
     }
 }

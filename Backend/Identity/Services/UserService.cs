@@ -1,4 +1,6 @@
-﻿using Common.Results;
+﻿using Common.Models;
+using Common.Results;
+using Identity.Controllers.Requests;
 using Identity.Models;
 using Identity.Repositories;
 using Identity.Services.Interfaces;
@@ -10,16 +12,18 @@ namespace Identity.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IPasswordValidator _passwordValidator;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IPasswordManager _passwordManager;
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="userRepository">User repository</param>
-        public UserService(IUserRepository userRepository, IPasswordValidator passwordValidator)
+        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IPasswordManager passwordManager, IPasswordHasher<User> passwordHasher)
         {
             _userRepository = userRepository;
-            _passwordValidator = passwordValidator;
+            _passwordManager = passwordManager;
+            _roleRepository = roleRepository;
         }
 
 
@@ -29,7 +33,7 @@ namespace Identity.Services
             User? user = _userRepository.GetByEmail(email);
             if (user != null && user.IsActive)
             {
-                IReadOnlyList<string> errors = await _passwordValidator.ValidateAsync(user, password);
+                IReadOnlyList<string> errors = await _passwordManager.ValidateAsync(user, password);
                 if (errors.Any())
                 {
                     return Result<User>.Fail("Invalid username or password", errors.ToList());
@@ -37,7 +41,46 @@ namespace Identity.Services
                 }
                 return Result<User>.Ok(user);
             }
-            return Result<User>.Fail("Invalid username or password");
+            return Result<User>.Fail("Invalid username or password. Please contact your administrator.");
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<User>> RegisterUser(SignUpRequest request)
+        {
+            if (await _userRepository.UserExistsAsync(request.Email, request.Username))
+            {
+                return Result<User>.Fail("Registration failed. Please verify your details and try again");
+            }
+
+            User user = new User
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Username = request.Username,
+                IsActive = false,                        
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            user.PasswordHash = _passwordManager.HashPassword(user, request.Password);
+
+
+            Role? defaultRole = await _roleRepository.GetRoleById((int)UserRoleEnum.User);
+            if (defaultRole == null)
+                return Result<User>.Fail("Default role not found.");
+
+            user.UserRoles.Add(new UserRole
+            {
+                Role = defaultRole,
+                User = user
+            });
+
+
+
+             if (await _userRepository.AddUserAsync(user) > 0)
+                return Result<User>.Ok(user);
+
+             return Result<User>.Fail("Registration failed. Please verify your details and try again");
         }
     }
 }

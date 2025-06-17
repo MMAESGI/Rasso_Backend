@@ -3,9 +3,11 @@ using Identity.Controllers.Requests;
 using Identity.DTOs.Responses;
 using Identity.Mappers;
 using Identity.Models;
+using Identity.Services;
 using Identity.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Identity.Controllers
 {
@@ -13,16 +15,16 @@ namespace Identity.Controllers
     [Route("api")]
     public class IdentityController : ControllerBase
     {
-        IUserService _authService;
+        IUserService _userService;
         ITokenGenerator _tokenGenerator;
         IIdentityMapper _mapper;
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="authService">Service d'authentification</param>
-        public IdentityController(IUserService authService, ITokenGenerator tokenGenerator, IIdentityMapper mapper)
+        public IdentityController(IUserService userService, ITokenGenerator tokenGenerator, IIdentityMapper mapper)
         {
-            _authService = authService;
+            _userService = userService;
             _tokenGenerator = tokenGenerator;
             _mapper = mapper;
         }
@@ -30,7 +32,7 @@ namespace Identity.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            Result<User> result = await _authService.GetUser(request.Email, request.Password);
+            Result<User> result = await _userService.GetUser(request.Email, request.Password);
             if (result.Success && result.Value != null)
             {
                 UserResponse user  = _mapper.ToUserResponse(result.Value);
@@ -45,13 +47,16 @@ namespace Identity.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest signUpRequest)
         {
-            Result<User> result = await _userService.SignUpAsync(signUpRequest);
 
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return 
+
+            Result<User> result = await _userService.RegisterUser(signUpRequest);
+
+            if (!result.Success)
+                return BadRequest(result.Error);
+            
+            DetailedUserResponse userResponse = _mapper.ToDetailedUserResponse(result.Value!);
+
+            return Ok(userResponse);
         }
 
     }

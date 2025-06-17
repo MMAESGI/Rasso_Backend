@@ -11,7 +11,9 @@ namespace Identity.Mappers
             return new DetailedUserResponse
             {
                 Id = user.Id,
-                Name = user.Name,
+                UserName = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 IsActive = user.IsActive,
                 CreatedAt = user.CreatedAt,
@@ -25,7 +27,9 @@ namespace Identity.Mappers
         {
             return new UserResponse
             {
-                Name = user.Name,
+                UserName = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email
             };
         }

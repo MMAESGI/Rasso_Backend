@@ -1,14 +1,22 @@
 ﻿using RassoApi.DTOs;
-using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
+using RassoApi.DTOs.Responses.User;
 using RassoApi.Models.EventModels;
 using RassoApi.Services.Events.Interfaces;
 
 namespace RassoApi.Mappers
 {
-    public static class EventMapper : IEventMapper
+    public class EventMapper : IEventMapper
     {
-        public static EventResponse ToResponse(Event ev, bool isFavorite)
+        private readonly IUserProxyService _userProxyService;
+        private readonly IUserMapper _userMapper;
+        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper)
+        {
+            _userProxyService = userProxyService;
+            _userMapper = userMapper;
+        }
+
+        public EventResponse ToEventResponse(Event ev, bool isFavorite = false)
         {
             return new EventResponse
             {
@@ -25,17 +33,13 @@ namespace RassoApi.Mappers
 
 
 
-        public static async Task<DetailedEventResponse> ToDetailedResponseAsync(
+        public async Task<DetailedEventResponse> ToDetailedEventResponseAsync(
                             Event ev,
-                            IUserProxyService userProxyService,
-                            bool isFavorite,
-                            int participantCount)
+                            bool isFavorite = false,
+                            int participantCount = 0)
         {
-            Task<UserDto?> organizerTask = userProxyService.GetUserByIdAsync(ev.OrganizerId);
-            Task<ModeratorResponse?> moderatedTask = Task.FromResult<ModeratorResponse?>(null);
-
-            if (ev.ModeratedByUserId.HasValue)
-                moderatedTask = userProxyService.GetUserByIdAsync(ev.ModeratedByUserId.Value);
+            Task<OrganizerResponse?> organizerTask = GetUserResponseAsync<OrganizerResponse>(ev.OrganizerId);
+            Task<ModeratorResponse?> moderatedTask = GetUserResponseAsync<ModeratorResponse>(ev.ModeratedByUserId);
 
             await Task.WhenAll(organizerTask, moderatedTask);
 
@@ -51,7 +55,7 @@ namespace RassoApi.Mappers
                 Category = ev.Category,
                 Status = ev.Status?.Code,
                 IsFavorite = isFavorite,
-                Organizer = organizerTask.Result!,
+                Organizer = organizerTask.Result,
                 ModeratedByUser = moderatedTask.Result,
                 ModeratedAt = ev.ModeratedAt,
                 RefusalReasonLabel = ev.RefusalReason?.Label,
@@ -61,6 +65,17 @@ namespace RassoApi.Mappers
             };
         }
 
+        private async Task<T?> GetUserResponseAsync<T>(Guid? userId) where T : UserResponse, new()
+        {
+            if (!userId.HasValue)
+                return null;
+
+            UserDto? userDto = await _userProxyService.GetUserByIdAsync(userId.Value);
+            if (userDto == null)
+                return null;
+
+            return _userMapper.ToUserResponse<T>(userDto);
+        }
     }
 
 }

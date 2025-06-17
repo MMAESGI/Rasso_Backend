@@ -1,4 +1,5 @@
 ﻿using Common.Results;
+using Identity.Controllers.Requests;
 using Identity.Models;
 
 namespace Identity.Services.Interfaces
@@ -23,6 +24,6 @@ namespace Identity.Services.Interfaces
         /// <param name="email">Email</param>
         /// <param name="password">Mot de passe</param>
         /// <returns></returns>
-        Task<Result<User>> RegisterUser(string email, string password);
+        Task<Result<User>> RegisterUser(SignUpRequest request);
     }
 }
