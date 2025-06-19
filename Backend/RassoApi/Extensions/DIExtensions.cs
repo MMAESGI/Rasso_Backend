@@ -9,8 +9,6 @@
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddEventServices();
-            services.AddFavoritesServices();
-
 
             return services;
         }

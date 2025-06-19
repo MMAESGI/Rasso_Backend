@@ -1,13 +1,13 @@
-﻿using RassoApi.DTOs.Responses.Event;
-using RassoApi.Models.EventModels;
+﻿//using RassoApi.DTOs.Responses.Event;
+//using RassoApi.Models.EventModels;
 
-namespace RassoApi.Services.Events.Interfaces
-{
-    public interface IFavoriteService
-    {
-        Task<List<EventResponse>> GetFavouriteEventsAsync(Guid userId);
-        Task<bool> ToggleFavoriteAsync(Guid userId, Guid eventId);
+//namespace RassoApi.Services.Events.Interfaces
+//{
+//    public interface IFavoriteService
+//    {
+//        Task<List<EventResponse>> GetFavouriteEventsAsync(Guid userId);
+//        Task<bool> ToggleFavoriteAsync(Guid userId, Guid eventId);
 
-    }
+//    }
 
-}
+//}

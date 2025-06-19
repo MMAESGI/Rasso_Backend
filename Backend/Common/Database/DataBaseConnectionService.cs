@@ -26,20 +26,20 @@ namespace Common.Database
 
             if (Path.Exists(envPath))
             {
-                Console.WriteLine($"Le fichier .env n'a pas été trouvé à l'emplacement : {envPath}.");
+                Console.WriteLine($"Le fichier .env a été trouvé à l'emplacement : {envPath}.");
                 Env.Load(envPath);
             }
             else
             {
-                Console.WriteLine($"Le fichier .env n'a pas été trouvé à l'emplacement : {envPath}.");
+                Console.WriteLine($"Le fichier .env n'a pas été trouvé à l'emplacement : {envPath}.\n Recherche du .env en cours ...");
                 Env.Load();
             }
 
-            string? server = Environment.GetEnvironmentVariable("DB_SERVER");
-            string? database = Environment.GetEnvironmentVariable("DB_NAME");
-            string? port = Environment.GetEnvironmentVariable("DB_PORT");
-            string? username = Environment.GetEnvironmentVariable("DB_USER");
-            string? password = Environment.GetEnvironmentVariable("DB_PASS");
+            string? server = Environment.GetEnvironmentVariable("DB_SERVER")?.Trim();
+            string? database = Environment.GetEnvironmentVariable("DB_NAME")?.Trim();
+            string? port = Environment.GetEnvironmentVariable("DB_PORT")?.Trim();
+            string? username = Environment.GetEnvironmentVariable("DB_USER")?.Trim();
+            string? password = Environment.GetEnvironmentVariable("DB_PASS")?.Trim();
 
 
             if (string.IsNullOrEmpty(server)
@@ -48,11 +48,12 @@ namespace Common.Database
                 || string.IsNullOrEmpty(username)
                 || string.IsNullOrEmpty(password))
             {
-                throw new InvalidDatabaseConnectionException("La chaine de connexion n'a pas pu être construite correctement avec les variables d'environnements.");
+                Console.WriteLine($"Chaine de connexion en erreur : {server};{port};{database};{username};{password}");
+                throw new InvalidDatabaseConnectionException($"La chaine de connexion n'a pas pu être construite correctement avec les variables d'environnements.");
             }
-            Console.WriteLine("Chaine de connexion : {server.Trim()};{port.Trim()};{database.Trim()};{username.Trim()};{password.Trim()}");
+            Console.WriteLine($"Chaine de connexion en erreur : {server};{port};{database};{username};{password}");
 
-            return $"Server={server.Trim()};Port={port.Trim()};Database={database.Trim()};Uid={username.Trim()};Pwd={password.Trim()};";
+            return $"Server={server};Port={port};Database={database};Uid={username};Pwd={password};";
         }
     }
 }

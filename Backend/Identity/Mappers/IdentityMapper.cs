@@ -30,7 +30,10 @@ namespace Identity.Mappers
                 UserName = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email
+                Email = user.Email,
+                Roles = user.UserRoles
+                          .Select(ur => ur.Role.Name)
+                          .ToList()
             };
         }
     }

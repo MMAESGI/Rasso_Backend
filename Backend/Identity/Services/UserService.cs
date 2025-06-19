@@ -65,7 +65,7 @@ namespace Identity.Services
             user.PasswordHash = _passwordManager.HashPassword(user, request.Password);
 
 
-            Role? defaultRole = await _roleRepository.GetRoleById((int)UserRoleEnum.User);
+            Role? defaultRole = await _roleRepository.GetRoleByName(UserRoleEnum.User);
             if (defaultRole == null)
                 return Result<User>.Fail("Default role not found.");
 

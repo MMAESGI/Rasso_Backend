@@ -1,29 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Identity.Models
 {
     [Index(nameof(Email), IsUnique = true)]
     [Index(nameof(Username), IsUnique = true)]
-    public class User
+    /// <inherits from="IdentityUser{Guid}">The base class for users in the identity system.</inherits>
+    public class User : IdentityUser<Guid>
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
 
-        [Required, MaxLength(20)]
-        public string FirstName { get; set; } = null!;
+        [Required, MaxLength(20), ProtectedPersonalData]
+        public string? FirstName { get; set; }
 
-        [Required, MaxLength(20)]
-        public string LastName { get; set; } = null!;
+        [Required, MaxLength(20), ProtectedPersonalData]
+        public string? LastName { get; set; }
 
-        [Required, MaxLength(150), EmailAddress]
-        public string Email { get; set; } = null!;
+        [Required, MaxLength(150), EmailAddress, ProtectedPersonalData]
+        public override string? Email { get; set; }
 
-        [Required, MaxLength(20)]
-        public string Username { get; set; } = null!;
-
-        [Required]
-        public string PasswordHash { get; set; } = null!;
+        [Required, MaxLength(20), ProtectedPersonalData]
+        public string? Username { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 

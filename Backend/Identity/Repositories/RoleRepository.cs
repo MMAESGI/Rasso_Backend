@@ -1,4 +1,5 @@
 ﻿
+using Common.Models;
 using Identity.Database;
 using Identity.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,8 @@ namespace Identity.Repositories
         public async Task<IList<string>> GetAllRolesAsync()
         {
             return await _context.Roles
-                .Select(r => r.Name)
+                .Where(r => r.Name != null)
+                .Select(r => r.Name!)
                 .ToListAsync();
         }
 
@@ -39,11 +41,11 @@ namespace Identity.Repositories
             return await _context.Roles.AnyAsync(r => r.Name == roleName);
         }
 
-        public async Task<Role?> GetRoleById(int roleId)
+        public async Task<Role?> GetRoleByName(UserRoleEnum roleEnum)
         {
             return await _context.Roles
                 .AsNoTracking()
-                .FirstOrDefaultAsync(r => r.Id == roleId);
+                .FirstOrDefaultAsync(r => r.Name == roleEnum.ToString());
         }
     }
 }
