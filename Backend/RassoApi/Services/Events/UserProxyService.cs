@@ -60,6 +60,12 @@ namespace RassoApi.Services.Events
                 return null;
             }
         }
+
+        public Task<List<UserDto?>> GetUsersByIdsAsync(List<Guid> userIds)
+        {
+            // TODO récupérer l'ensemble des utilisateurs via leurs IDs
+            throw new NotImplementedException();
+        }
     }
 
 }

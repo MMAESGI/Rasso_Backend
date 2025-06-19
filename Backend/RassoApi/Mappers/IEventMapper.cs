@@ -14,7 +14,7 @@ namespace RassoApi.Mappers
         /// <param name="ev"></param>
         /// <param name="isFavorite"></param>
         /// <returns></returns>
-        EventResponse ToEventResponse(Event ev, bool isFavorite = false);
+        EventResponse ToEventResponse(Event ev);
 
         /// <summary>
         ///  Maps an Event model to an EventResponse.
@@ -22,7 +22,7 @@ namespace RassoApi.Mappers
         /// <param name="ev"></param>
         /// <param name="isFavorite"></param>
         /// <returns></returns>
-        List<EventResponse> ToEventListResponse(List<Event> ev, bool isFavorite = false);
+        List<EventResponse> ToEventListResponse(List<Event> ev);
 
         /// <summary>
         /// Maps an Event model to a DetailedEventResponse.
@@ -32,9 +32,7 @@ namespace RassoApi.Mappers
         /// <param name="isFavorite"></param>
         /// <param name="participantCount"></param>
         /// <returns></returns>
-        Task<DetailedEventResponse> ToDetailedEventResponseAsync(Event ev,
-                                                      bool isFavorite = false,
-                                                      int participantCount = 0);
+        Task<DetailedEventResponse> ToDetailedEventResponseAsync(Event ev);
 
         /// <summary>
         /// Maps an Event model to a DetailedEventResponse.
@@ -43,8 +41,6 @@ namespace RassoApi.Mappers
         /// <param name="isFavorite"></param>
         /// <param name="participantCount"></param>
         /// <returns></returns>
-        Task<List<DetailedEventResponse>> ToDetailedEventListResponseAsync(List<Event> ev,
-                                                      bool isFavorite = false,
-                                                      int participantCount = 0);
+        Task<List<DetailedEventResponse>> ToDetailedEventListResponseAsync(List<Event> ev);
     }
 }

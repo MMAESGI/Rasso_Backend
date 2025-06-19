@@ -1,4 +1,5 @@
-﻿using RassoApi.DTOs;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using RassoApi.DTOs;
 using RassoApi.DTOs.Responses.Event;
 using RassoApi.DTOs.Responses.User;
 using RassoApi.Models.EventModels;
@@ -10,13 +11,13 @@ namespace RassoApi.Mappers
     {
         private readonly IUserProxyService _userProxyService;
         private readonly IUserMapper _userMapper;
-        public EventMapper(IUserProxyService userProxyService, , IUserMapper userMapper)
+        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper)
         {
             _userProxyService = userProxyService;
             _userMapper = userMapper;
         }
 
-        public EventResponse ToEventResponse(Event ev, bool isFavorite = false)
+        public EventResponse ToEventResponse(Event ev)
         {
             return new EventResponse
             {
@@ -28,10 +29,21 @@ namespace RassoApi.Mappers
                 Latitude = ev.Latitude,
                 Longitude = ev.Longitude,
                 Category = ev.Category,
+                IsFavorite = false, // TODO: Implement favorite logic
             };
         }
 
+        public List<EventResponse> ToEventListResponse(List<Event> ev)
+        {
+            List<EventResponse> responses = new();
 
+            foreach (var eventEntity in ev)
+            {
+                responses.Add(ToEventResponse(eventEntity));
+            }
+
+            return responses;
+        }
 
         public async Task<DetailedEventResponse> ToDetailedEventResponseAsync(Event ev)
         {
@@ -53,7 +65,7 @@ namespace RassoApi.Mappers
                 Longitude = ev.Longitude,
                 Category = ev.Category,
                 Status = ev.Status?.Code,
-                IsFavorite = isFavorite,
+                IsFavorite = isFavorite,                // TODO
                 Organizer = organizerTask.Result,
                 ModeratedByUser = moderatedTask.Result,
                 ModeratedAt = ev.ModeratedAt,
@@ -74,6 +86,14 @@ namespace RassoApi.Mappers
                 return null;
 
             return _userMapper.ToUserResponse<T>(userDto);
+        }
+
+        
+
+        public Task<List<DetailedEventResponse>> ToDetailedEventListResponseAsync(List<Event> ev)
+        {
+            // Refacto la récupération de la liste des utilisateurs pour l'optimisation
+            throw new NotImplementedException();
         }
     }
 
