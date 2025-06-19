@@ -21,7 +21,7 @@ namespace Identity.Services
         /// <inheritdoc />
         public string GenerateToken(Guid userId, string email)
         {
-            // Utiliser pour retourné le token
+            // Utilisé pour retourner le token
             JwtSecurityTokenHandler tokenHandler = new();
             string? ApiKey = Environment.GetEnvironmentVariable("ESGI_API_KEY");
 
@@ -37,6 +37,7 @@ namespace Identity.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Role, "User")                                          // A Récup
             };
 
