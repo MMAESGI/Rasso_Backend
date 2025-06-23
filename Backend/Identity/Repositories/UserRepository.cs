@@ -15,6 +15,8 @@ namespace Identity.Repositories
         public User? GetByEmail(string email)
         {
             return _context.Users
+                  .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
                 .FirstOrDefault(u => u.Email == email && u.IsActive);
         }
 

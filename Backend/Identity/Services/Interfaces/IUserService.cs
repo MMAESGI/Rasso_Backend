@@ -17,6 +17,7 @@ namespace Identity.Services.Interfaces
         /// <returns></returns>
         Task<Result<User>> GetUser(string email, string password);
 
+        Task<Result<User>> GetUser(string email);
 
         /// <summary>
         /// Indique si les identifiants sont valides

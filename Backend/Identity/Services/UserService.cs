@@ -44,6 +44,23 @@ namespace Identity.Services
             return Result<User>.Fail("Invalid username or password. Please contact your administrator.");
         }
 
+
+        public async Task<Result<User>> GetUser(string email)
+        {
+            User? user = _userRepository.GetByEmail(email);
+            if (user != null && user.IsActive)
+            {
+                //IReadOnlyList<string> errors = await _passwordManager.ValidateAsync(user, password);
+                //if (errors.Any())
+                //{
+                //    return Result<User>.Fail("Invalid username or password", errors.ToList());
+
+                //}
+                return Result<User>.Ok(user);
+            }
+            return Result<User>.Fail("Invalid username or password. Please contact your administrator.");
+        }
+
         /// <inheritdoc />
         public async Task<Result<User>> RegisterUser(SignUpRequest request)
         {
