@@ -44,7 +44,6 @@ namespace Identity.Repositories
         public async Task<Role?> GetRoleByName(UserRoleEnum roleEnum)
         {
             return await _context.Roles
-                .AsNoTracking()
                 .FirstOrDefaultAsync(r => r.Name == roleEnum.ToString());
         }
     }

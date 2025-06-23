@@ -58,7 +58,7 @@ namespace Identity.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 UserName = request.Username,
-                IsActive = false,                        
+                IsActive = true,             // Temporaire           
                 CreatedAt = DateTime.UtcNow,
             };
 
