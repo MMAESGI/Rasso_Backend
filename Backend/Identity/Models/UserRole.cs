@@ -1,14 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Models
 {
-    public class UserRole
+    public class UserRole : IdentityUserRole<Guid>
     {
-        public Guid UserId { get; set; }
-        public User User { get; set; } = default!;
+        public required User User { get; set; }
 
-        public int RoleId { get; set; }
-        public Role Role { get; set; } = default!;
+        public required Role Role { get; set; }
     }
 
 }

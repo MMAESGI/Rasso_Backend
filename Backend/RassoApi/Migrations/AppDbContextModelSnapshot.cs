@@ -22,20 +22,6 @@ namespace RassoApi.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("RassoApi.Entity.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
-                });
-
             modelBuilder.Entity("RassoApi.Models.EventModels.Event", b =>
                 {
                     b.Property<Guid>("Id")
@@ -110,10 +96,6 @@ namespace RassoApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModeratedByUserId");
-
-                    b.HasIndex("OrganizerId");
-
                     b.HasIndex("RefusalReasonId");
 
                     b.HasIndex("StatusId");
@@ -181,8 +163,6 @@ namespace RassoApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("event_participants", (string)null);
                 });
@@ -258,16 +238,6 @@ namespace RassoApi.Migrations
 
             modelBuilder.Entity("RassoApi.Models.EventModels.Event", b =>
                 {
-                    b.HasOne("RassoApi.Entity.User", "ModeratedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModeratedByUserId");
-
-                    b.HasOne("RassoApi.Entity.User", "Organizer")
-                        .WithMany()
-                        .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RassoApi.Models.RefusalReason", "RefusalReason")
                         .WithMany()
                         .HasForeignKey("RefusalReasonId");
@@ -277,10 +247,6 @@ namespace RassoApi.Migrations
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ModeratedByUser");
-
-                    b.Navigation("Organizer");
 
                     b.Navigation("RefusalReason");
 
@@ -306,15 +272,7 @@ namespace RassoApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RassoApi.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Event");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RassoApi.Models.Favorite", b =>
@@ -325,15 +283,7 @@ namespace RassoApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RassoApi.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Event");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RassoApi.Models.EventModels.Event", b =>

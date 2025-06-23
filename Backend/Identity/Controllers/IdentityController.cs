@@ -3,11 +3,8 @@ using Identity.Controllers.Requests;
 using Identity.DTOs.Responses;
 using Identity.Mappers;
 using Identity.Models;
-using Identity.Services;
 using Identity.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Identity.Controllers
 {

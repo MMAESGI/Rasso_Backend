@@ -15,13 +15,15 @@ namespace Identity.Repositories
         public User? GetByEmail(string email)
         {
             return _context.Users
+                  .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
                 .FirstOrDefault(u => u.Email == email && u.IsActive);
         }
 
         public async Task<bool> UserExistsAsync(string email, string username)
         {
             return await _context.Users
-                .AnyAsync(u => u.Email == email || u.Username == username);
+                .AnyAsync(u => u.Email == email || u.UserName == username);
         }
 
         public async Task<int> AddUserAsync(User user)

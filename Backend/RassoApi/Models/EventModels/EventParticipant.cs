@@ -18,9 +18,6 @@ namespace RassoApi.Models.EventModels
         [Required]
         public Guid UserId { get; set; }
 
-        [NotMapped]
-        public User? User { get; set; }
-
         public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
     }
 }

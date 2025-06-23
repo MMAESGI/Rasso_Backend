@@ -10,8 +10,6 @@ namespace Identity.Database
         {
             builder.ToTable("UserRoles");
 
-            builder.HasKey(ur => new { ur.UserId, ur.RoleId });
-
             builder.HasOne(ur => ur.User)
                 .WithMany(u => u.UserRoles)
                 .HasForeignKey(ur => ur.UserId);

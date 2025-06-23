@@ -1,6 +1,5 @@
 ﻿using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
-using RassoApi.Models.EventModels;
 
 namespace RassoApi.Services.Events.Interfaces
 {

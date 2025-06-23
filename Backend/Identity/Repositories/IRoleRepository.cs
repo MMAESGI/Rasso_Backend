@@ -1,4 +1,5 @@
-﻿using Identity.Models;
+﻿using Common.Models;
+using Identity.Models;
 
 namespace Identity.Repositories
 {
@@ -24,10 +25,9 @@ namespace Identity.Repositories
         Task<IList<string>> GetAllRolesAsync();
 
         /// <summary>
-        /// Gets a role by its ID.
+        /// Get role by name
         /// </summary>
-        /// <param name="roleId"></param>
-        /// <returns></returns>
-        Task<Role?> GetRoleById(int roleId);
+        /// <returns>A list of role names.</returns>
+        Task<Role?> GetRoleByName(UserRoleEnum roleEnum);
     }
 }

@@ -21,7 +21,7 @@ namespace RassoApi.Extensions
             
 
             _ = services.AddScoped<IMySqlService, MySqlService>();
-            _ = services.AddSingleton<IEventRepository, EventRepository>();
+            _ = services.AddScoped<IEventRepository, EventRepository>();
             _ = services.AddSingleton<IEventValidator, EventValidator>();
 
 

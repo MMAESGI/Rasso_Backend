@@ -13,9 +13,6 @@ namespace RassoApi.Models
         [Required]
         public Guid UserId { get; set; }
 
-        [NotMapped]
-        public User? User { get; set; }
-
         [Required]
         public Guid EventId { get; set; }
 

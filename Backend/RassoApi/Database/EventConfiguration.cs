@@ -30,8 +30,6 @@ namespace RassoApi.Database
             builder.Property(e => e.UpdatedAt).HasColumnName("updated_at");
 
             builder.HasOne(e => e.Status).WithMany().HasForeignKey(e => e.StatusId);
-            builder.HasOne(e => e.Organizer).WithMany().HasForeignKey(e => e.OrganizerId);
-            builder.HasOne(e => e.ModeratedByUser).WithMany().HasForeignKey(e => e.ModeratedByUserId);
             builder.HasOne(e => e.RefusalReason).WithMany().HasForeignKey(e => e.RefusalReasonId);
         }
     } 

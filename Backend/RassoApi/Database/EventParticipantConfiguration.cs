@@ -18,7 +18,6 @@ namespace RassoApi.Database
             builder.Property(ep => ep.RegisteredAt).HasColumnName("registered_at");
 
             builder.HasOne(ep => ep.Event).WithMany().HasForeignKey(ep => ep.EventId);
-            builder.HasOne(ep => ep.User).WithMany().HasForeignKey(ep => ep.UserId);
         }
     }
 

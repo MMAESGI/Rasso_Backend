@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RassoApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitalUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,20 +47,6 @@ namespace RassoApi.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "events",
                 columns: table => new
                 {
@@ -89,17 +75,6 @@ namespace RassoApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_events", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_events_User_moderated_by_id",
-                        column: x => x.moderated_by_id,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_events_User_organizer_id",
-                        column: x => x.organizer_id,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_events_event_statuses_status_id",
                         column: x => x.status_id,
@@ -153,12 +128,6 @@ namespace RassoApi.Migrations
                 {
                     table.PrimaryKey("PK_event_participants", x => x.id);
                     table.ForeignKey(
-                        name: "FK_event_participants_User_user_id",
-                        column: x => x.user_id,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_event_participants_events_event_id",
                         column: x => x.event_id,
                         principalTable: "events",
@@ -180,12 +149,6 @@ namespace RassoApi.Migrations
                 {
                     table.PrimaryKey("PK_favorites", x => new { x.user_id, x.event_id });
                     table.ForeignKey(
-                        name: "FK_favorites_User_user_id",
-                        column: x => x.user_id,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_favorites_events_event_id",
                         column: x => x.event_id,
                         principalTable: "events",
@@ -203,21 +166,6 @@ namespace RassoApi.Migrations
                 name: "IX_event_participants_event_id",
                 table: "event_participants",
                 column: "event_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_event_participants_user_id",
-                table: "event_participants",
-                column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_events_moderated_by_id",
-                table: "events",
-                column: "moderated_by_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_events_organizer_id",
-                table: "events",
-                column: "organizer_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_events_refusal_reason_id",
@@ -249,9 +197,6 @@ namespace RassoApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "events");
-
-            migrationBuilder.DropTable(
-                name: "User");
 
             migrationBuilder.DropTable(
                 name: "event_statuses");

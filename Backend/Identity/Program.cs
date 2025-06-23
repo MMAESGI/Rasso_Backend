@@ -1,5 +1,6 @@
 using Identity.Database;
 using Identity.Extensions;
+using Identity.Models;
 using Microsoft.EntityFrameworkCore;
 using static Common.CommonExtension;
 
@@ -18,6 +19,8 @@ builder.Services.AddApplicationServices();
 
 // Utilisation du package commun
 builder.Services.AddCommonServices<AppDbContext>();
+builder.Services.AddIdentityServices<AppDbContext, User, Role>();
+
 var app = builder.Build();
 
 // Utilisation du package commun

@@ -29,18 +29,12 @@ namespace RassoApi.Models.EventModels
         [Required]
         public Guid OrganizerId { get; set; }
 
-        [NotMapped]
-        public User? Organizer { get; set; } = null;
-
         public int StatusId { get; set; }
 
         [ForeignKey(nameof(StatusId))]
         public EventStatus? Status { get; set; }
 
         public Guid? ModeratedByUserId { get; set; }
-
-        [NotMapped]
-        public User? ModeratedByUser { get; set; }
 
         public DateTime? ModeratedAt { get; set; }
         public int? RefusalReasonId { get; set; }
