@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Requests\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

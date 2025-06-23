@@ -21,7 +21,7 @@ namespace Identity.Database
                 .IsRequired()
                 .HasMaxLength(20);
 
-            builder.Property(u => u.Username)
+            builder.Property(u => u.UserName)
                 .IsRequired()
                 .HasMaxLength(20);
 
@@ -39,7 +39,8 @@ namespace Identity.Database
                 .HasDefaultValue(true);
 
             builder.Property(u => u.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
 
             builder.HasMany(u => u.UserRoles)
                 .WithOne(ur => ur.User)

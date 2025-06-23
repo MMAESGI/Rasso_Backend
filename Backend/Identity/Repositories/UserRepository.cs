@@ -21,7 +21,7 @@ namespace Identity.Repositories
         public async Task<bool> UserExistsAsync(string email, string username)
         {
             return await _context.Users
-                .AnyAsync(u => u.Email == email || u.Username == username);
+                .AnyAsync(u => u.Email == email || u.UserName == username);
         }
 
         public async Task<int> AddUserAsync(User user)

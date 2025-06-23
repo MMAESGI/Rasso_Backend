@@ -57,7 +57,7 @@ namespace Identity.Services
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Username = request.Username,
+                UserName = request.Username,
                 IsActive = false,                        
                 CreatedAt = DateTime.UtcNow,
             };

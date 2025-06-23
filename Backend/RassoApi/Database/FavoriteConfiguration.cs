@@ -15,8 +15,6 @@ namespace RassoApi.Database
             builder.Property(f => f.UserId).HasColumnName("user_id");
             builder.Property(f => f.EventId).HasColumnName("event_id");
             builder.Property(f => f.CreatedAt).HasColumnName("created_at");
-
-            builder.HasOne(f => f.User).WithMany().HasForeignKey(f => f.UserId);
             builder.HasOne(f => f.Event).WithMany().HasForeignKey(f => f.EventId);
         }
     }
