@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Extension pour l'injection de dépendance
+// Extension pour l'injection de dï¿½pendance
 builder.Services.AddAppSettingsConfiguration(builder.Configuration);
 builder.Services.AddApplicationServices();
 
@@ -34,7 +34,11 @@ builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
     client.BaseAddress = new Uri("http://localhost:8080");
 });
 
+builder.Services.AddCorsConfiguration();
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
