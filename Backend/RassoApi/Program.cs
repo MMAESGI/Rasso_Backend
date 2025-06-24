@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Extension pour l'injection de d�pendance
+// Extension pour l'injection de dépendance
 builder.Services.AddAppSettingsConfiguration(builder.Configuration);
 builder.Services.AddApplicationServices();
 

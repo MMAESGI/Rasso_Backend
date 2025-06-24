@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// Extension pour l'injection de d�pendance
+// Extension pour l'injection de dépendance
 builder.Services.AddApplicationServices();
 
 // Utilisation du package commun
@@ -30,7 +30,7 @@ app.UseCors("AllowAll");
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
 
-// Peuplement des donn�es
+// Peuplement des données
 await app.SeedIdentityDataAsync();
 
 
