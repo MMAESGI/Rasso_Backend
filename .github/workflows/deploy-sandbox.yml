@@ -1,0 +1,35 @@
+name: Deploy to Sandbox on Label
+
+on:
+  push:
+    branches:
+      - env/sandbox
+
+jobs:
+  deploy-sandbox:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H 89.168.46.10 >> ~/.ssh/known_hosts
+
+    - name: Merge and Deploy on Sandbox VM
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        ssh -i ~/.ssh/id_ed25519 ubuntu@89.168.46.10 << 'EOF'
+          set -e
+          cd MMAESGI/sandbox/Rasso_Backend
+
+          git fetch --all
+          git reset --hard origin/env/sandbox
+
+          echo "Deploying latest sanbox code"
+          cd ..
+          docker compose -f docker-compose-back.yml down
+          docker compose -f docker-compose-back.yml up -d --build
+        EOF
