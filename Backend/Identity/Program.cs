@@ -14,19 +14,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// Extension pour l'injection de dépendance
+// Extension pour l'injection de dÃ©pendance
 builder.Services.AddApplicationServices();
 
 // Utilisation du package commun
 builder.Services.AddCommonServices<AppDbContext>();
 builder.Services.AddIdentityServices<AppDbContext, User, Role>();
 
+builder.Services.AddCorsConfiguration();
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
 
-// Peuplement des données
+// Peuplement des donnÃ©es
 await app.SeedIdentityDataAsync();
 
 

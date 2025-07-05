@@ -33,11 +33,10 @@ namespace Identity.Services
             User? user = _userRepository.GetByEmail(email);
             if (user != null && user.IsActive)
             {
-                IReadOnlyList<string> errors = await _passwordManager.ValidateAsync(user, password);
-                if (errors.Any())
+                bool isPasswordValid = _passwordManager.VerifyPassword(user, password);
+                if (!isPasswordValid)
                 {
-                    return Result<User>.Fail("Invalid username or password", errors.ToList());
-
+                    return Result<User>.Fail("Invalid username or password");
                 }
                 return Result<User>.Ok(user);
             }
