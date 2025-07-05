@@ -95,9 +95,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processHome(_response);
         });
     }
@@ -130,9 +128,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processAdmin(_response);
         });
     }
@@ -166,9 +162,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processEventsGET(_response);
         });
     }
@@ -210,9 +204,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processEventsPOST(_response);
         });
     }
@@ -252,9 +244,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processEventsGET2(_response);
         });
     }
@@ -299,9 +289,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processEventsPUT(_response);
         });
     }
@@ -346,9 +334,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processEventsPATCH(_response);
         });
     }
@@ -388,9 +374,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processEventsDELETE(_response);
         });
     }
@@ -427,9 +411,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processTop(_response);
         });
     }
@@ -481,9 +463,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processLocation(_response);
         });
     }
@@ -520,9 +500,7 @@ export class RassoApiClient implements IRassoApiClient {
             }
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response: Response) => {
             return this.processMain(_response);
         });
     }

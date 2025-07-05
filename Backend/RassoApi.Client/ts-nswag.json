@@ -36,7 +36,7 @@
       "responseClass": "SwaggerResponse",
       "protectedMethods": [],
       "configurationClass": null,
-      "useTransformOptionsMethod": true,
+      "useTransformOptionsMethod": false,
       "useTransformResultMethod": false,
       "generateDtoTypes": true,
       "operationGenerationMode": "MultipleClientsFromOperationId",

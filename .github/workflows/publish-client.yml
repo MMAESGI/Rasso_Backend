@@ -2,11 +2,8 @@ name: Publish TypeScript Client
 
 on:
   push:
-    branches:
-      - main  # ou la branche de merge finale
-  pull_request:
-    branches:
-      - users/mmic/*
+    branches: [main]
+    
 permissions:
   contents: read
   packages: write
@@ -16,19 +13,42 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client  # chemin vers ton client
+        working-directory: Backend/RassoApi.Client
 
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Setup .NET 9 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.X'
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
-      - run: ls -R .
-      - run: npm install
-      - run: npm run build  # compile ton client dans `dist`
 
-      - run: npm publish
+      - name: Install NSwag CLI
+        run: dotnet tool install --global NSwag.ConsoleCore
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Génère le client TypeScript
+        run: nswag run ts-nswag.json 
+
+      - name: Vérifie le client généré
+        run: ls -R .
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build client
+        run: npm run build
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
