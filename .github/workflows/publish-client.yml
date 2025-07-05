@@ -30,11 +30,11 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Run NSwag
-        run: dotnet nswag run path/to/your-config.nswag
+        run: nswag run path/to/your-config.nswag
 
 
       - name: Génère le client TypeScript
-        run: dotnet nswag run path/to/your-config.nswag
+        run: nswag run path/to/your-config.nswag
 
       - name: Vérifie le dossier généré
         run: ls -R Backend/RassoApi.Client/Generated/
