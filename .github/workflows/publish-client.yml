@@ -23,7 +23,17 @@ jobs:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
 
-      - name: Génère le client TypeScript (si besoin)
+      - name: Install NSwag CLI
+        run: dotnet tool install --global NSwag.ConsoleCore
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Run NSwag
+        run: dotnet nswag run path/to/your-config.nswag
+
+
+      - name: Génère le client TypeScript
         run: dotnet nswag run path/to/your-config.nswag
 
       - name: Vérifie le dossier généré
