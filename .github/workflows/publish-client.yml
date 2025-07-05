@@ -3,8 +3,6 @@ name: Publish TypeScript Client
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
     
 permissions:
   contents: read
