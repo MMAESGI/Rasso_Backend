@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Backend/RassoApi.Client
+        working-directory: Backend/RassoApi.Client/client-ts
 
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Génère le client TypeScript
-        run: nswag run client-ts/ts-nswag.json 
+        run: nswag run ts-nswag.json 
 
       - name: Vérifie le client généré
         run: ls -R .
