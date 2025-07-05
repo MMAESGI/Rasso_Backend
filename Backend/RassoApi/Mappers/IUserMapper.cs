@@ -1,5 +1,6 @@
 ﻿using RassoApi.DTOs;
 using RassoApi.DTOs.Responses.User;
+using RassoApi.Entity;
 
 namespace RassoApi.Mappers
 {
@@ -11,5 +12,12 @@ namespace RassoApi.Mappers
         /// <param name="user">The user model to map.</param>
         /// <returns>A UserResponse DTO containing the user's information.</returns>
         T ToUserResponse<T>(UserDto user) where T : UserResponse, new();
+
+        /// <summary>
+        /// Convertion en entité
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        User ToUserEntity(UserDto user);
     }
 }

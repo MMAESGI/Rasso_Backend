@@ -21,6 +21,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddCommonServices<AppDbContext>();
 builder.Services.AddIdentityServices<AppDbContext, User, Role>();
 
+
 var app = builder.Build();
 
 // Utilisation du package commun
@@ -30,15 +31,9 @@ app.UseCommonPackage<AppDbContext>();
 await app.SeedIdentityDataAsync();
 
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseAuthorization();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.MapControllers();
 
 app.Run();

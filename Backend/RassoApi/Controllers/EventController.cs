@@ -37,7 +37,7 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<EventResponse>.SuccessResponse(ev));
         }
 
-        [Authorize]
+        ///[Authorize]
         [HttpPost] // TODO Role organisateur
         public async Task<ActionResult<ApiResponse<EventResponse>>> Create([FromBody] CreateEventRequest request)
         {
@@ -52,7 +52,7 @@ namespace RassoApi.Controllers
 
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}")]
         [HttpPatch("{id}")] //TODO Role organisateur
         public async Task<ActionResult<ApiResponse<EventResponse>>> Update(Guid id, [FromBody] UpdateEventRequest request)
@@ -64,7 +64,7 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<EventResponse>.SuccessResponse(updated, "Event updated"));
         }
 
-        [Authorize]
+        ///[Authorize]
         [HttpDelete("{id}")] //TODO Role
         public async Task<ActionResult<ApiResponse<string>>> Delete(Guid id)
         {
