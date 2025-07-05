@@ -57,3 +57,5 @@ _ReSharper*/
 Database/lib/
 liquibase.properties
 *.jar
+/Backend/RassoApi.Client/client-ts/dist
+/Backend/RassoApi.Client/client-ts/node_modules

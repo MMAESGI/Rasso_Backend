@@ -33,3 +33,27 @@ Pour appliquer les changements manuellement, dans un terminal exécuter la comma
 ``` cmd
 dotnet ef database update
 ```
+
+# Clients
+
+Le backend fournit des clients auto-générés grâce à NSwag.
+
+- **RassoApi.Client** : contient un client C# `RassoApiClient.cs` et un client TypeScript `client-ts/rasso-api-client.ts`  
+- **Identity.Client** : contient un client Rust `identity-client.rs`
+
+## Publication automatique
+
+Les clients TypeScript sont automatiquement déployés en tant que package npm, permettant ainsi d'être installés depuis le front.  
+Cela simplifie l'utilisation en encapsulant les requêtes HTTP. De plus, cela permet de manipuler directement les objets.
+
+## Utilisation locale
+
+Pour travailler localement en développement avec la version locale, il faut :
+
+- Dans le backend, dossier `/client-ts` du projet souhaité :  
+  - `npm run build`  
+  - `npm link @mmaesgi/rassoapi-client`
+
+- Dans le frontend :  
+  - `npm link @mmaesgi/rassoapi-client`  (prérequis : `.npmrc` configuré)
+

@@ -7,10 +7,12 @@
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
     },
     "include": [
-        "Generated/**/*.ts"
+        "generated/**/*.ts"
     ],
     "exclude": [
         "node_modules"
