@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main  # ou la branche de merge finale
-
+  pull_request:
+    branches:
+      - users/mmic/*
 jobs:
   publish:
     runs-on: ubuntu-latest
