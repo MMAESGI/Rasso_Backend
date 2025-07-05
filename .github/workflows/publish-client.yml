@@ -41,14 +41,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client
 
       - name: Build client
         run: npm run build
-        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client
 
       - name: Publish to GitHub Packages
         run: npm publish
-        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client
+
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
