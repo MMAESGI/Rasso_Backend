@@ -1,9 +1,9 @@
 {
-  "runtime": "Net80",
+  "runtime": "Net90",
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "http://localhost:5048/swagger/v1/swagger.json",
+      "url": "../RassoApi/swagger/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
