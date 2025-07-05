@@ -10,7 +10,7 @@
         "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "rasso-api-client.ts"
+        "Generated/**/*.ts"
     ],
     "exclude": [
         "node_modules"
