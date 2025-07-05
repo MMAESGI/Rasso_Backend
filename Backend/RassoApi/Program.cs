@@ -31,7 +31,7 @@ builder.Services.AddCommonServices<AppDbContext>();
 builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
 {
     // Url du microservice Identity
-    client.BaseAddress = new Uri("http://localhost:8080");
+    client.BaseAddress = new Uri("http://identity:8080");
 });
 
 var app = builder.Build();
@@ -39,16 +39,12 @@ var app = builder.Build();
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapControllers();
 

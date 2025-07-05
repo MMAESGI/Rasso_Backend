@@ -16,4 +16,7 @@
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="RassoApi.Client\RassoApi.Client.csproj" />
+  </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@ using Org.BouncyCastle.Crypto;
 using RassoApi.DTOs;
 using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
+using RassoApi.Entity;
 using RassoApi.Exceptions;
 using RassoApi.Mappers;
 using RassoApi.Models.EventModels;
@@ -17,12 +18,17 @@ namespace RassoApi.Services.Events
         private readonly IEventRepository _eventRepository;
         private readonly IUserProxyService _userProxyService;
         private readonly IEventMapper _eventMapper;
+        private readonly IUserMapper _userMapper;
 
-        public EventService(IEventRepository eventRepo, IUserProxyService userProxyService, IEventMapper eventMapper)
+        public EventService(IEventRepository eventRepo,
+                            IUserProxyService userProxyService,
+                            IEventMapper eventMapper,
+                            IUserMapper userMapper)
         {
             _eventRepository = eventRepo;
             _userProxyService = userProxyService;
             _eventMapper = eventMapper;
+            _userMapper = userMapper;
         }
 
         public async Task<List<EventResponse>> GetAllEventsAsync()
@@ -39,7 +45,6 @@ namespace RassoApi.Services.Events
 
         public async Task<EventResponse> CreateEventAsync(CreateEventRequest request, string email)
         {
-            UserDto user = await GetUser(email);
 
             var entity = new Event
             {
@@ -48,8 +53,17 @@ namespace RassoApi.Services.Events
                 Description = request.Description,
                 Location = request.Location,
                 Date = request.Date,
-                OrganizerId = user.Id
             };
+
+            try
+            {
+                UserDto user = await GetUser(email);
+                entity.OrganizerId = user.Id;
+            } catch (Exception e)
+            {
+                //Log.Error("Utilisateur non trouvé");
+            }
+
 
             await _eventRepository.AddAsync(entity);
             return _eventMapper.ToEventResponse(entity);
@@ -100,7 +114,10 @@ namespace RassoApi.Services.Events
         private async Task<UserDto> GetUser(string email)
         {
             UserDto? user = await _userProxyService.GetUserByEmail(email);
-            if (user == null) throw new Exception("Utilisateur non trouvé.");
+            if (user == null)
+            {
+                throw new Exception("Utilisateur non trouvé.");
+            }
             return user;
         }
     }

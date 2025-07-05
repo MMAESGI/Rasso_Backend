@@ -51,12 +51,12 @@ namespace RassoApi.Services.Events
                     return null;
                 }
 
-                ApiResponse<UserDto>? apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<UserDto>>();
-                return apiResponse?.Data;
+                UserDto? apiResponse = await response.Content.ReadFromJsonAsync<UserDto>();
+                return apiResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception when calling identity service for user {UserId}", email);
+                _logger.LogError(ex, "Exception when calling identity service for user {email}", email);
                 return null;
             }
         }
