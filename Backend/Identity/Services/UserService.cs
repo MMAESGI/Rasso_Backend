@@ -44,7 +44,7 @@ namespace Identity.Services
         }
 
 
-        public async Task<Result<User>> GetUser(string email)
+        public async Task<Result<User>> GetUserByEmail(string email)
         {
             User? user = _userRepository.GetByEmail(email);
             if (user != null && user.IsActive)

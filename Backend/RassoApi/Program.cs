@@ -4,6 +4,9 @@ using RassoApi.Extensions;
 using RassoApi.Services.Events.Interfaces;
 using RassoApi.Services.Events;
 using static Common.CommonExtension;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Text.Json;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,11 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rasso API", Version = "v1" });
+
+});
 
 // Extension pour l'injection de dépendance
 builder.Services.AddAppSettingsConfiguration(builder.Configuration);
@@ -31,7 +38,7 @@ builder.Services.AddCommonServices<AppDbContext>();
 builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
 {
     // Url du microservice Identity
-    client.BaseAddress = new Uri("http://localhost:8080");
+    client.BaseAddress = new Uri("http://identity:8080");
 });
 
 builder.Services.AddCorsConfiguration();
@@ -43,16 +50,12 @@ app.UseCors("AllowAll");
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapControllers();
 

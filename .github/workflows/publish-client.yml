@@ -1,0 +1,28 @@
+name: Publish TypeScript Client
+
+on:
+  push:
+    branches:
+      - main  # ou la branche de merge finale
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rassoapi-client  # chemin vers ton client
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+
+      - run: npm install
+      - run: npm run build  # compile ton client dans `dist`
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

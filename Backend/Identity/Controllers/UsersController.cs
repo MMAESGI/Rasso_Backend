@@ -1,4 +1,6 @@
-﻿using Identity.Services.Interfaces;
+﻿using Common.Results;
+using Identity.Models;
+using Identity.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,11 +39,13 @@ namespace Identity.Controllers
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail(string email)
         {
-            var user = await _userService.GetUser(email);
-            if (user == null)
-                return NotFound();
+            Result<User> result = await _userService.GetUserByEmail(email);
+            if (result.Success)
+                return Ok(result.Value);
 
-            return Ok(user);
+            return NotFound();
+
+            
         }
     }
 
