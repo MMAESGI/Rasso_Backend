@@ -37,7 +37,7 @@ jobs:
         run: nswag run ts-nswag.json  # ou le nom réel
 
       - name: Vérifie le client généré
-        run: ls -R Generated/rasso-api-client
+        run: ls -R .
 
       - name: Install dependencies
         run: npm install
