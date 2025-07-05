@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rassoapi-client  # chemin vers ton client
+        working-directory: .Backend/RassoApi.Client/Generated/rassoapi-client  # chemin vers ton client
 
     steps:
       - uses: actions/checkout@v3
