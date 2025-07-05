@@ -3,28 +3,42 @@ name: Publish TypeScript Client
 on:
   push:
     branches:
-      - main  # ou la branche de merge finale
+      - main
   pull_request:
     branches:
       - users/mmic/*
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client  # chemin vers ton client
-
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Vérifie le contenu après checkout
+        run: ls -R
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
-      - run: ls -R .
-      - run: npm install
-      - run: npm run build  # compile ton client dans `dist`
 
-      - run: npm publish
+      - name: Génère le client TypeScript (si besoin)
+        run: dotnet nswag run path/to/your-config.nswag
+
+      - name: Vérifie le dossier généré
+        run: ls -R Backend/RassoApi.Client/Generated/
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client
+
+      - name: Build client
+        run: npm run build
+        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        working-directory: Backend/RassoApi.Client/Generated/rasso-api-client
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
