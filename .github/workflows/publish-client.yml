@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
-      - run: ls -R .Backend/RassoApi.Client/Generated/
+      - run: ls -R .
       - run: npm install
       - run: npm run build  # compile ton client dans `dist`
 
