@@ -4,8 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
 
+    branches: [main]
+    
+permissions:
+  contents: read
+  packages: write
+  
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -34,7 +39,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Génère le client TypeScript
-        run: nswag run ts-nswag.json  # ou le nom réel
+        run: nswag run ts-nswag.json 
 
       - name: Vérifie le client généré
         run: ls -R .
