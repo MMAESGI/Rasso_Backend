@@ -1,6 +1,5 @@
 ﻿using RassoApi.DTOs;
 using RassoApi.DTOs.Responses.User;
-using RassoApi.Entity;
 
 namespace RassoApi.Mappers
 {
@@ -18,6 +17,8 @@ namespace RassoApi.Mappers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        User ToUserEntity(UserDto user);
+        Entity.User ToUserEntity(UserDto user);
+
+        UserDto UserIdentityToUser(Identity.Client.User user);
     }
 }

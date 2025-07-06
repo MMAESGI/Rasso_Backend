@@ -5,30 +5,6 @@
     "version": "v1"
   },
   "paths": {
-    "/api/home": {
-      "get": {
-        "tags": [
-          "Basic"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/admin": {
-      "get": {
-        "tags": [
-          "Basic"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/events": {
       "get": {
         "tags": [

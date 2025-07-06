@@ -14,6 +14,8 @@ namespace Identity.Repositories
         /// <returns></returns>
         User? GetByEmail(string email);
 
+        User? GetById(Guid id);
+
         /// <summary>
         /// Indique si l'utilisateur existe déjà
         /// </summary>

@@ -9,11 +9,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
 		<PackageReference Include="NSwag.AspNetCore" Version="14.4.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
@@ -28,10 +28,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Common\Common.csproj" />
+		<ProjectReference Include="..\Identity.Client\Identity.Client.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Migrations\" />
+		<Folder Include="Services\DB\Interfaces\" />
 	</ItemGroup>
 
 </Project>

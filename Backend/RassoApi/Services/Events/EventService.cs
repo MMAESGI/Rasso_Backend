@@ -1,15 +1,13 @@
-﻿using System.ComponentModel;
-using Org.BouncyCastle.Crypto;
+﻿
 using RassoApi.DTOs;
 using RassoApi.DTOs.Requests.Event;
 using RassoApi.DTOs.Responses.Event;
-using RassoApi.Entity;
 using RassoApi.Exceptions;
 using RassoApi.Mappers;
 using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Events.Interfaces;
-using ZstdSharp;
+
 
 namespace RassoApi.Services.Events
 {
@@ -59,7 +57,7 @@ namespace RassoApi.Services.Events
             {
                 UserDto user = await GetUser(email);
                 entity.OrganizerId = user.Id;
-            } catch (Exception e)
+            } catch
             {
                 //Log.Error("Utilisateur non trouvé");
             }

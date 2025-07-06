@@ -1,0 +1,19 @@
+{
+    "name": "@mmaesgi/identity-client",
+    "version": "1.0.2",
+    "main": "dist/identity-client.js",
+    "types": "dist/identity-client.d.ts",
+    "files": [
+        "dist/identity-client.js",
+        "dist/identity-client.d.ts"
+    ],
+    "scripts": {
+        "build": "tsc"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/"
+    },
+    "dependencies": {
+        "axios": "^1.10.0"
+    }
+}

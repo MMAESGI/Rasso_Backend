@@ -19,6 +19,8 @@ namespace Identity.Services.Interfaces
 
         Task<Result<User>> GetUserByEmail(string email);
 
+        Result<User> GetById(Guid id);
+
         /// <summary>
         /// Indique si les identifiants sont valides
         /// </summary>

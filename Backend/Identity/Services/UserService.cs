@@ -26,6 +26,15 @@ namespace Identity.Services
             _roleRepository = roleRepository;
         }
 
+        public Result<User> GetById(Guid id)
+        {
+            User? user = _userRepository.GetById(id);
+            if (user == null)
+            {
+                return Result<User>.Fail("Cannot Find User");
+            }
+            return Result<User>.Ok(user);
+        }
 
         /// <inheritdoc />
         public async Task<Result<User>> GetUser(string email, string password)

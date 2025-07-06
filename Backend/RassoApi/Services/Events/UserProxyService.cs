@@ -1,71 +1,52 @@
-﻿using RassoApi.DTOs;
-using RassoApi.Helpers.Api;
+﻿using Identity.Client;
+using RassoApi.DTOs;
+using RassoApi.Mappers;
 using RassoApi.Services.Events.Interfaces;
 
-namespace RassoApi.Services.Events
+public class UserProxyService : IUserProxyService
 {
-    public class UserProxyService : IUserProxyService
+    private readonly IdentityClient _identityClient;
+    private readonly ILogger<UserProxyService> _logger;
+    private readonly IUserMapper _userMapper;
+
+    public UserProxyService(IdentityClient identityClient, ILogger<UserProxyService> logger, IUserMapper userMapper)
     {
-        private readonly HttpClient _httpClient;
-        private readonly ILogger<UserProxyService> _logger;
+        _identityClient = identityClient;
+        _logger = logger;
+        _userMapper = userMapper;
+    }
 
-        public UserProxyService(HttpClient httpClient, ILogger<UserProxyService> logger)
+    public async Task<UserDto?> GetUserByIdAsync(Guid userId)
+    {
+        try
         {
-            _httpClient = httpClient;
-            _logger = logger;
+            return _userMapper.UserIdentityToUser(await _identityClient.IdAsync(userId));
         }
-
-
-        // TODO
-        public async Task<UserDto?> GetUserByIdAsync(Guid userId)
+        catch (Exception ex)
         {
-            try
-            {
-                HttpResponseMessage response = await _httpClient.GetAsync($"/api/users/{userId}");
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogWarning("Failed to fetch user {UserId} from Identity. Status: {StatusCode}", userId, response.StatusCode);
-                    return null;
-                }
-
-                ApiResponse<UserDto>? apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<UserDto>>();
-                return apiResponse?.Data;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception when calling identity service for user {UserId}", userId);
-                return null;
-            }
-        }
-
-
-        // TODO
-        public async Task<UserDto?> GetUserByEmail(string email)
-        {
-            try
-            {
-                HttpResponseMessage response = await _httpClient.GetAsync($"/api/users/{email}");
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogWarning("Failed to fetch user {email} from Identity. Status: {StatusCode}", email, response.StatusCode);
-                    return null;
-                }
-
-                UserDto? apiResponse = await response.Content.ReadFromJsonAsync<UserDto>();
-                return apiResponse;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Exception when calling identity service for user {email}", email);
-                return null;
-            }
-        }
-
-        public Task<List<UserDto?>> GetUsersByIdsAsync(List<Guid> userIds)
-        {
-            // TODO récupérer l'ensemble des utilisateurs via leurs IDs
-            throw new NotImplementedException();
+            _logger.LogError(ex, "Exception when calling identity service for user {UserId}", userId);
+            return null;
         }
     }
 
+    public async Task<UserDto?> GetUserByEmail(string email)
+    {
+        try
+        {
+            return _userMapper.UserIdentityToUser(await _identityClient.EmailAsync(email));
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception when calling identity service for user {email}", email);
+            return null;
+        }
+    }
+
+    public Task<List<UserDto?>> GetUsersByIdsAsync(List<Guid> userIds)
+    {
+        throw new NotImplementedException();
+    }
+
+    // Implémenter GetUsersByIdsAsync si disponible dans IdentityClient
 }

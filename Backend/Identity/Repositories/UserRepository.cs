@@ -12,6 +12,14 @@ namespace Identity.Repositories
             _context = context;
         }
 
+
+        public User? GetById(Guid id)
+        {
+            return _context.Users
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                    .FirstOrDefault(x => x.Id == id);
+        }
         public User? GetByEmail(string email)
         {
             return _context.Users
