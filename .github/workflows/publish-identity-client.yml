@@ -1,15 +1,69 @@
-# .github/workflows/publish-rasso-client.yml
-name: Publish Identity Client
+name: Publish TS Client Identity
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'Backend/Identity.Client/**'
+  workflow_call:
+    inputs:
+      client-path:
+        required: true
+        type: string
 
 jobs:
-  publish-client:
-    uses: ./.github/workflows/publish-client.yml
-    with:
-      client-path: Backend/Identity.Client/client-ts
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend/Identity.Client/
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+      
+      - name: List contents of client path
+        run: ls -R .
+        
+      - name: Install NSwag CLI
+        run: dotnet tool install --global NSwag.ConsoleCore
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Génère le client TypeScript
+        run: nswag run client-ts/ts-nswag.json
+
+      - name: Vérifie s’il y a des changements
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop si aucun changement
+        if: steps.check_changes.outputs.changed == 'false'
+        run: echo "Aucun changement détecté, fin du workflow."
+
+
+      - name: Install dependencies
+        if: steps.check_changes.outputs.changed == 'true'
+        run: npm install
+
+      - name: Build client
+        if: steps.check_changes.outputs.changed == 'true'
+        run: npm run build
+
+      - name: Publish to GitHub Packages
+        if: steps.check_changes.outputs.changed == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
