@@ -1,14 +1,10 @@
-﻿using Common.Models;
-using Identity.Client;
-using RassoApi.DTOs;
-using RassoApi.DTOs.Responses.User;
-using RassoApi.Entity;
+﻿using RassoApi.DTOs.Responses.User;
 
 namespace RassoApi.Mappers
 {
     public class UserMapper : IUserMapper
     {
-        public T ToUserResponse<T>(UserDto user) where T : UserResponse, new()
+        public T ToUserResponse<T>(DTOs.UserDto user) where T : UserResponse, new()
         {
             return new T
             {
@@ -19,21 +15,21 @@ namespace RassoApi.Mappers
             };
         }
 
-        public Entity.User ToUserEntity(UserDto user)
+        public Entity.User ToUserEntity(DTOs.UserDto user)
         {
             return new Entity.User { Id = user.Id, Name = user.LastName + user.FirstName };
         }
 
-        public UserDto UserIdentityToUser(Identity.Client.User user)
+        public DTOs.UserDto UserIdentityToUser(Identity.Client.UserDto user)
         {
-            return new UserDto
+            return new DTOs.UserDto
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Username = user.UserName,
-                //role = user.UserRoles
+                Username = user.Username,
+                //role = user.Role ,
             };
         }
 

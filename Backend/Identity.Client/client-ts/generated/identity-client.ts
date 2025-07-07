@@ -24,11 +24,11 @@ export interface IIdentityClient {
     /**
      * @return OK
      */
-    email(email: string): Promise<User>;
+    email(email: string): Promise<UserDto>;
     /**
      * @return OK
      */
-    id(id: string): Promise<User>;
+    id(id: string): Promise<UserDto>;
 }
 
 export class IdentityClient implements IIdentityClient {
@@ -151,7 +151,7 @@ export class IdentityClient implements IIdentityClient {
     /**
      * @return OK
      */
-    email(email: string, cancelToken?: CancelToken): Promise<User> {
+    email(email: string, cancelToken?: CancelToken): Promise<UserDto> {
         let url_ = this.baseUrl + "/api/users/email/{email}";
         if (email === undefined || email === null)
             throw new Error("The parameter 'email' must be defined.");
@@ -178,7 +178,7 @@ export class IdentityClient implements IIdentityClient {
         });
     }
 
-    protected processEmail(response: AxiosResponse): Promise<User> {
+    protected processEmail(response: AxiosResponse): Promise<UserDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -192,20 +192,20 @@ export class IdentityClient implements IIdentityClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = User.fromJS(resultData200);
-            return Promise.resolve<User>(result200);
+            result200 = UserDto.fromJS(resultData200);
+            return Promise.resolve<UserDto>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<User>(null as any);
+        return Promise.resolve<UserDto>(null as any);
     }
 
     /**
      * @return OK
      */
-    id(id: string, cancelToken?: CancelToken): Promise<User> {
+    id(id: string, cancelToken?: CancelToken): Promise<UserDto> {
         let url_ = this.baseUrl + "/api/users/id/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -232,7 +232,7 @@ export class IdentityClient implements IIdentityClient {
         });
     }
 
-    protected processId(response: AxiosResponse): Promise<User> {
+    protected processId(response: AxiosResponse): Promise<UserDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -246,14 +246,14 @@ export class IdentityClient implements IIdentityClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = User.fromJS(resultData200);
-            return Promise.resolve<User>(result200);
+            result200 = UserDto.fromJS(resultData200);
+            return Promise.resolve<UserDto>(result200);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<User>(null as any);
+        return Promise.resolve<UserDto>(null as any);
     }
 }
 
@@ -295,66 +295,6 @@ export class LoginRequest implements ILoginRequest {
 export interface ILoginRequest {
     email: string;
     password: string;
-}
-
-export class Role implements IRole {
-    id?: string;
-    name?: string | undefined;
-    normalizedName?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    userRoles?: UserRole[] | undefined;
-
-    constructor(data?: IRole) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.normalizedName = _data["normalizedName"];
-            this.concurrencyStamp = _data["concurrencyStamp"];
-            if (Array.isArray(_data["userRoles"])) {
-                this.userRoles = [] as any;
-                for (let item of _data["userRoles"])
-                    this.userRoles!.push(UserRole.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Role {
-        data = typeof data === 'object' ? data : {};
-        let result = new Role();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["normalizedName"] = this.normalizedName;
-        data["concurrencyStamp"] = this.concurrencyStamp;
-        if (Array.isArray(this.userRoles)) {
-            data["userRoles"] = [];
-            for (let item of this.userRoles)
-                data["userRoles"].push(item ? item.toJSON() : <any>undefined);
-        }
-        return data;
-    }
-}
-
-export interface IRole {
-    id?: string;
-    name?: string | undefined;
-    normalizedName?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    userRoles?: UserRole[] | undefined;
 }
 
 export class SignUpRequest implements ISignUpRequest {
@@ -413,30 +353,16 @@ export interface ISignUpRequest {
     username: string;
 }
 
-export class User implements IUser {
+export class UserDto implements IUserDto {
     id?: string;
-    userName?: string | undefined;
-    normalizedUserName?: string | undefined;
+    username?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     email?: string | undefined;
-    normalizedEmail?: string | undefined;
-    emailConfirmed?: boolean;
-    passwordHash?: string | undefined;
-    securityStamp?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    phoneNumber?: string | undefined;
-    phoneNumberConfirmed?: boolean;
-    twoFactorEnabled?: boolean;
-    lockoutEnd?: Date | undefined;
-    lockoutEnabled?: boolean;
-    accessFailedCount?: number;
-    firstName!: string;
-    lastName!: string;
-    userRoles?: UserRole[] | undefined;
-    isActive?: boolean;
-    createdAt?: Date;
-    anonymizedAt?: Date | undefined;
+    avatarUrl?: string | undefined;
+    role?: UserRoleEnum[] | undefined;
 
-    constructor(data?: IUser) {
+    constructor(data?: IUserDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -448,36 +374,22 @@ export class User implements IUser {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.userName = _data["userName"];
-            this.normalizedUserName = _data["normalizedUserName"];
-            this.email = _data["email"];
-            this.normalizedEmail = _data["normalizedEmail"];
-            this.emailConfirmed = _data["emailConfirmed"];
-            this.passwordHash = _data["passwordHash"];
-            this.securityStamp = _data["securityStamp"];
-            this.concurrencyStamp = _data["concurrencyStamp"];
-            this.phoneNumber = _data["phoneNumber"];
-            this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
-            this.twoFactorEnabled = _data["twoFactorEnabled"];
-            this.lockoutEnd = _data["lockoutEnd"] ? new Date(_data["lockoutEnd"].toString()) : <any>undefined;
-            this.lockoutEnabled = _data["lockoutEnabled"];
-            this.accessFailedCount = _data["accessFailedCount"];
+            this.username = _data["username"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
-            if (Array.isArray(_data["userRoles"])) {
-                this.userRoles = [] as any;
-                for (let item of _data["userRoles"])
-                    this.userRoles!.push(UserRole.fromJS(item));
+            this.email = _data["email"];
+            this.avatarUrl = _data["avatarUrl"];
+            if (Array.isArray(_data["role"])) {
+                this.role = [] as any;
+                for (let item of _data["role"])
+                    this.role!.push(item);
             }
-            this.isActive = _data["isActive"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.anonymizedAt = _data["anonymizedAt"] ? new Date(_data["anonymizedAt"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): User {
+    static fromJS(data: any): UserDto {
         data = typeof data === 'object' ? data : {};
-        let result = new User();
+        let result = new UserDto();
         result.init(data);
         return result;
     }
@@ -485,108 +397,36 @@ export class User implements IUser {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["userName"] = this.userName;
-        data["normalizedUserName"] = this.normalizedUserName;
-        data["email"] = this.email;
-        data["normalizedEmail"] = this.normalizedEmail;
-        data["emailConfirmed"] = this.emailConfirmed;
-        data["passwordHash"] = this.passwordHash;
-        data["securityStamp"] = this.securityStamp;
-        data["concurrencyStamp"] = this.concurrencyStamp;
-        data["phoneNumber"] = this.phoneNumber;
-        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
-        data["twoFactorEnabled"] = this.twoFactorEnabled;
-        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
-        data["lockoutEnabled"] = this.lockoutEnabled;
-        data["accessFailedCount"] = this.accessFailedCount;
+        data["username"] = this.username;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
-        if (Array.isArray(this.userRoles)) {
-            data["userRoles"] = [];
-            for (let item of this.userRoles)
-                data["userRoles"].push(item ? item.toJSON() : <any>undefined);
+        data["email"] = this.email;
+        data["avatarUrl"] = this.avatarUrl;
+        if (Array.isArray(this.role)) {
+            data["role"] = [];
+            for (let item of this.role)
+                data["role"].push(item);
         }
-        data["isActive"] = this.isActive;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["anonymizedAt"] = this.anonymizedAt ? this.anonymizedAt.toISOString() : <any>undefined;
         return data;
     }
 }
 
-export interface IUser {
+export interface IUserDto {
     id?: string;
-    userName?: string | undefined;
-    normalizedUserName?: string | undefined;
+    username?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     email?: string | undefined;
-    normalizedEmail?: string | undefined;
-    emailConfirmed?: boolean;
-    passwordHash?: string | undefined;
-    securityStamp?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    phoneNumber?: string | undefined;
-    phoneNumberConfirmed?: boolean;
-    twoFactorEnabled?: boolean;
-    lockoutEnd?: Date | undefined;
-    lockoutEnabled?: boolean;
-    accessFailedCount?: number;
-    firstName: string;
-    lastName: string;
-    userRoles?: UserRole[] | undefined;
-    isActive?: boolean;
-    createdAt?: Date;
-    anonymizedAt?: Date | undefined;
+    avatarUrl?: string | undefined;
+    role?: UserRoleEnum[] | undefined;
 }
 
-export class UserRole implements IUserRole {
-    userId?: string;
-    roleId?: string;
-    user!: User;
-    role!: Role;
-
-    constructor(data?: IUserRole) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.user = new User();
-            this.role = new Role();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.userId = _data["userId"];
-            this.roleId = _data["roleId"];
-            this.user = _data["user"] ? User.fromJS(_data["user"]) : new User();
-            this.role = _data["role"] ? Role.fromJS(_data["role"]) : new Role();
-        }
-    }
-
-    static fromJS(data: any): UserRole {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserRole();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userId"] = this.userId;
-        data["roleId"] = this.roleId;
-        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
-        data["role"] = this.role ? this.role.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IUserRole {
-    userId?: string;
-    roleId?: string;
-    user: User;
-    role: Role;
+export enum UserRoleEnum {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
 }
 
 export class ApiException extends Error {

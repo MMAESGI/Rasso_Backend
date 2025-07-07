@@ -19,6 +19,6 @@ namespace RassoApi.Mappers
         /// <returns></returns>
         Entity.User ToUserEntity(UserDto user);
 
-        UserDto UserIdentityToUser(Identity.Client.User user);
+        UserDto UserIdentityToUser(Identity.Client.UserDto user);
     }
 }

@@ -16,7 +16,7 @@ public class UserProxyService : IUserProxyService
         _userMapper = userMapper;
     }
 
-    public async Task<UserDto?> GetUserByIdAsync(Guid userId)
+    public async Task<RassoApi.DTOs.UserDto?> GetUserByIdAsync(Guid userId)
     {
         try
         {
@@ -29,7 +29,7 @@ public class UserProxyService : IUserProxyService
         }
     }
 
-    public async Task<UserDto?> GetUserByEmail(string email)
+    public async Task<RassoApi.DTOs.UserDto?> GetUserByEmail(string email)
     {
         try
         {
@@ -43,10 +43,6 @@ public class UserProxyService : IUserProxyService
         }
     }
 
-    public Task<List<UserDto?>> GetUsersByIdsAsync(List<Guid> userIds)
-    {
-        throw new NotImplementedException();
-    }
 
     // Implémenter GetUsersByIdsAsync si disponible dans IdentityClient
 }
