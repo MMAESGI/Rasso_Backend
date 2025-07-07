@@ -8,56 +8,40 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
+
 export interface IRassoApiClient {
-
-    /**
-     * @return OK
-     */
-    home(): Promise<void>;
-
-    /**
-     * @return OK
-     */
-    admin(): Promise<void>;
-
     /**
      * @return OK
      */
     eventsGET(): Promise<EventResponseListApiResponse>;
-
     /**
      * @param body (optional) 
      * @return OK
      */
     eventsPOST(body: CreateEventRequest | undefined): Promise<EventResponseApiResponse>;
-
     /**
      * @return OK
      */
     eventsGET2(id: string): Promise<DetailedEventResponseApiResponse>;
-
     /**
      * @param body (optional) 
      * @return OK
      */
     eventsPUT(id: string, body: UpdateEventRequest | undefined): Promise<EventResponseApiResponse>;
-
     /**
      * @param body (optional) 
      * @return OK
      */
     eventsPATCH(id: string, body: UpdateEventRequest | undefined): Promise<EventResponseApiResponse>;
-
     /**
      * @return OK
      */
     eventsDELETE(id: string): Promise<StringApiResponse>;
-
     /**
      * @return OK
      */
     top(): Promise<EventResponseListApiResponse>;
-
     /**
      * @param locationName (optional) 
      * @param latitude (optional) 
@@ -65,7 +49,6 @@ export interface IRassoApiClient {
      * @return OK
      */
     location(locationName: string | undefined, latitude: number | undefined, longitude: number | undefined): Promise<EventResponseListApiResponse>;
-
     /**
      * @return OK
      */
@@ -73,120 +56,65 @@ export interface IRassoApiClient {
 }
 
 export class RassoApiClient implements IRassoApiClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
+    protected instance: AxiosInstance;
+    protected baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance || axios.create();
+
         this.baseUrl = baseUrl ?? "";
+
     }
 
     /**
      * @return OK
      */
-    home(): Promise<void> {
-        let url_ = this.baseUrl + "/api/home";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processHome(_response);
-        });
-    }
-
-    protected processHome(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    admin(): Promise<void> {
-        let url_ = this.baseUrl + "/api/admin";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.processAdmin(_response);
-        });
-    }
-
-    protected processAdmin(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    eventsGET(): Promise<EventResponseListApiResponse> {
+    eventsGET( cancelToken?: CancelToken): Promise<EventResponseListApiResponse> {
         let url_ = this.baseUrl + "/api/events";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
+        let options_: AxiosRequestConfig = {
             method: "GET",
+            url: url_,
             headers: {
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processEventsGET(_response);
         });
     }
 
-    protected processEventsGET(response: Response): Promise<EventResponseListApiResponse> {
+    protected processEventsGET(response: AxiosResponse): Promise<EventResponseListApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseListApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseListApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseListApiResponse>(null as any);
     }
@@ -195,42 +123,54 @@ export class RassoApiClient implements IRassoApiClient {
      * @param body (optional) 
      * @return OK
      */
-    eventsPOST(body: CreateEventRequest | undefined): Promise<EventResponseApiResponse> {
+    eventsPOST(body: CreateEventRequest | undefined, cancelToken?: CancelToken): Promise<EventResponseApiResponse> {
         let url_ = this.baseUrl + "/api/events";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
 
-        let options_: RequestInit = {
-            body: content_,
+        let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
+            url: url_,
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processEventsPOST(_response);
         });
     }
 
-    protected processEventsPOST(response: Response): Promise<EventResponseApiResponse> {
+    protected processEventsPOST(response: AxiosResponse): Promise<EventResponseApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseApiResponse>(null as any);
     }
@@ -238,41 +178,53 @@ export class RassoApiClient implements IRassoApiClient {
     /**
      * @return OK
      */
-    eventsGET2(id: string): Promise<DetailedEventResponseApiResponse> {
+    eventsGET2(id: string, cancelToken?: CancelToken): Promise<DetailedEventResponseApiResponse> {
         let url_ = this.baseUrl + "/api/events/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
+        let options_: AxiosRequestConfig = {
             method: "GET",
+            url: url_,
             headers: {
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processEventsGET2(_response);
         });
     }
 
-    protected processEventsGET2(response: Response): Promise<DetailedEventResponseApiResponse> {
+    protected processEventsGET2(response: AxiosResponse): Promise<DetailedEventResponseApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = DetailedEventResponseApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<DetailedEventResponseApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<DetailedEventResponseApiResponse>(null as any);
     }
@@ -281,7 +233,7 @@ export class RassoApiClient implements IRassoApiClient {
      * @param body (optional) 
      * @return OK
      */
-    eventsPUT(id: string, body: UpdateEventRequest | undefined): Promise<EventResponseApiResponse> {
+    eventsPUT(id: string, body: UpdateEventRequest | undefined, cancelToken?: CancelToken): Promise<EventResponseApiResponse> {
         let url_ = this.baseUrl + "/api/events/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -290,36 +242,48 @@ export class RassoApiClient implements IRassoApiClient {
 
         const content_ = JSON.stringify(body);
 
-        let options_: RequestInit = {
-            body: content_,
+        let options_: AxiosRequestConfig = {
+            data: content_,
             method: "PUT",
+            url: url_,
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processEventsPUT(_response);
         });
     }
 
-    protected processEventsPUT(response: Response): Promise<EventResponseApiResponse> {
+    protected processEventsPUT(response: AxiosResponse): Promise<EventResponseApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseApiResponse>(null as any);
     }
@@ -328,7 +292,7 @@ export class RassoApiClient implements IRassoApiClient {
      * @param body (optional) 
      * @return OK
      */
-    eventsPATCH(id: string, body: UpdateEventRequest | undefined): Promise<EventResponseApiResponse> {
+    eventsPATCH(id: string, body: UpdateEventRequest | undefined, cancelToken?: CancelToken): Promise<EventResponseApiResponse> {
         let url_ = this.baseUrl + "/api/events/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -337,36 +301,48 @@ export class RassoApiClient implements IRassoApiClient {
 
         const content_ = JSON.stringify(body);
 
-        let options_: RequestInit = {
-            body: content_,
+        let options_: AxiosRequestConfig = {
+            data: content_,
             method: "PATCH",
+            url: url_,
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processEventsPATCH(_response);
         });
     }
 
-    protected processEventsPATCH(response: Response): Promise<EventResponseApiResponse> {
+    protected processEventsPATCH(response: AxiosResponse): Promise<EventResponseApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseApiResponse>(null as any);
     }
@@ -374,41 +350,53 @@ export class RassoApiClient implements IRassoApiClient {
     /**
      * @return OK
      */
-    eventsDELETE(id: string): Promise<StringApiResponse> {
+    eventsDELETE(id: string, cancelToken?: CancelToken): Promise<StringApiResponse> {
         let url_ = this.baseUrl + "/api/events/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
+        let options_: AxiosRequestConfig = {
             method: "DELETE",
+            url: url_,
             headers: {
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processEventsDELETE(_response);
         });
     }
 
-    protected processEventsDELETE(response: Response): Promise<StringApiResponse> {
+    protected processEventsDELETE(response: AxiosResponse): Promise<StringApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = StringApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<StringApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<StringApiResponse>(null as any);
     }
@@ -416,38 +404,50 @@ export class RassoApiClient implements IRassoApiClient {
     /**
      * @return OK
      */
-    top(): Promise<EventResponseListApiResponse> {
+    top( cancelToken?: CancelToken): Promise<EventResponseListApiResponse> {
         let url_ = this.baseUrl + "/api/events/top";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
+        let options_: AxiosRequestConfig = {
             method: "GET",
+            url: url_,
             headers: {
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processTop(_response);
         });
     }
 
-    protected processTop(response: Response): Promise<EventResponseListApiResponse> {
+    protected processTop(response: AxiosResponse): Promise<EventResponseListApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseListApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseListApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseListApiResponse>(null as any);
     }
@@ -458,7 +458,7 @@ export class RassoApiClient implements IRassoApiClient {
      * @param longitude (optional) 
      * @return OK
      */
-    location(locationName: string | undefined, latitude: number | undefined, longitude: number | undefined): Promise<EventResponseListApiResponse> {
+    location(locationName: string | undefined, latitude: number | undefined, longitude: number | undefined, cancelToken?: CancelToken): Promise<EventResponseListApiResponse> {
         let url_ = this.baseUrl + "/api/events/location?";
         if (locationName === null)
             throw new Error("The parameter 'locationName' cannot be null.");
@@ -474,34 +474,46 @@ export class RassoApiClient implements IRassoApiClient {
             url_ += "longitude=" + encodeURIComponent("" + longitude) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
+        let options_: AxiosRequestConfig = {
             method: "GET",
+            url: url_,
             headers: {
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processLocation(_response);
         });
     }
 
-    protected processLocation(response: Response): Promise<EventResponseListApiResponse> {
+    protected processLocation(response: AxiosResponse): Promise<EventResponseListApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseListApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseListApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseListApiResponse>(null as any);
     }
@@ -509,38 +521,50 @@ export class RassoApiClient implements IRassoApiClient {
     /**
      * @return OK
      */
-    main(): Promise<EventResponseApiResponse> {
+    main( cancelToken?: CancelToken): Promise<EventResponseApiResponse> {
         let url_ = this.baseUrl + "/api/events/main";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
+        let options_: AxiosRequestConfig = {
             method: "GET",
+            url: url_,
             headers: {
                 "Accept": "text/plain"
-            }
+            },
+            cancelToken
         };
 
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
             return this.processMain(_response);
         });
     }
 
-    protected processMain(response: Response): Promise<EventResponseApiResponse> {
+    protected processMain(response: AxiosResponse): Promise<EventResponseApiResponse> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200  = _responseText;
             result200 = EventResponseApiResponse.fromJS(resultData200);
-            return result200;
-            });
+            return Promise.resolve<EventResponseApiResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
         }
         return Promise.resolve<EventResponseApiResponse>(null as any);
     }
@@ -1243,4 +1267,8 @@ function throwException(message: string, status: number, response: string, heade
         throw result;
     else
         throw new ApiException(message, status, response, headers, null);
+}
+
+function isAxiosError(obj: any): obj is AxiosError {
+    return obj && obj.isAxiosError === true;
 }

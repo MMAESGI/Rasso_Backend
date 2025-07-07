@@ -4,9 +4,8 @@ using RassoApi.Extensions;
 using RassoApi.Services.Events.Interfaces;
 using RassoApi.Services.Events;
 using static Common.CommonExtension;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Text.Json;
 using Microsoft.OpenApi.Models;
+using Identity.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,11 +34,20 @@ builder.Services.AddDataBaseServices();
 // Utilisation du package commun
 builder.Services.AddCommonServices<AppDbContext>();
 
-builder.Services.AddHttpClient<IUserProxyService, UserProxyService>(client =>
+builder.Services.AddHttpClient("Identity", client =>
 {
-    // Url du microservice Identity
     client.BaseAddress = new Uri("http://identity:8080");
 });
+builder.Services.AddScoped<IdentityClient>(provider =>
+{
+    var factory = provider.GetRequiredService<IHttpClientFactory>();
+    var httpClient = factory.CreateClient("Identity");
+    var baseUrl = httpClient.BaseAddress!.ToString();
+
+    return new IdentityClient(baseUrl, httpClient);
+});
+
+builder.Services.AddScoped<IUserProxyService, UserProxyService>();
 
 builder.Services.AddCorsConfiguration();
 

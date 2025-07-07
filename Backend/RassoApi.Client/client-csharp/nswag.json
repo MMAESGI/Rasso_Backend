@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "../RassoApi/swagger/swagger.json",
+      "url": "../../RassoApi/swagger/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -94,7 +94,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "Generated/RassoApiClient.cs",
+      "output": "generated/RassoApiClient.cs",
       "newLineBehavior": "Auto"
     }
   }

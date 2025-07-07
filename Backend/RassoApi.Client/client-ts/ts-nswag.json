@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "../RassoApi/swagger/swagger.json",
+      "url": "../../RassoApi/swagger/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -14,7 +14,7 @@
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 2.7,
-      "template": "Fetch",
+      "template": "Axios",
       "promiseType": "Promise",
       "httpClass": "HttpClient",
       "withCredentials": false,
@@ -36,7 +36,7 @@
       "responseClass": "SwaggerResponse",
       "protectedMethods": [],
       "configurationClass": null,
-      "useTransformOptionsMethod": true,
+      "useTransformOptionsMethod": false,
       "useTransformResultMethod": false,
       "generateDtoTypes": true,
       "operationGenerationMode": "MultipleClientsFromOperationId",
@@ -66,7 +66,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "Generated/rasso-api-client.ts",
+      "output": "generated/rasso-api-client.ts",
       "newLineBehavior": "Auto"
     }
   }

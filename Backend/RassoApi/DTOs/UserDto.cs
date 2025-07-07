@@ -10,7 +10,7 @@ namespace RassoApi.DTOs
         public string? LastName { get; set; }
         public string? Email { get; set; }
         public string? AvatarUrl { get; set; } = string.Empty;
-        public UserRoleEnum role { get; set; } = UserRoleEnum.Default;
+        public ICollection<UserRoleEnum> role { get; set; } = new List<UserRoleEnum> { UserRoleEnum.Default };
     }
 
 }

@@ -1,0 +1,4 @@
+# Ignore everything except dist and package.json
+*
+!dist
+!package.json

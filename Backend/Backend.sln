@@ -13,6 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RassoApi.Client", "RassoApi.Client\RassoApi.Client.csproj", "{0EEEC37E-22D8-E393-43F1-B63FD666A365}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0F9187D-7958-47DC-ADE5-4DB643F2F72C}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Client", "Identity.Client\Identity.Client.csproj", "{A0898C36-9F6C-4903-92A0-00D46B3BD8F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +46,10 @@ Global
 		{0EEEC37E-22D8-E393-43F1-B63FD666A365}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EEEC37E-22D8-E393-43F1-B63FD666A365}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EEEC37E-22D8-E393-43F1-B63FD666A365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0898C36-9F6C-4903-92A0-00D46B3BD8F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0898C36-9F6C-4903-92A0-00D46B3BD8F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0898C36-9F6C-4903-92A0-00D46B3BD8F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0898C36-9F6C-4903-92A0-00D46B3BD8F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

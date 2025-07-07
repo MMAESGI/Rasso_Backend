@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RassoApi.Database;
-using RassoApi.Repositories;
+﻿using RassoApi.Repositories;
 using RassoApi.Repositories.Interfaces;
-using RassoApi.Services.DB;
-using RassoApi.Services.DB.Interfaces;
+
 using RassoApi.Services.Events;
 using RassoApi.Services.Events.Interfaces;
 
@@ -18,14 +15,8 @@ namespace RassoApi.Extensions
         /// <returns></returns>
         public static IServiceCollection AddDataBaseServices(this IServiceCollection services)
         {
-            
-
-            _ = services.AddScoped<IMySqlService, MySqlService>();
             _ = services.AddScoped<IEventRepository, EventRepository>();
             _ = services.AddSingleton<IEventValidator, EventValidator>();
-
-
-
             return services;
         }
     }

@@ -15,8 +15,6 @@ namespace Identity.Models
         [Required, MaxLength(20), ProtectedPersonalData]
         public string? LastName { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-
         public bool IsActive { get; set; } = false;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -1,7 +1,9 @@
+using System.Configuration;
 using Identity.Database;
 using Identity.Extensions;
 using Identity.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using static Common.CommonExtension;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,19 +13,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity API", Version = "v1" });
 
+});
 
-// Extension pour l'injection de dépendance
+// Extension pour l'injection de dÃ©pendance
 builder.Services.AddApplicationServices();
 
 // Utilisation du package commun
 builder.Services.AddCommonServices<AppDbContext>();
+
 builder.Services.AddIdentityServices<AppDbContext, User, Role>();
 
 
 builder.Services.AddCorsConfiguration();
-
 
 var app = builder.Build();
 
@@ -32,8 +38,12 @@ app.UseCors("AllowAll");
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
 
+
 // Peuplement des données
-await app.SeedIdentityDataAsync();
+if (!args.Contains("swagger"))
+{
+    await app.SeedIdentityDataAsync();
+}
 
 
 app.UseAuthorization();

@@ -1,5 +1,7 @@
 ﻿using Common.Results;
+using Identity.DTOs;
 using Identity.Models;
+using Identity.Services;
 using Identity.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,16 +38,25 @@ namespace Identity.Controllers
 
 
         [AllowAnonymous]
-        [HttpGet("{email}")]
-        public async Task<IActionResult> GetByEmail(string email)
+        [HttpGet("email/{email}")]
+        public async Task<UserDto?> GetByEmail(string email)
         {
             Result<User> result = await _userService.GetUserByEmail(email);
-            if (result.Success)
-                return Ok(result.Value);
+            if (result.Success && result.Value != null)
+                return UserMapper.ToDto(result.Value);
 
-            return NotFound();
+            return null;
+        }
 
-            
+        [AllowAnonymous]
+        [HttpGet("id/{id}")]
+        public async Task<UserDto?> GetById(Guid id)
+        {
+            Result<User> result = await _userService.GetById(id);
+            if (result.Success && result.Value != null)
+                return UserMapper.ToDto(result.Value);
+
+            return null;
         }
     }
 

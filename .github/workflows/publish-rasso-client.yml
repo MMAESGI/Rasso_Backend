@@ -1,0 +1,15 @@
+# .github/workflows/publish-rasso-client.yml
+name: Publish RassoApi Client
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Backend/RassoApi.Client/**'
+
+jobs:
+  publish-client:
+    uses: ./.github/workflows/publish-client.yml
+    with:
+      client-path: Backend/RassoApi.Client

@@ -11,26 +11,35 @@ namespace Identity.Services
     /// <inheritdoc cref="IUserService"/>
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
         private readonly IPasswordManager _passwordManager;
+        private readonly UserManager<User> _userManager;
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="userRepository">User repository</param>
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IPasswordManager passwordManager, IPasswordHasher<User> passwordHasher)
+        public UserService(IPasswordManager passwordManager,
+                           IPasswordHasher<User> passwordHasher,
+                           UserManager<User> userManager)
         {
-            _userRepository = userRepository;
             _passwordManager = passwordManager;
-            _roleRepository = roleRepository;
+            _userManager = userManager;
         }
 
+        public async Task<Result<User>> GetById(Guid id)
+        {
+            User? user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return Result<User>.Fail("Cannot Find User");
+            }
+            return Result<User>.Ok(user);
+        }
 
         /// <inheritdoc />
         public async Task<Result<User>> GetUser(string email, string password)
         {
-            User? user = _userRepository.GetByEmail(email);
+            User? user = await _userManager.FindByEmailAsync(email);
             if (user != null && user.IsActive)
             {
                 bool isPasswordValid = _passwordManager.VerifyPassword(user, password);
@@ -46,7 +55,7 @@ namespace Identity.Services
 
         public async Task<Result<User>> GetUserByEmail(string email)
         {
-            User? user = _userRepository.GetByEmail(email);
+            User? user = await _userManager.FindByEmailAsync(email);
             if (user != null && user.IsActive)
             {
                 //IReadOnlyList<string> errors = await _passwordManager.ValidateAsync(user, password);
@@ -63,7 +72,7 @@ namespace Identity.Services
         /// <inheritdoc />
         public async Task<Result<User>> RegisterUser(SignUpRequest request)
         {
-            if (await _userRepository.UserExistsAsync(request.Email, request.Username))
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
                 return Result<User>.Fail("Registration failed. Please verify your details and try again");
             }
@@ -80,20 +89,13 @@ namespace Identity.Services
 
             user.PasswordHash = _passwordManager.HashPassword(user, request.Password);
 
+            await _userManager.CreateAsync(user, request.Password);
 
-            Role? defaultRole = await _roleRepository.GetRoleByName(UserRoleEnum.User);
-            if (defaultRole == null)
-                return Result<User>.Fail("Default role not found.");
+            await _userManager.AddToRoleAsync(user, "Admin"); // Temporaire
 
-            user.UserRoles.Add(new UserRole
-            {
-                Role = defaultRole,
-                User = user
-            });
+            IdentityResult identityResult = await _userManager.CreateAsync(user);
 
-
-
-             if (await _userRepository.AddUserAsync(user) > 0)
+            if (identityResult.Succeeded)
                 return Result<User>.Ok(user);
 
              return Result<User>.Fail("Registration failed. Please verify your details and try again");

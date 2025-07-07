@@ -48,7 +48,7 @@ namespace RassoApi.Controllers
             }
 
             EventResponse eventResponse = await _eventService.CreateEventAsync(request, email);
-            return CreatedAtAction(nameof(GetById), new { eventId = eventResponse.Id }, ApiResponse<EventResponse>.SuccessResponse(eventResponse, "Event created successfully."));
+            return Ok(ApiResponse<EventResponse>.SuccessResponse(eventResponse, "Event created successfully."));
 
         }
 
@@ -102,19 +102,29 @@ namespace RassoApi.Controllers
         //    return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(favoriteEvents));
         //}
 
-        //[Authorize]
-        //[HttpPut("favorite")]
-        //[HttpPatch("favorite")]
-        //public async Task<ActionResult<ApiResponse<string>>> ToggleFavorite([FromBody] ToggleFavoriteRequest request)
-        //{
-        //    string? email = GetEmailByClaim();
-        //    if (string.IsNullOrEmpty(email))
-        //    {
-        //        return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
-        //    }
-        //    var result = await _eventService.ToggleFavoriteAsync(email, request.EventId);
-        //    return Ok(ApiResponse<string>.SuccessResponse("Favorite updated"));
-        //}
+        [HttpPut("favorite")]
+        [HttpPatch("favorite")]
+        public async Task<ActionResult<ApiResponse<string>>> ToggleFavorite([FromBody] ToggleFavoriteRequest request)
+        {
+            try
+            {
+                string? email = GetEmailByClaim();
+                if (string.IsNullOrEmpty(email))
+                {
+                    return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+                }
+                EventResponse result = await _eventService.ToggleFavoriteAsync(email, request.EventId);
+            }
+            catch (EventException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Une erreur est survenue lors de la récupération des événements");
+            }
+            return Ok(ApiResponse<string>.SuccessResponse("Favorite updated"));
+        }
 
         [HttpGet("location")]
         public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetByLocation(

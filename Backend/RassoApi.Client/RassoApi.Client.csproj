@@ -11,12 +11,16 @@
 		<PackageReference Include="NSwag.CodeGeneration.CSharp" Version="14.4.0" />
 	</ItemGroup>
 
-	<Target Name="GenerateNSwagClient" BeforeTargets="BeforeBuild">
-		<Exec Command="dotnet nswag run nswag.json" />
+	<ItemGroup>
+	  <Folder Include="client-ts\" />
+	</ItemGroup>
+
+	<Target Name="GenerateNSwagClient" BeforeTargets="BeforeBuild"  Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+		<Exec Command="nswag run client-csharp/nswag.json" />
 	</Target>
 	
-	<Target Name="GenerateTypeScriptClient" BeforeTargets="BeforeBuild">
-		<Exec Command="dotnet nswag run ts-nswag.json" />
+	<Target Name="GenerateTypeScriptClient" BeforeTargets="BeforeBuild"  Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+		<Exec Command="nswag run client-ts/ts-nswag.json" />
 	</Target>
 
 </Project>

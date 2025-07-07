@@ -14,7 +14,7 @@ namespace RassoApi.Mappers
         /// <param name="ev"></param>
         /// <param name="isFavorite"></param>
         /// <returns></returns>
-        EventResponse ToEventResponse(Event ev);
+        Task<EventResponse> ToEventResponse(Event ev, Guid? userId = null);
 
         /// <summary>
         ///  Maps an Event model to an EventResponse.

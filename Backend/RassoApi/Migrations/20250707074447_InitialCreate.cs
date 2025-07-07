@@ -1,74 +1,67 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
 namespace RassoApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalUpdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "event_statuses",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     code = table.Column<int>(type: "int", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_event_statuses", x => x.id);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "refusal_reasons",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    code = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     label = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_refusal_reasons", x => x.id);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "events",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    title = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    title = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false),
+                    description = table.Column<string>(type: "longtext", nullable: false),
                     date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    location = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    location = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
                     latitude = table.Column<double>(type: "double", nullable: true),
                     longitude = table.Column<double>(type: "double", nullable: true),
-                    category = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    organizer_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    category = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    organizer_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     status_id = table.Column<int>(type: "int", nullable: false),
-                    moderated_by_id = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    moderated_by_id = table.Column<Guid>(type: "char(36)", nullable: true),
                     moderated_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     refusal_reason_id = table.Column<int>(type: "int", nullable: true),
-                    refusal_comment = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    refusal_comment = table.Column<string>(type: "longtext", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -87,20 +80,17 @@ namespace RassoApi.Migrations
                         principalTable: "refusal_reasons",
                         principalColumn: "id");
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "event_media",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    event_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    s3_url = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    filename = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    event_id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    s3_url = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    filename = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
+                    description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
                     uploaded_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -113,15 +103,15 @@ namespace RassoApi.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "event_participants",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    event_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    user_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    event_id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    user_id = table.Column<Guid>(type: "char(36)", nullable: false),
                     registered_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -134,15 +124,15 @@ namespace RassoApi.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "favorites",
                 columns: table => new
                 {
-                    user_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    event_id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    user_id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    event_id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -155,7 +145,7 @@ namespace RassoApi.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_event_media_event_id",
