@@ -25,6 +25,21 @@ namespace Identity.Services
             return result.Succeeded ? Array.Empty<string>() : result.Errors.Select(e => e.Description).ToList();
         }
 
+        public bool VerifyPassword(User user, string password)
+        {            
+            if (string.IsNullOrEmpty(user.PasswordHash))
+            {
+                Console.WriteLine("No password hash stored for user");
+                return false;
+            }
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            bool isValid = result == PasswordVerificationResult.Success;
+            
+            Console.WriteLine($"Password verification result: {result} (Valid: {isValid})");
+            return isValid;
+        }
+
         public string HashPassword(User user, string password)
         {
             return _passwordHasher.HashPassword(user, password);

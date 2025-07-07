@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
-// Extension pour l'injection de dépendance
+// Extension pour l'injection de dÃ©pendance
 builder.Services.AddAppSettingsConfiguration(builder.Configuration);
 builder.Services.AddApplicationServices();
 
@@ -49,7 +49,11 @@ builder.Services.AddScoped<IdentityClient>(provider =>
 
 builder.Services.AddScoped<IUserProxyService, UserProxyService>();
 
+builder.Services.AddCorsConfiguration();
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();

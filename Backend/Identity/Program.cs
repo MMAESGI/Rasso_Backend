@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
-// Extension pour l'injection de dépendance
+// Extension pour l'injection de dÃƒÂ©pendance
 builder.Services.AddApplicationServices();
 
 // Utilisation du package commun
@@ -29,18 +29,21 @@ builder.Services.AddCommonServices<AppDbContext>();
 builder.Services.AddIdentityServices<AppDbContext, User, Role>();
 
 
+builder.Services.AddCorsConfiguration();
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Utilisation du package commun
 app.UseCommonPackage<AppDbContext>();
 
-// Peuplement des données
+
+// Peuplement des donnÃ©es
 if (!args.Contains("swagger"))
 {
     await app.SeedIdentityDataAsync();
 }
-
 
 
 app.UseAuthorization();
