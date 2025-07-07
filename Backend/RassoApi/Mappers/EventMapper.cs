@@ -22,8 +22,9 @@ namespace RassoApi.Mappers
             _context = context;
         }
 
-        public EventResponse ToEventResponse(Event ev)
+        public async Task<EventResponse> ToEventResponse(Event ev, Guid? userId = null)
         {
+            bool isFavorite = await IsFavorite(ev.Id, userId);
 
             return new EventResponse
             {
@@ -35,7 +36,7 @@ namespace RassoApi.Mappers
                 Latitude = ev.Latitude,
                 Longitude = ev.Longitude,
                 Category = ev.Category,
-                IsFavorite = IsFavorite()
+                IsFavorite = isFavorite
             };
         }
 
@@ -45,7 +46,7 @@ namespace RassoApi.Mappers
 
             foreach (var eventEntity in ev)
             {
-                responses.Add(ToEventResponse(eventEntity));
+                responses.Add(ToEventResponse(eventEntity).Result);
             }
 
             return responses;
@@ -102,10 +103,12 @@ namespace RassoApi.Mappers
             throw new NotImplementedException();
         }
 
-        private async Task<bool> IsFavorite(Guid eventId, Guid userId)
+        private async Task<bool> IsFavorite(Guid eventId, Guid? userId)
         {
+            if (!userId.HasValue) return false;
 
-            return await _context.Favorites.FirstOrDefaultAsync(f => f.UserId == userId && f.EventId == eventId) != null;
+            return await _context.Favorites
+                .AnyAsync(f => f.UserId == userId && f.EventId == eventId);
         }
     }
 

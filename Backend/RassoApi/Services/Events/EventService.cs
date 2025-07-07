@@ -65,7 +65,7 @@ namespace RassoApi.Services.Events
 
 
             await _eventRepository.AddAsync(entity);
-            return _eventMapper.ToEventResponse(entity);
+            return await _eventMapper.ToEventResponse(entity);
         }
 
         public async Task<EventResponse> UpdateEventAsync(Guid id, UpdateEventRequest request)
@@ -79,7 +79,7 @@ namespace RassoApi.Services.Events
             ev.Location = request.Location;
 
             await _eventRepository.UpdateAsync(ev);         // TODO la logique de maj est mauvaise, on est pas sur que cela soit modifier
-            return _eventMapper.ToEventResponse(ev);
+            return await _eventMapper.ToEventResponse(ev);
         }
 
         public async Task<bool> DeleteEventAsync(Guid id)
@@ -105,7 +105,7 @@ namespace RassoApi.Services.Events
             Event? ev = await _eventRepository.GetMainEventForUserAsync(user.Id);
             if (ev != null)
             {
-                return _eventMapper.ToEventResponse(ev);
+                return await _eventMapper.ToEventResponse(ev);
             }
             throw new EventException("Evenement non trouvé.") ;
         }
@@ -129,7 +129,7 @@ namespace RassoApi.Services.Events
                 if (ev != null)
                 {
                     Event eventResult = await _eventRepository.ToggleFavoriteAsync(user.Id, ev);
-                    return _eventMapper.ToEventResponse(eventResult);
+                    return await _eventMapper.ToEventResponse(eventResult);
                 }
             }
             catch(Exception ex)
