@@ -16,11 +16,11 @@
 		<Folder Include="client-ts\" />
 	</ItemGroup>
 
-	<Target Name="GenerateNSwagClient" BeforeTargets="BeforeBuild">
+	<Target Name="GenerateNSwagClient" BeforeTargets="BeforeBuild"  Condition="'$(BuildingInsideVisualStudio)' == 'true'">
 		<Exec Command="nswag run client-csharp/nswag.json" />
 	</Target>
 
-	<Target Name="GenerateTypeScriptClient" BeforeTargets="BeforeBuild">
+	<Target Name="GenerateTypeScriptClient" BeforeTargets="BeforeBuild"  Condition="'$(BuildingInsideVisualStudio)' == 'true'">
 		<Exec Command="nswag run client-ts/ts-nswag.json" />
 	</Target>
 </Project>
