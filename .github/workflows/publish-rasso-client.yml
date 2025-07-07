@@ -12,4 +12,4 @@ jobs:
   publish-client:
     uses: ./.github/workflows/publish-client.yml
     with:
-      client-path: Backend/RassoApi.Client
+      client-path: Backend/RassoApi.Client/client-ts
