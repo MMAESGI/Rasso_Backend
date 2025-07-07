@@ -38,7 +38,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Génère le client TypeScript
-        run: nswag run client-ts/ts-nswag.json
+        run: nswag run ts-nswag.json
 
       - name: Vérifie s’il y a des changements
         id: check_changes
