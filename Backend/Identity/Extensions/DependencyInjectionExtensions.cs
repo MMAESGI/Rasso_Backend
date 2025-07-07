@@ -23,7 +23,7 @@ namespace Identity.Extensions
             
 
             // Services
-            services.AddSingleton<IIdentityMapper, IdentityMapper>();
+            services.AddScoped<IIdentityMapper, IdentityMapper>();
             services.AddScoped<IPasswordManager, PasswordManager>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IUserService, UserService>();

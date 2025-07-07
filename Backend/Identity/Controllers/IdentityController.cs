@@ -32,7 +32,7 @@ namespace Identity.Controllers
             Result<User> result = await _userService.GetUser(request.Email, request.Password);
             if (result.Success && result.Value != null)
             {
-                UserResponse user  = _mapper.ToUserResponse(result.Value);
+                UserResponse user  = await _mapper.ToUserResponse(result.Value);
                 string token = _tokenGenerator.GenerateToken(result.Value.Id, result.Value.Email);
                 return Ok(new { Token = token, User  = user});
             }
@@ -51,7 +51,7 @@ namespace Identity.Controllers
             if (!result.Success)
                 return BadRequest(result.Error);
             
-            DetailedUserResponse userResponse = _mapper.ToDetailedUserResponse(result.Value!);
+            DetailedUserResponse userResponse = await _mapper.ToDetailedUserResponse(result.Value!);
 
             return Ok(userResponse);
         }

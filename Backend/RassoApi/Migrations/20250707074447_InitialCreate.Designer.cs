@@ -11,8 +11,8 @@ using RassoApi.Database;
 namespace RassoApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250706141939_InitialUpdate")]
-    partial class InitialUpdate
+    [Migration("20250707074447_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

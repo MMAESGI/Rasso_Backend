@@ -6,7 +6,6 @@ namespace Identity.Database
 {
     public class AppDbContext : IdentityDbContext<User, Role, Guid>
     {
-        public DbSet<UserRole> UserRole => Set<UserRole>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -17,7 +16,6 @@ namespace Identity.Database
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
 
         }
     }

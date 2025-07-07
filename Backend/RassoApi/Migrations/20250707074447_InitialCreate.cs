@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace RassoApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialUpdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -50,9 +50,9 @@ namespace Identity.Controllers
 
         [AllowAnonymous]
         [HttpGet("id/{id}")]
-        public UserDto? GetById(Guid id)
+        public async Task<UserDto?> GetById(Guid id)
         {
-            Result<User> result = _userService.GetById(id);
+            Result<User> result = await _userService.GetById(id);
             if (result.Success && result.Value != null)
                 return UserMapper.ToDto(result.Value);
 

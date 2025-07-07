@@ -1,5 +1,6 @@
 ﻿using Identity.Database;
 using Identity.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Repositories
@@ -7,24 +8,21 @@ namespace Identity.Repositories
     public class UserRepository : IUserRepository
     {
         public readonly AppDbContext _context;
-        public UserRepository(AppDbContext context)
+        private readonly UserManager<User> _userManager;
+        public UserRepository(AppDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
 
         public User? GetById(Guid id)
         {
-            return _context.Users
-                .Include(u => u.UserRoles)
-                    .ThenInclude(ur => ur.Role)
-                    .FirstOrDefault(x => x.Id == id);
+            return _context.Users.FirstOrDefault(x => x.Id == id);
         }
         public User? GetByEmail(string email)
         {
             return _context.Users
-                  .Include(u => u.UserRoles)
-                    .ThenInclude(ur => ur.Role)
                 .FirstOrDefault(u => u.Email == email && u.IsActive);
         }
 
