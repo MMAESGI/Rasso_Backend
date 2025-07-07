@@ -27,7 +27,10 @@ jobs:
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
-
+      
+      - name: List contents of client path
+        run: ls -R ${{ inputs.client-path }}
+        
       - name: Install NSwag CLI
         run: dotnet tool install --global NSwag.ConsoleCore
 
