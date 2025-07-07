@@ -73,7 +73,7 @@ namespace Identity.Services
         /// <inheritdoc />
         public async Task<Result<User>> RegisterUser(SignUpRequest request)
         {
-            if (await _userManager.FindByEmailAsync(request.Email) == null)
+            if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
                 return Result<User>.Fail("Registration failed. Please verify your details and try again");
             }

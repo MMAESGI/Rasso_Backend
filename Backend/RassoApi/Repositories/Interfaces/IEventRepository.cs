@@ -12,5 +12,6 @@ namespace RassoApi.Repositories.Interfaces
         Task<List<Event>> GetTopEventsAsync();
         Task<List<Event>> GetByLocationAsync(string? locationName, double? latitude, double? longitude);
         Task<Event?> GetMainEventForUserAsync(Guid userId);
+        Task<Event> ToggleFavoriteAsync(Guid userId, Event ev);
     }
 }

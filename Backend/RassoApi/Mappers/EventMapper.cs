@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using RassoApi.Database;
 using RassoApi.DTOs;
 using RassoApi.DTOs.Responses.Event;
 using RassoApi.DTOs.Responses.User;
@@ -11,14 +13,18 @@ namespace RassoApi.Mappers
     {
         private readonly IUserProxyService _userProxyService;
         private readonly IUserMapper _userMapper;
-        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper)
+        private readonly AppDbContext _context;
+
+        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper, AppDbContext context)
         {
             _userProxyService = userProxyService;
             _userMapper = userMapper;
+            _context = context;
         }
 
         public EventResponse ToEventResponse(Event ev)
         {
+
             return new EventResponse
             {
                 Id = ev.Id,
@@ -29,7 +35,7 @@ namespace RassoApi.Mappers
                 Latitude = ev.Latitude,
                 Longitude = ev.Longitude,
                 Category = ev.Category,
-                IsFavorite = false, // TODO: Implement favorite logic
+                IsFavorite = IsFavorite()
             };
         }
 
@@ -94,6 +100,12 @@ namespace RassoApi.Mappers
         {
             // Refacto la récupération de la liste des utilisateurs pour l'optimisation
             throw new NotImplementedException();
+        }
+
+        private async Task<bool> IsFavorite(Guid eventId, Guid userId)
+        {
+
+            return await _context.Favorites.FirstOrDefaultAsync(f => f.UserId == userId && f.EventId == eventId) != null;
         }
     }
 

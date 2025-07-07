@@ -37,7 +37,7 @@ namespace RassoApi.Services.Events
 
         public async Task<DetailedEventResponse> GetEventByIdAsync(Guid id)
         {
-            var ev = await _eventRepository.GetByIdAsync(id, includeImages: true);
+            Event? ev = await _eventRepository.GetByIdAsync(id, includeImages: true);
             return ev == null ? throw new EventException("Evenement non trouvé.") : await _eventMapper.ToDetailedEventResponseAsync(ev);
         }
 
@@ -51,6 +51,7 @@ namespace RassoApi.Services.Events
                 Description = request.Description,
                 Location = request.Location,
                 Date = request.Date,
+                StatusId = 1
             };
 
             try
@@ -117,6 +118,25 @@ namespace RassoApi.Services.Events
                 throw new Exception("Utilisateur non trouvé.");
             }
             return user;
+        }
+
+        public async Task<EventResponse> ToggleFavoriteAsync(string userEmail, Guid EventId)
+        {
+            try
+            {
+                UserDto user = await GetUser(userEmail);
+                Event? ev = await _eventRepository.GetByIdAsync(EventId, includeImages: true);
+                if (ev != null)
+                {
+                    Event eventResult = await _eventRepository.ToggleFavoriteAsync(user.Id, ev);
+                    return _eventMapper.ToEventResponse(eventResult);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new EventException("Une erreur est survenue lors de la modification de l'événement", ex);
+            }
+            throw new EventException("Evenement non trouvé");
         }
     }
 
