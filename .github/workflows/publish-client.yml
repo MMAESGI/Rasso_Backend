@@ -29,7 +29,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
       
       - name: List contents of client path
-        run: ls -R ${{ inputs.client-path }}
+        run: ls -R .
         
       - name: Install NSwag CLI
         run: dotnet tool install --global NSwag.ConsoleCore
@@ -38,7 +38,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Génère le client TypeScript
-        run: nswag run client-ts/ts-nswag.json
+        run: nswag run ts-nswag.json
 
       - name: Vérifie s’il y a des changements
         id: check_changes
