@@ -14,5 +14,7 @@ namespace RassoApi.Services.Events.Interfaces
         Task<List<EventResponse>> GetEventsByLocationAsync(string? locationName, double? latitude, double? longitude);
         Task<EventResponse> GetMainEventAsync(string username);
 
+        Task<EventResponse> ToggleFavoriteAsync(string userEmail, Guid EventId);
+
     }
 }

@@ -17,8 +17,8 @@ namespace RassoApi.Extensions
         public static IServiceCollection AddEventServices(this IServiceCollection services)
         {
             services.AddScoped<IEventService, EventService>();
-            services.AddSingleton<IEventMapper, EventMapper>();
-            services.AddSingleton<IUserMapper, UserMapper>();
+            services.AddScoped<IEventMapper, EventMapper>();
+            services.AddScoped<IUserMapper, UserMapper>();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<IEventValidator, EventValidator>();

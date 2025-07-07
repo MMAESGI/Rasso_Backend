@@ -125,6 +125,27 @@ namespace RassoApi.Repositories
             return true;
         }
 
+        public async Task<Event> ToggleFavoriteAsync(Guid userId, Event ev)
+        {
+            Favorite? fav = await _context.Favorites
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.EventId == ev.Id);
+
+            if (fav != null)
+            {
+                _context.Favorites.Remove(fav);
+            }
+            else
+            {
+                _context.Favorites.Add(new Favorite
+                {
+                    UserId = userId,
+                    EventId = ev.Id
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return await _context.Events.Where(x => x.Id == ev.Id).FirstOrDefaultAsync();
+        }
     }
 
 }

@@ -21,11 +21,15 @@ namespace Common
                 {
                     string connectionString = DataBaseConnectionService.GetConnectionString();
                     Console.WriteLine($"Using connection string: {connectionString}");
-                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                    options.UseMySQL(connectionString);
                 });
             }
-            
-
+            else
+            {
+                // Ajout d'un DbContext InMemory pour Swagger
+                services.AddDbContext<TContext>(options =>
+                    options.UseInMemoryDatabase("SwaggerInMemoryDb"));
+            }
             return services;
         }
 

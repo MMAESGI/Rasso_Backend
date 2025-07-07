@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace RassoApi.DTOs
+namespace Identity.DTOs
 {
     public class UserDto
     {
@@ -12,5 +12,4 @@ namespace RassoApi.DTOs
         public string? AvatarUrl { get; set; } = string.Empty;
         public ICollection<UserRoleEnum> role { get; set; } = new List<UserRoleEnum> { UserRoleEnum.Default };
     }
-
 }
