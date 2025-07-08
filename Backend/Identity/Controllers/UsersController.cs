@@ -58,6 +58,16 @@ namespace Identity.Controllers
 
             return null;
         }
+
+        [AllowAnonymous] // Temp
+        [HttpGet()]
+        public List<UserDto> GetAll()
+        {
+            List<User> result = _userService.GetAll();
+            return UserMapper.ToDtoList(result);
+
+
+        }
     }
 
 }

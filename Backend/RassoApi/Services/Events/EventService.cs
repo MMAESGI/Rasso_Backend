@@ -32,7 +32,7 @@ namespace RassoApi.Services.Events
         public async Task<List<EventResponse>> GetAllEventsAsync()
         {
             List<Event> events = await _eventRepository.GetAllAsync(includeImages: true);
-            return _eventMapper.ToEventListResponse(events);
+            return await _eventMapper.ToEventListResponse(events);
         }
 
         public async Task<DetailedEventResponse> GetEventByIdAsync(Guid id)
@@ -90,13 +90,13 @@ namespace RassoApi.Services.Events
         public async Task<List<EventResponse>> GetTopEventsAsync()
         {
             List<Event> top = await _eventRepository.GetTopEventsAsync();
-            return _eventMapper.ToEventListResponse(top);
+            return await _eventMapper.ToEventListResponse(top);
         }
 
         public async Task<List<EventResponse>> GetEventsByLocationAsync(string? name, double? latitude, double? longitude)
         {
             List<Event> results = await _eventRepository.GetByLocationAsync(name, latitude, longitude);
-            return _eventMapper.ToEventListResponse(results);
+            return await _eventMapper.ToEventListResponse(results);
         }
 
         public async Task<EventResponse> GetMainEventAsync(string email)
@@ -138,6 +138,27 @@ namespace RassoApi.Services.Events
             }
             throw new EventException("Evenement non trouvé");
         }
+
+        public async Task<List<EventResponse>> GetFavorites(string userEmail)
+        {
+            try
+            {
+                UserDto user = await GetUser(userEmail);
+                List<Event> favoriteEvents = await _eventRepository.GetFavorite(user.Id);
+
+                if (favoriteEvents == null || !favoriteEvents.Any())
+                {
+                    throw new EventException("Aucun événement favori trouvé pour l'utilisateur.");
+                }
+
+                return await _eventMapper.ToEventListResponse(favoriteEvents);
+            }
+            catch (Exception ex)
+            {
+                throw new EventException("Une erreur est survenue lors de la récupération des événements favoris.", ex);
+            }
+        }
+
     }
 
 }

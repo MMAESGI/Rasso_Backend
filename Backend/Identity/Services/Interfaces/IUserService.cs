@@ -28,5 +28,8 @@ namespace Identity.Services.Interfaces
         /// <param name="password">Mot de passe</param>
         /// <returns></returns>
         Task<Result<User>> RegisterUser(SignUpRequest request);
+
+        List<User> GetAll();
+
     }
 }
