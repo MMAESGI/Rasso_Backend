@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RassoApi.Database;
+using RassoApi.Enums;
 using RassoApi.Models;
 using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
@@ -162,6 +163,34 @@ namespace RassoApi.Repositories
                 .Where(f => f.UserId == userId)
                 .Select(f => f.EventId)
                 .ToListAsync();
+        }
+
+
+
+        public async Task<List<Event>> GetPendingEvents()
+        {
+            return await _context.Events
+                .Include(e => e.Status)
+                .Where(e => e.Status!.Code == StatusEnum.WAITINGVALIDATION)
+                .ToListAsync();
+        }
+
+
+
+        public async Task<bool> SetEventStatus(Guid eventId, StatusEnum newStatus)
+        {
+            var ev = await _context.Events.FindAsync(eventId);
+            if (ev == null)
+                return false;
+
+            var status = await _context.EventStatuses.FirstOrDefaultAsync(s => s.Code == newStatus);
+            if (status == null)
+                return false;
+
+            ev.StatusId = status.Id;
+            ev.ModeratedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
     }
