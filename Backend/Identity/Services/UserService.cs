@@ -26,6 +26,11 @@ namespace Identity.Services
             _userManager = userManager;
         }
 
+        public List<User> GetAll()
+        {
+            return _userManager.Users.ToList();
+        }
+
         public async Task<Result<User>> GetById(Guid id)
         {
             User? user = await _userManager.FindByIdAsync(id.ToString());

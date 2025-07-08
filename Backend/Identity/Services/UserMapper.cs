@@ -15,5 +15,12 @@ namespace Identity.Services
                 LastName = user.LastName,
             };
         }
+
+        public static List<UserDto> ToDtoList(List<User> user)
+        {
+            return user?.Select(ToDto).ToList() ?? new List<UserDto>();
+
+        }
+
     }
 }

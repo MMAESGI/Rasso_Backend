@@ -22,7 +22,7 @@ namespace RassoApi.Mappers
         /// <param name="ev"></param>
         /// <param name="isFavorite"></param>
         /// <returns></returns>
-        List<EventResponse> ToEventListResponse(List<Event> ev);
+        Task<List<EventResponse>> ToEventListResponse(List<Event> ev, Guid? userId = null);
 
         /// <summary>
         /// Maps an Event model to a DetailedEventResponse.

@@ -126,6 +126,31 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<string>.SuccessResponse("Favorite updated"));
         }
 
+
+        [HttpGet("favorite")]
+        public async Task<ActionResult<ApiResponse<string>>> GetFavorites()
+        {
+            try
+            {
+                string? email = GetEmailByClaim();
+                if (string.IsNullOrEmpty(email))
+                {
+                    return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+                }
+                List<EventResponse> result = await _eventService.GetFavorites(email);
+                return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(result));
+            }
+            catch (EventException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Une erreur est survenue lors de la récupération des événements");
+            }
+           
+        }
+
         [HttpGet("location")]
         public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetByLocation(
                                         [FromQuery] string? locationName,

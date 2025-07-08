@@ -27,7 +27,7 @@ namespace RassoApi.Services.Events
             {
                 return new List<EventResponse>();
             }
-            return _eventMapper.ToEventListResponse(events);
+            return await _eventMapper.ToEventListResponse(events);
 
         }
     }

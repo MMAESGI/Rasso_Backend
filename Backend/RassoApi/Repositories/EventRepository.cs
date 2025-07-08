@@ -146,6 +146,24 @@ namespace RassoApi.Repositories
             await _context.SaveChangesAsync();
             return await _context.Events.Where(x => x.Id == ev.Id).FirstOrDefaultAsync();
         }
+
+        public async Task<List<Event>> GetFavorite(Guid userId)
+        {
+            return await _context.Favorites
+                .Where(f => f.UserId == userId)
+                .Include(f => f.Event)
+                .Select(f => f.Event)
+                .ToListAsync();
+        }
+
+        public async Task<List<Guid>> GetFavoriteEventIds(Guid userId)
+        {
+            return await _context.Favorites
+                .Where(f => f.UserId == userId)
+                .Select(f => f.EventId)
+                .ToListAsync();
+        }
+
     }
 
 }

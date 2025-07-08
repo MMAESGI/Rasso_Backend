@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Logging;
 using RassoApi.Database;
 using RassoApi.DTOs;
 using RassoApi.DTOs.Responses.Event;
 using RassoApi.DTOs.Responses.User;
 using RassoApi.Models.EventModels;
+using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Events.Interfaces;
 
 namespace RassoApi.Mappers
@@ -12,14 +14,16 @@ namespace RassoApi.Mappers
     public class EventMapper : IEventMapper
     {
         private readonly IUserProxyService _userProxyService;
+        private readonly IEventRepository _eventRepository;
         private readonly IUserMapper _userMapper;
         private readonly AppDbContext _context;
 
-        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper, AppDbContext context)
+        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper, AppDbContext context, IEventRepository eventRepository)
         {
             _userProxyService = userProxyService;
             _userMapper = userMapper;
             _context = context;
+            _eventRepository = eventRepository;
         }
 
         public async Task<EventResponse> ToEventResponse(Event ev, Guid? userId = null)
@@ -40,17 +44,34 @@ namespace RassoApi.Mappers
             };
         }
 
-        public List<EventResponse> ToEventListResponse(List<Event> ev)
+        public async Task<List<EventResponse>> ToEventListResponse(List<Event> ev, Guid? userId = null)
         {
-            List<EventResponse> responses = new();
+            var responses = new List<EventResponse>();
 
-            foreach (var eventEntity in ev)
+            // Récupère les IDs des événements favoris de l'utilisateur en une seule fois
+            List<Guid> favoriteEventIds = userId.HasValue
+                ? await _eventRepository.GetFavoriteEventIds(userId.Value) 
+            : new List<Guid>();
+
+            foreach (Event evt in ev)
             {
-                responses.Add(ToEventResponse(eventEntity).Result);
+                responses.Add(new EventResponse
+                {
+                    Id = evt.Id,
+                    Title = evt.Title,
+                    Description = evt.Description,
+                    Date = evt.Date,
+                    Location = evt.Location,
+                    Latitude = evt.Latitude,
+                    Longitude = evt.Longitude,
+                    Category = evt.Category,
+                    IsFavorite = favoriteEventIds.Contains(evt.Id)
+                });
             }
 
             return responses;
         }
+
 
         public async Task<DetailedEventResponse> ToDetailedEventResponseAsync(Event ev)
         {
