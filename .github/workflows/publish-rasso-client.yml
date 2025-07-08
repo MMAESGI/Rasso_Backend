@@ -13,6 +13,9 @@ on:
     paths:
       - 'Backend/RassoApi.Client/client-ts/**'
 
+  workflow_dispatch:
+
+
 jobs:
   publish-client:
     uses: ./.github/workflows/publish-client.yml
