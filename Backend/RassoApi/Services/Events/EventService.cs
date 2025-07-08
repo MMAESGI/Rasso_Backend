@@ -110,6 +110,19 @@ namespace RassoApi.Services.Events
             throw new EventException("Evenement non trouvé.") ;
         }
 
+
+        public async Task<UserDto?> GetUserByEmail(string email)
+        {
+            return await _userProxyService.GetUserByEmail(email);
+        }
+
+        public async Task<List<EventResponse>> GetEventsByUserIdAsync(Guid userId)
+        {
+            var events = await _eventRepository.GetAllAsync();
+            var filtered = events.Where(e => e.OrganizerId == userId).ToList();
+            return await _eventMapper.ToEventListResponse(filtered);
+        }
+
         private async Task<UserDto> GetUser(string email)
         {
             UserDto? user = await _userProxyService.GetUserByEmail(email);

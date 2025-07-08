@@ -16,7 +16,9 @@ namespace RassoApi.Services.Events.Interfaces
 
         Task<EventResponse> ToggleFavoriteAsync(string userEmail, Guid EventId);
         Task<List<EventResponse>> GetFavorites(string userEmail);
-        
+
+        Task<RassoApi.DTOs.UserDto?> GetUserByEmail(string email);
+        Task<List<EventResponse>> GetEventsByUserIdAsync(Guid userId);
 
     }
 }
