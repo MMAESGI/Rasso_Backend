@@ -75,7 +75,7 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<string>.SuccessResponse("Event deleted"));
         }
 
-        [HttpGet("top")]
+        [HttpGet("populaires")]
         public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetTop()
         {
             var top = await _eventService.GetTopEventsAsync();
