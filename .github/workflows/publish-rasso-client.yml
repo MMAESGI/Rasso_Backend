@@ -15,7 +15,7 @@ on:
 
 jobs:
   publish-client:
-    uses: ./.github/workflows/reusable-publish-client.yml
+    uses: ./.github/workflows/publish-client.yml
     with:
       client-path: Backend/RassoApi.Client/client-ts
     secrets: inherit

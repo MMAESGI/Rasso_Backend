@@ -79,7 +79,7 @@ namespace Identity.Services
         {
             if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
-                return Result<User>.Fail("Registration failed. Please verify your details and try again");
+                return Result<User>.Fail("This email is already registered. Please use a different email.");
             }
 
             User user = new User
@@ -94,16 +94,20 @@ namespace Identity.Services
 
             user.PasswordHash = _passwordManager.HashPassword(user, request.Password);
 
-            await _userManager.CreateAsync(user, request.Password);
+            IdentityResult identityResult = await _userManager.CreateAsync(user, request.Password);
 
-            await _userManager.AddToRoleAsync(user, "Admin"); // Temporaire
-
-            IdentityResult identityResult = await _userManager.CreateAsync(user);
+            if (!identityResult.Succeeded)
+            {
+                return Result<User>.Fail($"User creation errors: {string.Join(", ", identityResult.Errors.Select(e => e.Description))}");
+            }
 
             if (identityResult.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Admin"); // Temporaire
                 return Result<User>.Ok(user);
+            }
 
-             return Result<User>.Fail("Registration failed. Please verify your details and try again");
+            return Result<User>.Fail("Registration failed. Please verify your details and try again");
         }
     }
 }
