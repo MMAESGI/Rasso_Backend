@@ -1,4 +1,4 @@
-name: Publish TS Client (Reusable)
+name: Generate & Publish TS Client
 
 on:
   workflow_call:
@@ -8,39 +8,39 @@ on:
         type: string
 
 jobs:
-  publish:
+  generate-client:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ inputs.client-path }}
 
+    outputs:
+      has-changes: ${{ steps.check_changes.outputs.changed }}
+      version: ${{ steps.extract_version.outputs.version }}
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup .NET 9
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: 9.0.x
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: https://npm.pkg.github.com/
-      
-      - name: List contents of client path
-        run: ls -R ${{ inputs.client-path }}
-        
+
       - name: Install NSwag CLI
         run: dotnet tool install --global NSwag.ConsoleCore
 
       - name: Add dotnet tools to PATH
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
-      - name: Génère le client TypeScript
-        run: nswag run client-ts/ts-nswag.json
+      - name: Run NSwag to regenerate client
+        run: nswag run ts-nswag.json
 
-      - name: Vérifie s’il y a des changements
+      - name: Check if files changed
         id: check_changes
         run: |
           if git diff --quiet; then
@@ -49,21 +49,36 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Stop si aucun changement
-        if: steps.check_changes.outputs.changed == 'false'
-        run: echo "Aucun changement détecté, fin du workflow."
+      - name: Extract version from package.json
+        id: extract_version
+        run: |
+          version=$(jq -r '.version' package.json)
+          echo "version=$version" >> $GITHUB_OUTPUT
 
+  publish-client:
+    needs: generate-client
+    if: needs.generate-client.outputs.has-changes == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.client-path }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
 
       - name: Install dependencies
-        if: steps.check_changes.outputs.changed == 'true'
         run: npm install
 
       - name: Build client
-        if: steps.check_changes.outputs.changed == 'true'
         run: npm run build
 
       - name: Publish to GitHub Packages
-        if: steps.check_changes.outputs.changed == 'true'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

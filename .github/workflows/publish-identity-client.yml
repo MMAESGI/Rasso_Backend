@@ -1,4 +1,3 @@
-# .github/workflows/publish-rasso-client.yml
 name: Publish Identity Client
 
 on:
@@ -6,10 +5,17 @@ on:
     branches:
       - main
     paths:
-      - 'Backend/Identity.Client/**'
+      - 'Backend/Identity.Client/client-ts/**'
+
+  pull_request:
+    branches:
+      - 'users/**'
+    paths:
+      - 'Backend/Identity.Client/client-ts/**'
 
 jobs:
   publish-client:
-    uses: ./.github/workflows/publish-client.yml
+    uses: ./.github/workflows/reusable-publish-client.yml
     with:
-      client-path: Backend/Identity.Client
+      client-path: Backend/Identity.Client/client-ts
+    secrets: inherit
