@@ -17,12 +17,17 @@ COPY ["Identity/Identity.csproj", "Identity/"]
 RUN dotnet restore "./Identity/Identity.csproj"
 COPY . .
 WORKDIR "/src/Identity"
-RUN dotnet build "./Identity.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+
+RUN dotnet tool install --global NSwag.ConsoleCore && \
+    echo "$HOME/.dotnet/tools" >> /etc/profile && \
+    export PATH="$PATH:$HOME/.dotnet/tools"
+
+RUN dotnet build "./Identity.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Cette étape permet de publier le projet de service à copier dans la phase finale
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Identity.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Identity.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Cette phase est utilisée en production ou lors de l’exécution à partir de VS en mode normal (par défaut quand la configuration de débogage n’est pas utilisée)
 FROM base AS final

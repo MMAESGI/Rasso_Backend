@@ -13,63 +13,9 @@ on:
     paths:
       - 'Backend/Identity.Client/client-ts/**'
 
-
-
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: Backend/Identity.Client/client-ts
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 9
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          registry-url: https://npm.pkg.github.com/
-
-      - name: Install NSwag CLI
-        run: dotnet tool install --global NSwag.ConsoleCore
-
-      - name: Add dotnet tools to PATH
-        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
-
-      - name: Générer le client TypeScript
-        run: nswag run client-ts/ts-nswag.json
-
-      - name: Vérifier s’il y a des changements
-        id: check_changes
-        run: |
-          if git diff --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop si aucun changement
-        if: steps.check_changes.outputs.changed == 'false'
-        run: echo "Aucun changement détecté, fin du workflow."
-
-      - name: Install dependencies
-        if: steps.check_changes.outputs.changed == 'true'
-        run: npm ci
-
-      - name: Build client
-        if: steps.check_changes.outputs.changed == 'true'
-        run: npm run build
-
-      - name: Publier le package sur GitHub Packages
-        if: steps.check_changes.outputs.changed == 'true'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
+  publish-client:
+    uses: ./.github/workflows/reusable-publish-client.yml
+    with:
+      client-path: Backend/Identity.Client/client-ts
+    secrets: inherit
