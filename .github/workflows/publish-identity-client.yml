@@ -18,4 +18,6 @@ jobs:
     uses: ./.github/workflows/publish-client.yml
     with:
       client-path: Backend/Identity.Client/client-ts
+      package-name: '@mmaesgi/identity-client'  
+
     secrets: inherit

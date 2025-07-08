@@ -18,4 +18,5 @@ jobs:
     uses: ./.github/workflows/publish-client.yml
     with:
       client-path: Backend/RassoApi.Client/client-ts
+      package-name: '@mmaesgi/rassoapi-client'  # Mets ici le vrai nom de ton package
     secrets: inherit

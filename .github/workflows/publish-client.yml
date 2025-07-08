@@ -6,6 +6,9 @@ on:
       client-path:
         required: true
         type: string
+      package-name:
+        required: true
+        type: string
 
 jobs:
   generate-client:
@@ -15,8 +18,8 @@ jobs:
         working-directory: ${{ inputs.client-path }}
 
     outputs:
-      has-changes: ${{ steps.check_changes.outputs.changed }}
       version: ${{ steps.extract_version.outputs.version }}
+      publish-needed: ${{ steps.version_check.outputs.publish_needed }}
 
     steps:
       - uses: actions/checkout@v3
@@ -40,24 +43,33 @@ jobs:
       - name: Run NSwag to regenerate client
         run: nswag run ts-nswag.json
 
-      - name: Check if files changed
-        id: check_changes
-        run: |
-          if git diff --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Extract version from package.json
         id: extract_version
         run: |
           version=$(jq -r '.version' package.json)
           echo "version=$version" >> $GITHUB_OUTPUT
 
+      - name: Check if version already published
+        id: version_check
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PACKAGE_NAME="${{ inputs.package-name }}"
+          published_version=$(npm view "$PACKAGE_NAME" version --registry=https://npm.pkg.github.com/ 2>/dev/null || echo "none")
+          local_version=$(jq -r '.version' package.json)
+
+          echo "Local version: $local_version"
+          echo "Published version: $published_version"
+
+          if [ "$local_version" = "$published_version" ]; then
+            echo "publish_needed=false" >> $GITHUB_OUTPUT
+          else
+            echo "publish_needed=true" >> $GITHUB_OUTPUT
+          fi
+
   publish-client:
     needs: generate-client
-    if: needs.generate-client.outputs.has-changes == 'true'
+    if: needs.generate-client.outputs.publish-needed == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
