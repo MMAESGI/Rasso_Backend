@@ -1,4 +1,5 @@
-﻿using RassoApi.Models.EventModels;
+﻿using RassoApi.Enums;
+using RassoApi.Models.EventModels;
 
 namespace RassoApi.Repositories.Interfaces
 {
@@ -15,6 +16,9 @@ namespace RassoApi.Repositories.Interfaces
         Task<Event> ToggleFavoriteAsync(Guid userId, Event ev);
         Task<List<Event>> GetFavorite(Guid userId);
         Task<List<Guid>> GetFavoriteEventIds(Guid userId);
+
+        Task<List<Event>> GetPendingEvents();
+        Task<bool> SetEventStatus(Guid eventId, StatusEnum status);
 
     }
 }
