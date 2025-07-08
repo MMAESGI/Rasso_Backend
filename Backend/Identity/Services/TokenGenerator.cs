@@ -45,7 +45,7 @@ namespace Identity.Services
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(15),                                   
+                Expires = DateTime.UtcNow.AddHours(24),                                   
                 Issuer = "http://id.identity.com",                                              // Celui qui créer le token         
                 Audience = "http://baseApi.com",                                           // La "destination" du token, peut varier en fonction du destinataire
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(ByteApiKey), SecurityAlgorithms.HmacSha256)

@@ -186,6 +186,31 @@ namespace RassoApi.Controllers
             
         }
 
+        [HttpGet("user_events")]
+        public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetEventsByUser()
+        {
+            try
+            {
+                string? email = GetEmailByClaim();
+                if (string.IsNullOrEmpty(email))
+                {
+                    return Unauthorized("Utilisateur non authentifié ou claim email manquant.");
+                }
+                var user = await _eventService.GetUserByEmail(email);
+                if (user == null)
+                {
+                    return NotFound(ApiResponse<List<EventResponse>>.FailureResponse("Utilisateur non trouvé"));
+                }
+
+                List<EventResponse> events = await _eventService.GetEventsByUserIdAsync(user.Id);
+                return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(events, "Events retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponse<List<EventResponse>>.FailureResponse($"Erreur lors de la récupération des événements : {ex.Message}"));
+            }
+        }
+
         private string? GetEmailByClaim()
         {
             return User.FindFirst(ClaimTypes.Email)?.Value
