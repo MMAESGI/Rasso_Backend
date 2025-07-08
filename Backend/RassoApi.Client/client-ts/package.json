@@ -1,6 +1,6 @@
 {
     "name": "@mmaesgi/rassoapi-client",
-    "version": "2.0.0",
+    "version": "2.0.2",
     "main": "dist/rasso-api-client.js",
     "types": "dist/rasso-api-client.d.ts",
     "files": [
