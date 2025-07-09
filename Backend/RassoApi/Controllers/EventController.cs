@@ -34,12 +34,12 @@ namespace RassoApi.Controllers
             if (ev == null)
                 return NotFound(ApiResponse<EventResponse>.FailureResponse("Event not found"));
 
-            return Ok(ApiResponse<EventResponse>.SuccessResponse(ev));
+            return Ok(ApiResponse<DetailedEventResponse>.SuccessResponse(ev));
         }
 
         ///[Authorize]
         [HttpPost] // TODO Role organisateur
-        public async Task<ActionResult<ApiResponse<EventResponse>>> Create([FromBody] CreateEventRequest request)
+        public async Task<ActionResult<ApiResponse<EventResponse>>> Create([FromForm] CreateEventRequest request)
         {
             string? email = GetEmailByClaim();
             if (string.IsNullOrEmpty(email))

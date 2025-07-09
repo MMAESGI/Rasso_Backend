@@ -8,6 +8,7 @@ using RassoApi.DTOs.Responses.User;
 using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Events.Interfaces;
+using RassoApi.Services.Storage;
 
 namespace RassoApi.Mappers
 {
@@ -17,18 +18,29 @@ namespace RassoApi.Mappers
         private readonly IEventRepository _eventRepository;
         private readonly IUserMapper _userMapper;
         private readonly AppDbContext _context;
+        private readonly IImageStorageService _imageStorageService;
 
-        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper, AppDbContext context, IEventRepository eventRepository)
+        public EventMapper(IUserProxyService userProxyService, IUserMapper userMapper, AppDbContext context, IEventRepository eventRepository, IImageStorageService imageStorageService)
         {
             _userProxyService = userProxyService;
             _userMapper = userMapper;
             _context = context;
             _eventRepository = eventRepository;
+            _imageStorageService = imageStorageService;
         }
 
         public async Task<EventResponse> ToEventResponse(Event ev, Guid? userId = null)
         {
             bool isFavorite = await IsFavorite(ev.Id, userId);
+
+            var imageUrls = new List<string>();
+            if (ev.Images != null && ev.Images.Any())
+            {
+                foreach (var image in ev.Images)
+                {
+                    imageUrls.Add(image.S3Url + image.Filename);
+                }
+            }
 
             return new EventResponse
             {
@@ -40,7 +52,8 @@ namespace RassoApi.Mappers
                 Latitude = ev.Latitude,
                 Longitude = ev.Longitude,
                 Category = ev.Category,
-                IsFavorite = isFavorite
+                IsFavorite = isFavorite,
+                ImageUrls = imageUrls
             };
         }
 
@@ -55,6 +68,16 @@ namespace RassoApi.Mappers
 
             foreach (Event evt in ev)
             {
+
+                var imageUrls = new List<string>();
+                if (evt.Images != null && evt.Images.Any())
+                {
+                    foreach (var image in evt.Images)
+                    {
+                        imageUrls.Add(image.S3Url + image.Filename);
+                    }
+                }
+
                 responses.Add(new EventResponse
                 {
                     Id = evt.Id,
@@ -65,7 +88,8 @@ namespace RassoApi.Mappers
                     Latitude = evt.Latitude,
                     Longitude = evt.Longitude,
                     Category = evt.Category,
-                    IsFavorite = favoriteEventIds.Contains(evt.Id)
+                    IsFavorite = favoriteEventIds.Contains(evt.Id),
+                    ImageUrls = imageUrls
                 });
             }
 
@@ -81,6 +105,16 @@ namespace RassoApi.Mappers
             int participantCount = 0; // TODO
 
             await Task.WhenAll(organizerTask, moderatedTask);
+
+            // Construire les URLs complètes des images
+            var imageUrls = new List<string>();
+            if (ev.Images != null)
+            {
+                foreach (var image in ev.Images)
+                {
+                    imageUrls.Add(image.S3Url + image.Filename);
+                }
+            }
 
             return new DetailedEventResponse
             {
@@ -100,7 +134,7 @@ namespace RassoApi.Mappers
                 RefusalReasonLabel = ev.RefusalReason?.Label,
                 RefusalComment = ev.RefusalComment,
                 ParticipantCount = participantCount,
-                ImageUrls = ev.Images?.Select(i => i.S3Url).ToList() ?? new List<string>()
+                ImageUrls = imageUrls
             };
         }
 
