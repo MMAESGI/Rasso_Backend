@@ -119,7 +119,38 @@ namespace RassoApi.Services.Events
             ev.Location = request.Location;
 
             await _eventRepository.UpdateAsync(ev);         // TODO la logique de maj est mauvaise, on est pas sur que cela soit modifier
-            return await _eventMapper.ToEventResponse(ev);
+            
+            if (request.Images != null && request.Images.Any())
+            {
+                foreach (var image in request.Images)
+                {
+                    try
+                    {
+                        var uploadResponse = await _imageStorageService.UploadImageAsync(image);
+                        var imageUrl = await _imageStorageService.GetImageUrlAsync(uploadResponse.custom_name);
+                        
+                        var eventMedia = new EventMedia
+                        {
+                            Id = Guid.NewGuid(),
+                            EventId = ev.Id,
+                            S3Url = imageUrl,
+                            Filename = uploadResponse.original_name,
+                            Description = $"Image pour l'événement {ev.Title}",
+                            UploadedAt = DateTime.UtcNow
+                        };
+                        
+                        await _eventRepository.AddEventMediaAsync(eventMedia);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new EventException($"Erreur lors de l'upload de l'image {image.FileName}: {ex.Message}");
+                    }
+                }
+            }
+
+            // Récupérer l'événement avec les images pour la réponse
+            var eventWithImages = await _eventRepository.GetByIdAsync(ev.Id, includeImages: true);
+            return await _eventMapper.ToEventResponse(eventWithImages ?? ev);
         }
 
         public async Task<bool> DeleteEventAsync(Guid id)
