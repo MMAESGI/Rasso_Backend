@@ -34,12 +34,12 @@ namespace RassoApi.Controllers
             if (ev == null)
                 return NotFound(ApiResponse<EventResponse>.FailureResponse("Event not found"));
 
-            return Ok(ApiResponse<EventResponse>.SuccessResponse(ev));
+            return Ok(ApiResponse<DetailedEventResponse>.SuccessResponse(ev));
         }
 
         ///[Authorize]
         [HttpPost] // TODO Role organisateur
-        public async Task<ActionResult<ApiResponse<EventResponse>>> Create([FromBody] CreateEventRequest request)
+        public async Task<ActionResult<ApiResponse<EventResponse>>> Create([FromForm] CreateEventRequest request)
         {
             string? email = GetEmailByClaim();
             if (string.IsNullOrEmpty(email))
@@ -55,7 +55,7 @@ namespace RassoApi.Controllers
         //[Authorize]
         [HttpPut("{id}")]
         [HttpPatch("{id}")] //TODO Role organisateur
-        public async Task<ActionResult<ApiResponse<EventResponse>>> Update(Guid id, [FromBody] UpdateEventRequest request)
+        public async Task<ActionResult<ApiResponse<EventResponse>>> Update(Guid id, [FromForm] UpdateEventRequest request)
         {
             var updated = await _eventService.UpdateEventAsync(id, request);
             if (updated == null)
@@ -75,7 +75,7 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<string>.SuccessResponse("Event deleted"));
         }
 
-        [HttpGet("top")]
+        [HttpGet("populaires")]
         public async Task<ActionResult<ApiResponse<List<EventResponse>>>> GetTop()
         {
             var top = await _eventService.GetTopEventsAsync();

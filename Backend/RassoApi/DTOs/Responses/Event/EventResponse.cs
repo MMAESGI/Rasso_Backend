@@ -15,6 +15,11 @@ namespace RassoApi.DTOs.Responses.Event
         public string? Category { get; set; }
         public StatusEnum? Status { get; set; }
         public bool IsFavorite { get; set; }
+        
+        /// <summary>
+        /// Liste des URLs des images associées à l'événement.
+        /// </summary>
+        public List<string> ImageUrls { get; set; } = new();
 
     }
 }

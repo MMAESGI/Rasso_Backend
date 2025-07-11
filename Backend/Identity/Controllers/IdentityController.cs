@@ -26,7 +26,7 @@ namespace Identity.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("login")]
+        [HttpPost("auth/connexion")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             Result<User> result = await _userService.GetUser(request.Email, request.Password);
@@ -41,7 +41,7 @@ namespace Identity.Controllers
         }
 
 
-        [HttpPost("signup")]
+        [HttpPost("/auth/inscription")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest signUpRequest)
         {
 

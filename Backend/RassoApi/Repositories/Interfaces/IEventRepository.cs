@@ -18,7 +18,7 @@ namespace RassoApi.Repositories.Interfaces
         Task<List<Guid>> GetFavoriteEventIds(Guid userId);
 
         Task<List<Event>> GetPendingEvents();
-        Task<bool> SetEventStatus(Guid eventId, StatusEnum status);
-
+        Task<bool> SetEventStatus(Guid eventId, StatusEnum newStatus);
+        Task AddEventMediaAsync(EventMedia eventMedia);
     }
 }

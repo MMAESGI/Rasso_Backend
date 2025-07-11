@@ -4,6 +4,7 @@ using RassoApi.Repositories;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Events;
 using RassoApi.Services.Events.Interfaces;
+using RassoApi.Services.Storage;
 
 namespace RassoApi.Extensions
 {
@@ -23,6 +24,13 @@ namespace RassoApi.Extensions
             services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<IEventValidator, EventValidator>();
             services.AddScoped<ISearchService, SearchService>();
+            
+            // Service de stockage d'images
+            services.AddHttpClient<IImageStorageService, ImageStorageService>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+            services.AddScoped<IImageStorageService, ImageStorageService>();
 
 
             return services;
