@@ -62,17 +62,18 @@ namespace RassoApi.Repositories
         public async Task<List<Event>> GetTopEventsAsync()
         {
             return await _context.Events
+                .Include(e => e.Images)
                 .OrderByDescending(e => e.Date)
                 .Take(10)
                 .ToListAsync();
         }
 
-        public async Task<List<Event>> GetByLocationAsync(string? name, double? latitude, double? longitude)
+        public async Task<List<Event>> GetByLocationAsync(string? locationName, double? latitude, double? longitude)
         {
-            var query = _context.Events.AsQueryable();
+            var query = _context.Events.Include(e => e.Images).AsQueryable();
 
-            if (!string.IsNullOrEmpty(name))
-                query = query.Where(e => e.Location!.Contains(name));
+            if (!string.IsNullOrEmpty(locationName))
+                query = query.Where(e => e.Location!.Contains(locationName));
 
             if (latitude.HasValue && longitude.HasValue)
             {
@@ -90,6 +91,7 @@ namespace RassoApi.Repositories
         {
             // Le plus proche event dans le futur pour cet utilisateur
             return await _context.Events
+                .Include(e => e.Images)
                 .Where(e => e.OrganizerId == userId && e.Date > DateTime.UtcNow)
                 .OrderBy(e => e.Date)
                 .FirstOrDefaultAsync();
@@ -145,7 +147,7 @@ namespace RassoApi.Repositories
             }
 
             await _context.SaveChangesAsync();
-            return await _context.Events.Where(x => x.Id == ev.Id).FirstOrDefaultAsync();
+            return await _context.Events.Include(e => e.Images).Where(x => x.Id == ev.Id).FirstOrDefaultAsync();
         }
 
         public async Task<List<Event>> GetFavorite(Guid userId)
@@ -153,6 +155,7 @@ namespace RassoApi.Repositories
             return await _context.Favorites
                 .Where(f => f.UserId == userId)
                 .Include(f => f.Event)
+                .ThenInclude(e => e.Images)
                 .Select(f => f.Event)
                 .ToListAsync();
         }
@@ -191,6 +194,20 @@ namespace RassoApi.Repositories
             ev.ModeratedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task AddEventMediaAsync(EventMedia eventMedia)
+        {
+            _context.EventImages.Add(eventMedia);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<string>> GetEventImageUrlsAsync(Guid eventId)
+        {
+            return await _context.EventImages
+                .Where(img => img.EventId == eventId)
+                .Select(img => img.S3Url)
+                .ToListAsync();
         }
 
     }

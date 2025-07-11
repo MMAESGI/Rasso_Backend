@@ -7,6 +7,7 @@ using RassoApi.Mappers;
 using RassoApi.Models.EventModels;
 using RassoApi.Repositories.Interfaces;
 using RassoApi.Services.Events.Interfaces;
+using RassoApi.Services.Storage;
 
 
 namespace RassoApi.Services.Events
@@ -17,16 +18,19 @@ namespace RassoApi.Services.Events
         private readonly IUserProxyService _userProxyService;
         private readonly IEventMapper _eventMapper;
         private readonly IUserMapper _userMapper;
+        private readonly IImageStorageService _imageStorageService;
 
         public EventService(IEventRepository eventRepo,
                             IUserProxyService userProxyService,
                             IEventMapper eventMapper,
-                            IUserMapper userMapper)
+                            IUserMapper userMapper,
+                            IImageStorageService imageStorageService)
         {
             _eventRepository = eventRepo;
             _userProxyService = userProxyService;
             _eventMapper = eventMapper;
             _userMapper = userMapper;
+            _imageStorageService = imageStorageService;
         }
 
         public async Task<List<EventResponse>> GetAllEventsAsync()
@@ -37,13 +41,15 @@ namespace RassoApi.Services.Events
 
         public async Task<DetailedEventResponse> GetEventByIdAsync(Guid id)
         {
-            Event? ev = await _eventRepository.GetByIdAsync(id, includeImages: true);
-            return ev == null ? throw new EventException("Evenement non trouvé.") : await _eventMapper.ToDetailedEventResponseAsync(ev);
+            Event? ev = await _eventRepository.GetByIdAsync(id, includeImages: true);            
+
+            var res = ev == null ? throw new EventException("Evenement non trouvé.") : await _eventMapper.ToDetailedEventResponseAsync(ev);
+
+            return res;
         }
 
         public async Task<EventResponse> CreateEventAsync(CreateEventRequest request, string email)
         {
-
             var entity = new Event
             {
                 Id = Guid.NewGuid(),
@@ -51,21 +57,55 @@ namespace RassoApi.Services.Events
                 Description = request.Description,
                 Location = request.Location,
                 Date = request.Date,
-                StatusId = 1
+                StatusId = 1,
+                Category = request.Category
             };
 
             try
             {
                 UserDto user = await GetUser(email);
                 entity.OrganizerId = user.Id;
-            } catch
+            } 
+            catch
             {
-                //Log.Error("Utilisateur non trouvé");
+                throw new EventException("Utilisateur non trouvé");
             }
 
-
+            // Ajouter l'événement
             await _eventRepository.AddAsync(entity);
-            return await _eventMapper.ToEventResponse(entity);
+
+            // Gestion des images
+            if (request.Images != null && request.Images.Any())
+            {
+                foreach (var image in request.Images)
+                {
+                    try
+                    {
+                        var uploadResponse = await _imageStorageService.UploadImageAsync(image);
+                        var imageUrl = await _imageStorageService.GetImageUrlAsync(uploadResponse.custom_name);
+                        
+                        var eventMedia = new EventMedia
+                        {
+                            Id = Guid.NewGuid(),
+                            EventId = entity.Id,
+                            S3Url = imageUrl,
+                            Filename = uploadResponse.original_name,
+                            Description = $"Image pour l'événement {entity.Title}",
+                            UploadedAt = DateTime.UtcNow
+                        };
+                        
+                        await _eventRepository.AddEventMediaAsync(eventMedia);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new EventException($"Erreur lors de l'upload de l'image {image.FileName}: {ex.Message}");
+                    }
+                }
+            }
+
+            // Récupérer l'événement avec les images pour la réponse
+            var eventWithImages = await _eventRepository.GetByIdAsync(entity.Id, includeImages: true);
+            return await _eventMapper.ToEventResponse(eventWithImages ?? entity);
         }
 
         public async Task<EventResponse> UpdateEventAsync(Guid id, UpdateEventRequest request)
@@ -118,7 +158,7 @@ namespace RassoApi.Services.Events
 
         public async Task<List<EventResponse>> GetEventsByUserIdAsync(Guid userId)
         {
-            var events = await _eventRepository.GetAllAsync();
+            var events = await _eventRepository.GetAllAsync(includeImages: true);
             var filtered = events.Where(e => e.OrganizerId == userId).ToList();
             return await _eventMapper.ToEventListResponse(filtered);
         }
