@@ -55,7 +55,7 @@ namespace RassoApi.Controllers
         //[Authorize]
         [HttpPut("{id}")]
         [HttpPatch("{id}")] //TODO Role organisateur
-        public async Task<ActionResult<ApiResponse<EventResponse>>> Update(Guid id, [FromBody] UpdateEventRequest request)
+        public async Task<ActionResult<ApiResponse<EventResponse>>> Update(Guid id, [FromForm] UpdateEventRequest request)
         {
             var updated = await _eventService.UpdateEventAsync(id, request);
             if (updated == null)
