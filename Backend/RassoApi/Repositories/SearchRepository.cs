@@ -16,7 +16,10 @@ namespace RassoApi.Repositories
         public async Task<List<Event>> GetEventBySearchedWord(string query)
         {
             return await _context.Events
-                .Where(e => e.Title.Contains(query) || e.Description.Contains(query))
+                .Where(e => e.Title.Contains(query) || 
+                           e.Description.Contains(query) || 
+                           (e.Location != null && e.Location.Contains(query)) ||
+                           (e.Category != null && e.Category.Contains(query)))
                 .ToListAsync();
         }
     }

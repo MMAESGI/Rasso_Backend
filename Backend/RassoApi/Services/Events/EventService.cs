@@ -56,6 +56,8 @@ namespace RassoApi.Services.Events
                 Title = request.Title,
                 Description = request.Description,
                 Location = request.Location,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
                 Date = request.Date,
                 StatusId = 1,
                 Category = request.Category
