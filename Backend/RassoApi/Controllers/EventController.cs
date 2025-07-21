@@ -14,10 +14,12 @@ namespace RassoApi.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly ISearchService _searchService;
 
-        public EventsController(IEventService eventService)
+        public EventsController(IEventService eventService, ISearchService searchService)
         {
             _eventService = eventService;
+            _searchService = searchService;
         }
 
         [HttpGet]
@@ -82,12 +84,12 @@ namespace RassoApi.Controllers
             return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(top));
         }
 
-        //[HttpGet("search")]
-        //public async Task<ActionResult<ApiResponse<List<EventResponse>>>> Search([FromQuery] string q)
-        //{
-        //    //var results = await _eventService.SearchEventsAsync(q);
-        //    return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(null));
-        //}
+        [HttpGet("search")]
+        public async Task<ActionResult<ApiResponse<List<EventResponse>>>> Search([FromQuery] string q)
+        {
+           var results = await _searchService.SearchEventsAsync(q);
+           return Ok(ApiResponse<List<EventResponse>>.SuccessResponse(results));
+        }
 
         //[Authorize]
         //[HttpGet("favourites")]
